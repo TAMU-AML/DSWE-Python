@@ -1,1 +1,5 @@
-
+.DS_Store
+.vscode/
+dswe/__pycache__
+dswe/DSWE.egg-info
+build/
