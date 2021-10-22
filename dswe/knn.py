@@ -6,7 +6,6 @@
 import numpy as np
 import pandas as pd
 import math
-from sklearn import neighbors
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.model_selection import GridSearchCV
 from ._knn_subroutine import compute_best_k
@@ -55,8 +54,7 @@ class KNNPowerCurve(object):
             regressor.fit(normalized_X, y)
             mae = np.mean(abs(regressor.predict(normalized_X) - y))
 
-            return {'best_k': result['best_k'], 'RMSE': result['best_rmse'],
-                    'MAE': mae, 'X': X, 'y': y}
+            return {'best_k': result['best_k'], 'RMSE': result['best_rmse'], 'MAE': mae, 'X': X, 'y': y}
 
         else:
             print("Subset selection choice is not available yet.")
