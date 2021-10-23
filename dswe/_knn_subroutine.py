@@ -24,7 +24,7 @@ def compute_best_k(X, y, range_k):
     best_rmse = min(gcv)
 
     if best_k < max_k:
-        return {'best_k': best_k, 'best_rmse': best_rmse}
+        return ({'best_k': best_k, 'best_rmse': best_rmse})
 
     if best_k == max_k:
         range_k = max_k + np.linspace(5, 50, 10, dtype=int)

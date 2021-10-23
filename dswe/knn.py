@@ -24,78 +24,94 @@ class KNNPowerCurve(object):
     def check_data_format(self, X, y):
         try:
             not isinstance(X, list) or not isinstance(pd.DataFrame(
-                X), pd.DataFrame) or isinstance(np.array(X), np.ndarray)
+                X), pd.DataFrame) or not isinstance(np.array(X), np.ndarray)
         except:
             print(
                 "The train features data should be either of list or numpy array or dataframe.")
 
         try:
             not isinstance(y, list) or not isinstance(pd.DataFrame(
-                y), pd.DataFrame) or isinstance(np.array(y), np.ndarray)
+                y), pd.DataFrame) or not isinstance(np.array(y), np.ndarray)
         except:
             print(
                 "The train target data should be either of list or numpy array or dataframe.")
 
+        self.X = np.array(X)
+        self.y = np.array(y)
+
+        try:
+            np.isnan(self.X).any() or np.isnan(self.y).any()
+        except:
+            print("The data should not contains any null value.")
+
+        try:
+            np.isfinite(self.X).any() or np.isfinite(self.y).any()
+        except:
+            print("The data should have only numeric and finite value.")
+
     def fit(self, X, y, subset_selection=False):
         self.check_data_format(X, y)
-        X = np.array(X)
-        y = np.array(y)
 
-        normalized_X = (X - X.min(axis=0)) / (X.max(axis=0) - X.min(axis=0))
+        self.scaler_min = self.X.min(axis=0)
+        self.scaler_max = self.X.max(axis=0)
+
+        self.normalized_X = (self.X - self.scaler_min) / \
+            (self.scaler_max - self.scaler_min)
         range_k = np.linspace(5, 50, 10, dtype=int)
 
         if not subset_selection:
-            result = compute_best_k(X, y, range_k)
+            result = compute_best_k(self.X, self.y, range_k)
 
             knn = KNeighborsRegressor(n_neighbors=result['best_k'])
             parameters = {'algorithm': self.algorithms,
                           'weights': self.weights}
             regressor = GridSearchCV(knn, parameters)
-            regressor.fit(normalized_X, y)
-            mae = np.mean(abs(regressor.predict(normalized_X) - y))
+            regressor.fit(self.normalized_X, self.y)
+            mae = np.mean(abs(regressor.predict(self.normalized_X) - self.y))
 
-            return {'best_k': result['best_k'], 'RMSE': result['best_rmse'], 'MAE': mae, 'X': X, 'y': y}
+            self.best_k = result['best_k']
+            self.best_rmse = result['best_rmse']
+            self.mae = mae
+
+            return self
 
         else:
             print("Subset selection choice is not available yet.")
 
-    def predict(self, knn_model, X):
-        train_X = knn_model['X']
-        train_y = knn_model['y']
-        best_k = knn_model['best_k']
+    def predict(self, test_X):
 
-        normlized_train_X = (train_X - train_X.min(axis=0)) / \
-            (train_X.max(axis=0) - train_X.min(axis=0))
-        normlized_test_X = (X - X.min(axis=0)) / \
-            (X.max(axis=0) - X.min(axis=0))
+        normlized_test_X = (test_X - self.scaler_min) / \
+            (self.scaler_max - self.scaler_min)
 
-        prediction = KNeighborsRegressor(n_neighbors=best_k).fit(
-            normlized_train_X, train_y).predict(normlized_test_X)
+        prediction = KNeighborsRegressor(n_neighbors=self.best_k).fit(
+            self.normalized_X, self.y).predict(normlized_test_X)
 
         return prediction
 
-    def update(self, knn_model, X, y):
-        old_X = knn_model['X']
-        old_y = knn_model['y']
-        old_best_k = knn_model['best_k']
+    def update(self, new_X, new_y):
 
-        new_X = np.concatenate([old_X, X])
-        new_y = np.concatenate([old_y, y])
+        if new_X.shape[0] <= self.X.shape[0]:
+            self.X = np.concatenate([self.X[new_X.shape[0]:], new_X])
+            self.y = np.concatenate([self.y[new_y.shape[0]:], new_y])
+        else:
+            print("Please run fit function again.")
 
-        normalized_X = (new_X - new_X.min(axis=0)) / \
-            (new_X.max(axis=0) - new_X.min(axis=0))
+        self.scaler_min = self.X.min(axis=0)
+        self.scaler_max = self.X.max(axis=0)
+
+        self.normalized_X = (self.X - self.scaler_min) / \
+            (self.scaler_max - self.scaler_min)
 
         ubk = 1.2
         lbk = 0.8
         interval_k = 5
-        max_k = math.ceil(ubk * old_best_k)
+        max_k = math.ceil(ubk * self.best_k)
         max_k = max_k + (interval_k - (max_k // interval_k))
-        min_k = math.floor(lbk * old_best_k)
+        min_k = math.floor(lbk * self.best_k)
         min_k = min_k - (max_k // interval_k)
         range_k = np.linspace(min_k, max_k, interval_k, dtype=int)
 
-        result = compute_best_k(normalized_X, new_y, range_k)
+        result = compute_best_k(self.normalized_X, self.y, range_k)
+        self.best_k = result['best_k']
 
-        result = {'best_K': result['best_k'], 'X': normalized_X, 'y': new_y}
-
-        return result
+        return self
