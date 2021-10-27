@@ -20,7 +20,7 @@ def compute_best_k(X, y, range_k):
         gcv[i] = np.sqrt(
             np.mean(np.power((y - pred_y) / (1 - (1/range_k[i])), 2)))
 
-    best_k = range_k[np.argmax(gcv)]
+    best_k = range_k[np.argmin(gcv)]
     best_rmse = min(gcv)
 
     if best_k < max_k:
