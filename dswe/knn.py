@@ -13,15 +13,39 @@ from ._knn_subroutine import compute_best_k
 
 class KNNPowerCurve(object):
 
+    """
+    k-nearest neighbors regression model.
+
+
+    All the parameters are fine-tuned automatically using GridSearch.
+    No need to explicitly pass anything.
+
+    Parameters
+    ----------
+
+    weights : {'auto', 'distance'}
+            - 'uniform' : uniform weights.  All points in each neighborhood
+            are weighted equally.
+            - 'distance' : weight points by the inverse of their distance.
+            in this case, closer neighbors of a query point will have a
+            greater influence than neighbors which are further away.
+
+    algorithms : Algorithm used to compute the nearest neighbors.
+                - 'auto' will attempt to decide the most appropriate algorithm
+                based on the values passed to 'fit' method.
+
+    """
+
     def __init__(
             self,
-            algorithms=['auto', 'kd_tree', 'ball_tree'],
-            weights=['uniform']):
+            algorithms=['auto'],
+            weights=['uniform', 'distance']):
 
         self.algorithms = algorithms
         self.weights = weights
 
     def validate_inputs(self, X, y):
+        """Validates the inputs to KNNPowerCurve."""
         if not (isinstance(X, list) or isinstance(pd.DataFrame(X), pd.DataFrame) or isinstance(np.array(X), np.ndarray)):
             raise ValueError(
                 "The features data should be either of list or numpy array or dataframe.")
@@ -41,6 +65,21 @@ class KNNPowerCurve(object):
                 "The data should have only numeric values.")
 
     def fit(self, X, y, subset_selection=False):
+        """Fit the KNNPowerCurve from the training dataset.
+
+        Parameters
+        ----------
+        X : {array-like, sparse matrix} of shape (n_samples, n_features)
+            Training data.
+
+        y : {array-like, sparse matrix} of shape (n_samples,)
+            Target values.
+
+        Return
+        ------
+        self : The fitted KNNPowerCurve.
+        """
+
         self.validate_inputs(X, y)
 
         self.X = np.array(X)
@@ -75,22 +114,50 @@ class KNNPowerCurve(object):
         else:
             print("Subset selection choice is not available yet.")
 
-    def predict(self, test_X):
+    def predict(self, X):
+        """Predict the target for the provided data.
 
-        normlized_test_X = (test_X - self.scaler_min) / \
+        Parameters
+        ----------
+        X : array-like of shape (n_queries, n_features)
+           Test samples.
+
+        Returns
+        -------
+        y : ndarray of shape (n_queries,)
+           Predicted target values.
+
+        """
+
+        normlized_X = (X - self.scaler_min) / \
             (self.scaler_max - self.scaler_min)
 
-        prediction = KNeighborsRegressor(n_neighbors=self.best_k).fit(
-            self.normalized_X, self.y).predict(normlized_test_X)
+        y_pred = KNeighborsRegressor(n_neighbors=self.best_k).fit(
+            self.normalized_X, self.y).predict(normlized_X)
 
-        return prediction
+        return y_pred
 
-    def update(self, new_X, new_y):
-        self.validate_inputs(new_X, new_y)
+    def update(self, X, y):
+        """Update the model when new training dataset will arrive.
 
-        if new_X.shape[0] <= self.X.shape[0]:
-            self.X = np.concatenate([self.X[new_X.shape[0]:], new_X])
-            self.y = np.concatenate([self.y[new_y.shape[0]:], new_y])
+        Parameters
+        ----------
+        X : {array-like, sparse matrix} of shape (n_samples, n_features)
+            New training data.
+
+        y : {array-like, sparse matrix} of shape (n_samples,)
+            New target values.
+
+        Return
+        ------
+        self : The fitted KNNPowerCurve.
+        """
+
+        self.validate_inputs(X, y)
+
+        if X.shape[0] <= self.X.shape[0]:
+            self.X = np.concatenate([self.X[X.shape[0]:], X])
+            self.y = np.concatenate([self.y[y.shape[0]:], y])
         else:
             print("Please run fit function again.")
 
