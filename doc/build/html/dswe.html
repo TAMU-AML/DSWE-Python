@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+
+<html lang="Python">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>dswe package &#8212; DSWE (Data Science for Wind Energy) 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="dswe" href="modules.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="dswe-package">
+<h1>dswe package<a class="headerlink" href="#dswe-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-dswe.knn">
+<span id="dswe-knn-module"></span><h2>dswe.knn module<a class="headerlink" href="#module-dswe.knn" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dswe.knn.KNNPowerCurve">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dswe.knn.</span></span><span class="sig-name descname"><span class="pre">KNNPowerCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algorithms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['auto']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['uniform',</span> <span class="pre">'distance']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/knn.html#KNNPowerCurve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.knn.KNNPowerCurve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>k-nearest neighbors regression model.</p>
+<p>All the parameters are fine-tuned automatically using GridSearch.
+No need to explicitly pass anything.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>weights</strong> (<em>{'auto'</em><em>, </em><em>'distance'}</em>) -- <ul>
+<li><p>'uniform' : uniform weights.  All points in each neighborhood</p></li>
+</ul>
+<p>are weighted equally.
+- 'distance' : weight points by the inverse of their distance.
+in this case, closer neighbors of a query point will have a
+greater influence than neighbors which are further away.</p>
+</p></li>
+<li><p><strong>algorithms</strong> (<em>Algorithm used to compute the nearest neighbors.</em>) -- <ul>
+<li><p>'auto' will attempt to decide the most appropriate algorithm</p></li>
+</ul>
+<p>based on the values passed to 'fit' method.</p>
+</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="dswe.knn.KNNPowerCurve.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subset_selection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/knn.html#KNNPowerCurve.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.knn.KNNPowerCurve.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the KNNPowerCurve from the training dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) -- Training data.</p></li>
+<li><p><strong>y</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) -- Target values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>self</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>The fitted KNNPowerCurve.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dswe.knn.KNNPowerCurve.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/knn.html#KNNPowerCurve.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.knn.KNNPowerCurve.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the target for the provided data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>array-like of shape</em><em> (</em><em>n_queries</em><em>, </em><em>n_features</em><em>)</em>) -- Test samples.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>y</strong> -- Predicted target values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray of shape (n_queries,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dswe.knn.KNNPowerCurve.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/knn.html#KNNPowerCurve.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.knn.KNNPowerCurve.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the model when new training dataset will arrive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) -- New training data.</p></li>
+<li><p><strong>y</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) -- New target values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>self</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>The fitted KNNPowerCurve.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dswe.knn.KNNPowerCurve.validate_inputs">
+<span class="sig-name descname"><span class="pre">validate_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/knn.html#KNNPowerCurve.validate_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.knn.KNNPowerCurve.validate_inputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates the inputs to KNNPowerCurve.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-dswe">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-dswe" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">DSWE (Data Science for Wind Energy)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">dswe</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">dswe package</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">dswe</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">dswe</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Pratyush Kumar, Abhinav Prakash, and Yu Ding.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/dswe.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
