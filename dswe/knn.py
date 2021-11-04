@@ -4,10 +4,10 @@
 # LICENSE file in the root directory of this source tree.
 
 import numpy as np
-import pandas as pd
 import math
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.model_selection import GridSearchCV
+from .utils import validate_inputs
 from ._knn_subroutine import compute_best_k
 
 
@@ -44,26 +44,6 @@ class KNNPowerCurve(object):
         self.algorithms = algorithms
         self.weights = weights
 
-    def validate_inputs(self, X, y):
-        """Validates the inputs to KNNPowerCurve."""
-        if not (isinstance(X, list) or isinstance(pd.DataFrame(X), pd.DataFrame) or isinstance(np.array(X), np.ndarray)):
-            raise ValueError(
-                "The features data should be either of list or numpy array or dataframe.")
-
-        if not (isinstance(y, list) or isinstance(pd.DataFrame(y), pd.DataFrame) or isinstance(np.array(y), np.ndarray)):
-            raise ValueError(
-                "The target data should be either of list or numpy array or dataframe.")
-
-        if np.isnan(np.array(X)).any() or np.isnan(np.array(y)).any():
-            raise ValueError("The data should not contains any null value.")
-
-        if np.isinf(np.array(X)).any() or np.isinf(np.array(y)).any():
-            raise ValueError("The data must not have any infinite value.")
-
-        if not np.isfinite(np.array(X)).any() or not np.isfinite(np.array(y)).any():
-            raise ValueError(
-                "The data should have only numeric values.")
-
     def fit(self, X, y, subset_selection=False):
         """Fit the KNNPowerCurve from the training dataset.
 
@@ -75,12 +55,12 @@ class KNNPowerCurve(object):
         y : {array-like, sparse matrix} of shape (n_samples,)
             Target values.
 
-        Return
-        ------
+        Returns
+        -------
         self : The fitted KNNPowerCurve.
         """
 
-        self.validate_inputs(X, y)
+        validate_inputs(X, y)
 
         self.X = np.array(X)
         self.y = np.array(y)
@@ -148,12 +128,12 @@ class KNNPowerCurve(object):
         y : {array-like, sparse matrix} of shape (n_samples,)
             New target values.
 
-        Return
-        ------
+        Returns
+        -------
         self : The fitted KNNPowerCurve.
         """
 
-        self.validate_inputs(X, y)
+        validate_inputs(X, y)
 
         if X.shape[0] <= self.X.shape[0]:
             self.X = np.concatenate([self.X[X.shape[0]:], X])
