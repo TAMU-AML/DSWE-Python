@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html lang="Python">
+<html>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
@@ -49,18 +49,18 @@ No need to explicitly pass anything.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>weights</strong> (<em>{'auto'</em><em>, </em><em>'distance'}</em>) -- <ul>
-<li><p>'uniform' : uniform weights.  All points in each neighborhood</p></li>
+<li><p><strong>algorithms</strong> (<em>Algorithm used to compute the nearest neighbors.</em>) – <ul>
+<li><p>‘auto’ will attempt to decide the most appropriate algorithm
+based on the values passed to ‘fit’ method.</p></li>
 </ul>
-<p>are weighted equally.
-- 'distance' : weight points by the inverse of their distance.
-in this case, closer neighbors of a query point will have a
-greater influence than neighbors which are further away.</p>
 </p></li>
-<li><p><strong>algorithms</strong> (<em>Algorithm used to compute the nearest neighbors.</em>) -- <ul>
-<li><p>'auto' will attempt to decide the most appropriate algorithm</p></li>
+<li><p><strong>weights</strong> (<em>{'uniform'</em><em>, </em><em>'distance'}</em>) – <ul>
+<li><p>‘uniform’ : uniform weights.  All points in each neighborhood
+are weighted equally.</p></li>
+<li><p>’distance’ : weight points by the inverse of their distance.
+in this case, closer neighbors of a query point will have a
+greater influence than neighbors which are further away.</p></li>
 </ul>
-<p>based on the values passed to 'fit' method.</p>
 </p></li>
 </ul>
 </dd>
@@ -72,8 +72,8 @@ greater influence than neighbors which are further away.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) -- Training data.</p></li>
-<li><p><strong>y</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) -- Target values.</p></li>
+<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Training data.</p></li>
+<li><p><strong>y</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target values.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -91,10 +91,10 @@ greater influence than neighbors which are further away.</p>
 <dd><p>Predict the target for the provided data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>array-like of shape</em><em> (</em><em>n_queries</em><em>, </em><em>n_features</em><em>)</em>) -- Test samples.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>array-like of shape</em><em> (</em><em>n_queries</em><em>, </em><em>n_features</em><em>)</em>) – Test samples.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>y</strong> -- Predicted target values.</p>
+<dd class="field-even"><p><strong>y</strong> – Predicted target values.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>ndarray of shape (n_queries,)</p>
@@ -109,8 +109,8 @@ greater influence than neighbors which are further away.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) -- New training data.</p></li>
-<li><p><strong>y</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) -- New target values.</p></li>
+<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – New training data.</p></li>
+<li><p><strong>y</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – New target values.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -120,12 +120,6 @@ greater influence than neighbors which are further away.</p>
 <dd class="field-odd"><p>The fitted KNNPowerCurve.</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dswe.knn.KNNPowerCurve.validate_inputs">
-<span class="sig-name descname"><span class="pre">validate_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/knn.html#KNNPowerCurve.validate_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.knn.KNNPowerCurve.validate_inputs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validates the inputs to KNNPowerCurve.</p>
 </dd></dl>
 
 </dd></dl>
