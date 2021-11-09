@@ -20,5 +20,5 @@ After cloning, install the package using 'pip' and set the path
 to the package directory. All the dependencies require for this package
 will be installed automatically::
 
-  > pip install /DSWE-Python
+  > pip install /DSWE-Python/
 
