@@ -9,8 +9,8 @@ with open("requirements.txt", "r") as f:
 setup(
     name="DSWE",
     version="0.0.1",
-    author="Pratyush Kumar",
-    author_email="pratyush.019@gmail.com",
+    author="Pratyush Kumar, Abhinav Prakash, and Yu Ding",
+    author_email="yuding@tamu.edu",
     description="A python package to supplement the Data Science for Wind Energy (DSWE) book.",
     long_description=long_description,
     long_description_content_type="text/markdown",
