@@ -57,15 +57,18 @@ def compute_loglike_grad_sum_tempGP(databins, params):
 
 
 def estimate_binned_params(databins):
-    ncov = databins['X'].shape[2]
+    ncov = databins[0]['X'].shape[1]
     theta = [0] * ncov
 
-    for i in ncov:
-        theta[i] = databins['X'][:, :, i].std(axis=1, ddof=1).mean()
+    for i in range(ncov):
+        theta[i] = np.mean([bins['X'][:, i].std(ddof=1) for bins in databins])
 
-    beta = databins['y'].mean()
-    sigma_f = (databins['y'].std(axis=1, ddof=1) / math.sqrt(2)).mean()
-    sigma_n = (databins['y'].std(axis=1, ddof=1) / math.sqrt(2)).mean()
+    beta = np.mean([bins['y'][:].mean() for bins in databins])
+    sigma_f = np.mean([bins['y'][:].std(ddof=1) / math.sqrt(2)
+                      for bins in databins])
+    sigma_n = np.mean([bins['y'][:].std(ddof=1) / math.sqrt(2)
+                      for bins in databins])
+
     params = {'theta': theta, 'sigma_f': sigma_f,
               'sigma_n': sigma_n, 'beta': beta}
 
@@ -73,13 +76,13 @@ def estimate_binned_params(databins):
     par_init.extend(params['theta'])
     par_init.extend([params['sigma_f'], params['sigma_n'], params['beta']])
 
-    obj_fun = lambda par: compute_loglike_sum_tempGP(databins, params={'theta': par_init[0:ncov],
-                                                                       'sigma_f': par_init[ncov:ncov + 1], 'sigma_n': par_init[ncov + 1:ncov + 2], 'beta': par_init[ncov + 2]})
+    obj_fun = lambda par: compute_loglike_sum_tempGP(databins, params={'theta': par[0:ncov],
+                                                                       'sigma_f': par[ncov:ncov + 1], 'sigma_n': par[ncov + 1:ncov + 2], 'beta': par[ncov + 2]})
 
-    obj_grad = lambda par: compute_loglike_grad_sum_tempGP(databins, params={'theta': par_init[0:ncov],
-                                                                             'sigma_f': par_init[ncov:ncov + 1], 'sigma_n': par_init[ncov + 1:ncov + 2], 'beta': par_init[ncov + 2]})
+    obj_grad = lambda par: compute_loglike_grad_sum_tempGP(databins, params={'theta': par[0:ncov],
+                                                                             'sigma_f': par[ncov:ncov + 1], 'sigma_n': par[ncov + 1:ncov + 2], 'beta': par[ncov + 2]})
 
     optim_result = minimize(fun=obj_fun, x0=par_init,
                             method='L-BFGS-B', jac=obj_grad)
 
-    return optim_result.x
+    return {'estimated_params': optim_result.x, 'obj_val': optim_result.fun, 'grad_val': optim_result.jac}
