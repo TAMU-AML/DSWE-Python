@@ -85,4 +85,12 @@ def estimate_binned_params(databins):
     optim_result = minimize(fun=obj_fun, x0=par_init,
                             method='L-BFGS-B', jac=obj_grad)
 
-    return {'estimated_params': optim_result.x, 'obj_val': optim_result.fun, 'grad_val': optim_result.jac}
+    estimated_params = {'theta': abs(optim_result.x[0:ncov]),
+                        'sigma_f': abs(optim_result.x[ncov:ncov + 1]).item(),
+                        'sigma_n': abs(optim_result.x[ncov + 1:ncov + 2]).item(),
+                        'beta': abs(optim_result.x[ncov + 2:ncov + 3]).item()}
+
+    obj_val = optim_result.fun
+    grad_val = optim_result.jac
+
+    return {'estimated_params': estimated_params, 'obj_val': obj_val, 'grad_val': grad_val}
