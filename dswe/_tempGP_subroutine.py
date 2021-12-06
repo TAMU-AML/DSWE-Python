@@ -56,7 +56,7 @@ def compute_loglike_grad_sum_tempGP(databins, params):
     return np.array(loglikesum).sum(axis=0)
 
 
-def estimate_binned_params(databins):
+def estimate_binned_params(databins, opt_method='L-BFGS-B'):
     ncov = databins[0]['X'].shape[1]
     theta = [0] * ncov
 
@@ -83,12 +83,12 @@ def estimate_binned_params(databins):
                                                                              'sigma_f': par[ncov:ncov + 1], 'sigma_n': par[ncov + 1:ncov + 2], 'beta': par[ncov + 2]})
 
     optim_result = minimize(fun=obj_fun, x0=par_init,
-                            method='L-BFGS-B', jac=obj_grad)
+                            method=opt_method, jac=obj_grad)
 
     estimated_params = {'theta': abs(optim_result.x[0:ncov]),
                         'sigma_f': abs(optim_result.x[ncov:ncov + 1]).item(),
                         'sigma_n': abs(optim_result.x[ncov + 1:ncov + 2]).item(),
-                        'beta': abs(optim_result.x[ncov + 2:ncov + 3]).item()}
+                        'beta': optim_result.x[ncov + 2:ncov + 3].item()}
 
     obj_val = optim_result.fun
     grad_val = optim_result.jac
