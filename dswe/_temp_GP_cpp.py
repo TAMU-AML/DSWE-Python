@@ -61,7 +61,7 @@ def compute_loglike_GP(X, y, params):
     return t1 + t2 + t3
 
 
-def predict_GP(train_X, train_y, weighted_y, test_X, params):
+def predict_GP(train_X, weighted_y, test_X, params):
     pred = np.zeros((test_X.shape[0], 1))
     theta, sigma_f, beta = params['theta'], params['sigma_f'], params['beta']
     test_cov_mat = math.pow(sigma_f, 2) * \

@@ -58,6 +58,8 @@ class TempGP(object):
         if not test_T:
             return pred_F
         else:
-            return pred_F  # ++ compute local function
+            pred_G = compute_local_function(
+                self.train_residual, self.T, test_T, self.thinning_number)
+            return pred_F + pred_G
 
     def update(self, X, y, T=None, replace=True, update_model_F=False):

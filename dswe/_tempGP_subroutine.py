@@ -5,6 +5,7 @@
 
 import numpy as np
 import math
+import warnings
 from statsmodels.tsa import stattools as ts
 from scipy.optimize import minimize
 from ._temp_GP_cpp import *
@@ -94,3 +95,61 @@ def estimate_binned_params(databins, opt_method='L-BFGS-B'):
     grad_val = optim_result.jac
 
     return {'estimated_params': estimated_params, 'obj_val': obj_val, 'grad_val': grad_val}
+
+
+def estimate_local_function_params(trainT, residual):
+    theta = np.std(trainT, ddof=1)
+    sigma_f = np.std(residual, ddof=1) / np.sqrt(2)
+    sigma_n = sigma_f
+
+    par_init = [theta, sigma_f, sigma_n]
+
+    obj_fun = lambda par: compute_loglike_GP(trainT.reshape(-1, 1), residual, params={'theta': par[0:1],
+                                                                                      'sigma_f': par[1:2], 'sigma_n': par[2:3], 'beta': 0})
+
+    obj_grad = lambda par: compute_loglike_grad_GP_zero_mean(trainT.reshape(-1, 1), residual, params={'theta': par[0:1],
+                                                                                                      'sigma_f': par[1:2], 'sigma_n': par[2:3], 'beta': 0})
+
+    optim_result = minimize(fun=obj_fun, x0=par_init,
+                            method='L-BFGS-B', jac=obj_grad)
+
+    estimated_params = {'theta': abs(optim_result.x[0:1]),
+                        'sigma_f': abs(optim_result.x[1:2]).item(),
+                        'sigma_n': abs(optim_result.x[2:3]).item(),
+                        'beta': 0}
+
+    obj_val = optim_result.fun
+    grad_val = optim_result.jac
+
+    return {'estimated_params': estimated_params, 'obj_val': obj_val, 'grad_val': grad_val}
+
+
+def compute_local_function(residual, train_T, test_T, neighbourhood):
+    pred = [0] * len(test_T)
+    for i in range(len(test_T)):
+        distance = abs(test_T[i] - train_T)
+        train_idx = np.where(distance < neighbourhood)[0]
+        if len(train_idx) > 0:
+            if np.var(residual[train_idx]) < np.finfo(np.float64).eps or np.isnan(residual[train_idx]).any():
+                msg = "While computing g(t), variance of the training residuals is numerically zero for time index: " + str(
+                    test_T[i]) + "\nUsing mean of the response as the prediction."
+                warnings.warn(msg)
+                pred[i] = np.mean(residual[train_idx])
+            else:
+                try:
+                    params = estimate_local_function_params(
+                        train_T[train_idx], residual[train_idx])
+                    weighted_res = compute_weighted_y(np.array(train_T[train_idx]).reshape(
+                        -1, 1), np.array(residual[train_idx]), params['estimated_params'])
+                    pred[i] = predict_GP(np.array(train_T[train_idx]).reshape(-1, 1), weighted_res,
+                                         np.array(test_T[i]).reshape(-1, 1), params['estimated_params'])[0]
+                except:
+                    msg = "While computing g(t), variance of the training residuals is numerically zero for time index: " + str(
+                        test_T[i]) + "\nUsing mean of the response as the prediction."
+                    warnings.warn(msg)
+                    pred[i] = np.mean(residual[train_idx])
+
+        else:
+            pred[i] = 0
+
+    return pred
