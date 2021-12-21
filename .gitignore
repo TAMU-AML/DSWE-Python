@@ -5,3 +5,4 @@ dswe/DSWE.egg-info
 __pycache__
 DSWE.egg-info
 dist
+/build

@@ -22,7 +22,7 @@ class TempGP(object):
 
     Parameters
     ----------
-    opt_method: Type of solver. The best working solver are ['L-BFGS-B', 'BFGS].
+    opt_method: Type of solver. The best working solver are ['L-BFGS-B', 'BFGS'].
 
     """
 
