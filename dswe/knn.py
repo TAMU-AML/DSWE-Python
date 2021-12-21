@@ -54,7 +54,7 @@ class KNNPowerCurve(object):
 
         Returns
         -------
-        self : The fitted KNNPowerCurve.
+        A fitted object of class KNNPowerCurve.
         """
 
         validate_inputs(X, y)
@@ -96,14 +96,13 @@ class KNNPowerCurve(object):
 
         Parameters
         ----------
-        X : array-like of shape (n_queries, n_features)
+        X : array-like of shape (n_samples, n_features)
            Test samples.
 
         Returns
         -------
-        y : ndarray of shape (n_queries,)
+        y : ndarray of shape (n_samples,)
            Predicted target values.
-
         """
 
         normlized_X = (X - self.scaler_min) / \
@@ -127,7 +126,7 @@ class KNNPowerCurve(object):
 
         Returns
         -------
-        self : The fitted KNNPowerCurve.
+        An updated object of class KNNPowerCurve.
         """
 
         validate_inputs(X, y)

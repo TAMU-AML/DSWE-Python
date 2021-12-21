@@ -25,3 +25,20 @@ def validate_inputs(X, y):
 
     if not (np.issubdtype(np.array(X).dtype, np.number) or np.issubdtype(np.array(y).dtype, np.number)):
         raise ValueError("The data should have only numeric values.")
+
+
+def validate_features(X):
+    """Validates the inputs without target to model."""
+
+    if not (isinstance(X, list) or isinstance(pd.DataFrame(X), pd.DataFrame) or isinstance(np.array(X), np.ndarray)):
+        raise ValueError(
+            "The features data should be either of list or numpy array or dataframe.")
+
+    if np.isnan(np.array(X)).any():
+        raise ValueError("The data should not contains any null value.")
+
+    if np.isinf(np.array(X)).any():
+        raise ValueError("The data must not have any infinity value.")
+
+    if not np.issubdtype(np.array(X).dtype, np.number):
+        raise ValueError("The data should have only numeric values.")

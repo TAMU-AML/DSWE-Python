@@ -65,7 +65,7 @@ def predict_GP(train_X, weighted_y, test_X, params):
     pred = np.zeros((test_X.shape[0], 1))
     theta, sigma_f, beta = params['theta'], params['sigma_f'], params['beta']
     test_cov_mat = math.pow(sigma_f, 2) * \
-        compute_correl_mat(train_X, test_X, theta)
+        compute_correl_mat(test_X, train_X, theta)
     pred = beta + np.dot(test_cov_mat, weighted_y)
 
     return pred
