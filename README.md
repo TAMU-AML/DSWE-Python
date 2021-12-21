@@ -19,3 +19,6 @@ will be installed automatically:
 ```console
 pip install DSWE-Python/
 ```
+
+### Documentation
+[Link](doc/build/html/index.html)
