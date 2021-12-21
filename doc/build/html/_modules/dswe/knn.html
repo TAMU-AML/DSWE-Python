@@ -87,7 +87,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        self : The fitted KNNPowerCurve.</span>
+<span class="sd">        A fitted object of class KNNPowerCurve.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">validate_inputs</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -129,14 +129,13 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        X : array-like of shape (n_queries, n_features)</span>
+<span class="sd">        X : array-like of shape (n_samples, n_features)</span>
 <span class="sd">           Test samples.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        y : ndarray of shape (n_queries,)</span>
+<span class="sd">        y : ndarray of shape (n_samples,)</span>
 <span class="sd">           Predicted target values.</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">normlized_X</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaler_min</span><span class="p">)</span> <span class="o">/</span> \
@@ -160,7 +159,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        self : The fitted KNNPowerCurve.</span>
+<span class="sd">        An updated object of class KNNPowerCurve.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">validate_inputs</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>

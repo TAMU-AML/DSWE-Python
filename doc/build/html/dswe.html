@@ -77,10 +77,10 @@ greater influence than neighbors which are further away.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong></p>
+<dd class="field-even"><p></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>The fitted KNNPowerCurve.</p>
+<dd class="field-odd"><p>A fitted object of class KNNPowerCurve.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -91,13 +91,13 @@ greater influence than neighbors which are further away.</p></li>
 <dd><p>Predict the target for the provided data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>array-like of shape</em><em> (</em><em>n_queries</em><em>, </em><em>n_features</em><em>)</em>) – Test samples.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Test samples.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>y</strong> – Predicted target values.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>ndarray of shape (n_queries,)</p>
+<dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -114,10 +114,144 @@ greater influence than neighbors which are further away.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong></p>
+<dd class="field-even"><p></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>The fitted KNNPowerCurve.</p>
+<dd class="field-odd"><p>An updated object of class KNNPowerCurve.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-dswe.tempGP"></span><dl class="py class">
+<dt class="sig sig-object py" id="dswe.tempGP.TempGP">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dswe.tempGP.</span></span><span class="sig-name descname"><span class="pre">TempGP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opt_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'L-BFGS-B'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/tempGP.html#TempGP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.tempGP.TempGP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Paper: The temporal overfitting problem with applications in wind power curve modeling.
+Description: A Gaussian process based power curve model which explicitly models</p>
+<blockquote>
+<div><p>the temporal aspect of the power curve.
+The model consists of two parts: f(x) and g(t).</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>opt_method</strong> (<em>Type of solver. The best working solver are</em><em> [</em><em>'L-BFGS-B'</em><em>, </em><em>'BFGS</em><em>]</em><em></em>) – </p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="dswe.tempGP.TempGP.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/tempGP.html#TempGP.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.tempGP.TempGP.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the TempGP from the training dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>A matrix with each column corresponding to one input variable.</em>) – {array-like, sparse matrix} of shape (n_samples, n_features)
+Training data.</p></li>
+<li><p><strong>y</strong> (<em>A vector with each element corresponding to the output at the corresponding</em>) – row of X.
+{array-like, sparse matrix} of shape (n_samples,)
+Target values.</p></li>
+<li><p><strong>T</strong> (<em>A vector for time indices of the data points. By default</em><em>, </em><em>the function assigns</em>) – natural numbers starting from 1 as the time indices.
+{array-like, sparse matrix} of shape (n_samples,)
+Temporal values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>A fitted object classm TempGP.</em></p></li>
+<li><p><strong>thinning_number</strong> (<em>the thinning number computed by the algorithm.</em>)</p></li>
+<li><p><strong>model_F</strong> (<em>A dictionary containing details of the model for predicting function f(x).</em>) –</p>
+<ul>
+<li><dl class="simple">
+<dt>X<span class="classifier">The input variable matrix for computing the cross-covariance for predictions, same</span></dt><dd><p>as X unless the model is updated. See TempGP.update() method for details on
+updating the model.</p>
+</dd>
+</dl>
+</li>
+<li><p>y : The response vector, again same as y unless the model is updated.</p></li>
+<li><dl class="simple">
+<dt>weighted_y<span class="classifier">The weighted response, that is, the response left multiplied by the inverse of</span></dt><dd><p>the covariance matrix.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</li>
+<li><p><strong>model_G</strong> (<em>A dictionary containing details of the model for predicting function g(t).</em>) –</p>
+<ul>
+<li><dl class="simple">
+<dt>residuals<span class="classifier">The residuals after subtracting function f(x) from the response. Used to</span></dt><dd><p>predict g(t). See TempGP.update() method for updating the residuals.</p>
+</dd>
+</dl>
+</li>
+<li><p>T : The time indices of the residuals, same as T.</p></li>
+</ul>
+</li>
+<li><p><strong>optim_result</strong> (<em>A dictionary containing optimized values of model f(x).</em>) –</p>
+<ul>
+<li><p>estimated_params :  estimated hyperparameters for function f(x).</p></li>
+<li><p>obj_val : objective value of the hyperparameter optimization for f(x).</p></li>
+<li><p>grad_val : gradient vector at the optimal objective value.</p></li>
+</ul>
+</li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Prakash, A., Tuo, R., &amp; Ding, Y. (2020). “The temporal overfitting problem with applications
+in wind power curve modeling.” arXiv preprint arXiv:2012.01349. &lt;https://arxiv.org/abs/
+2012.01349&gt;.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dswe.tempGP.TempGP.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/tempGP.html#TempGP.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.tempGP.TempGP.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the target for the provided data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>A matrix with each column corresponding to one input variable.</em>) – array-like of shape (n_samples, n_features)
+Test samples.</p></li>
+<li><p><strong>T</strong> (<em>A vector for time indices of the data points.</em>) – {array-like, sparse matrix} of shape (n_samples,)
+Temporal values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>y</strong> – Predicted target values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dswe.tempGP.TempGP.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_model_F</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/tempGP.html#TempGP.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.tempGP.TempGP.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the model when new training dataset will arrive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>A matrix with each column corresponding to one input variable.</em>) – {array-like, sparse matrix} of shape (n_samples, n_features)
+New training data.</p></li>
+<li><p><strong>y</strong> (<em>A vector with each element corresponding to the output at the corresponding</em>) – row of X.
+{array-like, sparse matrix} of shape (n_samples,)
+New target values.</p></li>
+<li><p><strong>T</strong> (<em>A vector with time indices of the new datapoints. If None</em><em>, </em><em>the function assigns</em>) – natural numbers starting with one larger than the existing time indices in existing T.
+{array-like, sparse matrix} of shape (n_samples,)
+New temporal values.</p></li>
+<li><p><strong>replace</strong> (<em>A boolean to specify whether to replace the old data with the new one</em><em>, or </em><em>to</em>) – add the new data while still keeping all the old data. Default is True, which
+replaces the top m rows from the old data, where m is the number of data points
+in the new data.</p></li>
+<li><p><strong>update_model_F</strong> (<em>A boolean to specify whether to update model_F as well. If the original TempGP</em>) – model is trained on a sufficiently large dataset (say one year), updating model_F
+regularly may not result in any significant improvement, but can be computationally expensive.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>An updated object of class TempGP.</p>
 </dd>
 </dl>
 </dd></dl>

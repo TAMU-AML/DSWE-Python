@@ -12,6 +12,11 @@ dswe.knn module
    :undoc-members:
    :show-inheritance:
 
+.. automodule:: dswe.tempGP
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
