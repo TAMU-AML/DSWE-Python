@@ -19,7 +19,6 @@ class TempGP(object):
                 the temporal aspect of the power curve. 
                 The model consists of two parts: f(x) and g(t).
 
-
     Parameters
     ----------
     opt_method: Type of solver. The best working solver are ['L-BFGS-B', 'BFGS'].
