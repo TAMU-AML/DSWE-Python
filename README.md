@@ -21,4 +21,4 @@ pip install DSWE-Python/
 ```
 
 ### Documentation
-[Link](doc/build/html/index.html)
+[Link](docs/build/html/index.html)
