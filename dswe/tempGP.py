@@ -33,14 +33,14 @@ class TempGP(object):
 
         Parameters
         ----------
-        X : A matrix with each column corresponding to one input variable.
-            {array-like, sparse matrix} of shape (n_samples, n_features)
-            Training data.
+        X : A matrix with each column corresponding to one input variable. \
+            {array-like, sparse matrix} of shape (n_samples, n_features). \
+
 
         y : A vector with each element corresponding to the output at the corresponding
-            row of X.
-            {array-like, sparse matrix} of shape (n_samples,)
-            Target values.
+        row of X.
+        {array-like, sparse matrix} of shape (n_samples,)
+        Target values.
 
         T : A vector for time indices of the data points. By default, the function assigns
             natural numbers starting from 1 as the time indices.
