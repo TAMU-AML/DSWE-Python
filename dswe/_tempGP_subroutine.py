@@ -8,7 +8,7 @@ import math
 import warnings
 from statsmodels.tsa import stattools as ts
 from scipy.optimize import minimize
-from ._temp_GP_cpp import *
+from ._GPMethods_cpp import *
 
 
 def compute_thinning_number(X):

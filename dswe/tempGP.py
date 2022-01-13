@@ -5,7 +5,7 @@
 
 import numpy as np
 from .utils import validate_features, validate_inputs
-from ._temp_GP_cpp import *
+from ._GPMethods_cpp import *
 from ._tempGP_subroutine import *
 
 

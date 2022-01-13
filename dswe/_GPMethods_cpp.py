@@ -139,3 +139,37 @@ def compute_loglike_grad_GP_zero_mean(X, y, params):
     grad_val[n_theta + 1] = -0.5 * np.trace(del_sigma_n_mat)
 
     return grad_val
+
+
+def compute_diff_conv_(X1, y1, X2, y2, XT, theta, sigma_f, sigma_n, beta):
+    KX1X1 = math.pow(sigma_f, 2) * compute_correl_mat(X1, X1, theta)
+    diag_idx = np.diag_indices(KX1X1.shape[0])
+    KX1X1[diag_idx] += math.pow(sigma_n, 2)
+    inv_KX1X1 = pinvh(KX1X1)
+    KX1X1 = None
+
+    KXTX1 = math.pow(sigma_f, 2) * compute_correl_mat(XT, X1, theta)
+    mu1 = beta + np.dot(np.dot(KXTX1, inv_KX1X1), (y1 - beta))
+    K1 = np.dot(inv_KX1X1, KXTX1.T)
+    K = np.dot(KXTX1, K1)
+    KXTX1 = None
+    inv_KX1X1 = None
+
+    KX2X2 = math.pow(sigma_f, 2) * compute_correl_mat(X2, X2, theta)
+    diag_idx = np.diag_indices(KX2X2.shape[0])
+    KX2X2[diag_idx] += math.pow(sigma_n, 2)
+    inv_KX2X2 = pinvh(KX2X2)
+    KX2X2 = None
+
+    KXTX2 = math.pow(sigma_f, 2) * compute_correl_mat(XT, X2, theta)
+    mu2 = beta + np.dot(np.dot(KXTX2, inv_KX2X2), (y2 - beta))
+    K2 = np.dot(KXTX2, inv_KX2X2)
+    inv_KX2X2 = None
+    K = K + np.dot(K2, KXTX2.T)
+    KXTX2 = None
+
+    KX2X1 = math.pow(sigma_f, 2) * compute_correl_mat(X2, X1, theta)
+    K = K - (2 * np.dot(np.dot(K2, KX2X1), K1))
+    K = (K + K.T) / 2
+
+    return {'diff_cov_mat': K, 'mu1': mu1, 'mu2': mu2}
