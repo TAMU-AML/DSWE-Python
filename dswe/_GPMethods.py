@@ -1,6 +1,7 @@
 import math
 import numpy as np
-from scipy.linalg import cholesky, solve_triangular, pinvh
+from scipy.linalg import cholesky, solve_triangular, pinvh, eigh
+from scipy import stats
 
 
 def outer_diff(X1, X2):
@@ -173,3 +174,29 @@ def compute_diff_conv_(X1, y1, X2, y2, XT, theta, sigma_f, sigma_n, beta):
     K = (K + K.T) / 2
 
     return {'diff_cov_mat': K, 'mu1': mu1, 'mu2': mu2}
+
+
+def compute_conf_band_(diff_cov_mat, conf_level):
+    eig_val, eig_vec = eigh(diff_cov_mat)
+    first_idx = np.where(eig_val[eig_val < 1e-8])[0][-1]
+    lambdaa = np.diag(np.flip(eig_val[first_idx:len(eig_val)]))
+    eig_mat = np.fliplr(eig_vec[:, first_idx:len(eig_val)])
+    n_eig = lambdaa.shape[0]
+    radius = np.sqrt(stats.chi2.ppf(conf_level, n_eig))
+    n_samples = 1000
+    Z = np.zeros((n_eig, n_samples))
+
+    n = 0
+    while n < n_samples:
+        z_sample = np.random.randn(n_eig)
+        z_sum = np.power(z_sample, 2).sum()
+
+        if z_sum <= radius:
+            Z[:, n] = z_sample
+            n += 1
+
+    G = np.dot(np.dot(eig_mat, np.sqrt(lambdaa)), Z)
+    G = np.abs(G)
+    band = G.max(axis=1)
+
+    return band

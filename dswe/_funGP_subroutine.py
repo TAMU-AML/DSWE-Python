@@ -8,7 +8,7 @@ import math
 import warnings
 from statsmodels.tsa import stattools as ts
 from scipy.optimize import minimize
-from ._GPMethods_cpp import *
+from ._GPMethods import *
 
 
 def compute_thinning_number(X):
@@ -97,7 +97,7 @@ def estimate_binned_params(databins, opt_method='L-BFGS-B'):
     return {'estimated_params': estimated_params, 'obj_val': obj_val, 'grad_val': grad_val}
 
 
-def estimate_parameters(trainX, trainy, optim_size, range_seed, opt_method='L-BFGS-B', limit_memory=False):
+def estimate_parameters(trainX, trainy, band_size, range_seed, opt_method='L-BFGS-B', limit_memory=False):
     if not limit_memory:
         thinning_number = math.ceil((compute_thinning_number(
             trainX[0]) + compute_thinning_number(trainX[1])) / 2)
@@ -108,7 +108,7 @@ def estimate_parameters(trainX, trainy, optim_size, range_seed, opt_method='L-BF
         return optim_result
 
     elif limit_memory:
-        max_data_sample = optim_size
+        max_data_sample = band_size
         for i in range(len(trainX)):
             if len(trainX[i]) > max_data_sample:
                 np.random.seed(range_seed)
@@ -144,3 +144,8 @@ def compute_diff_conv(trainX, trainy, params, testX, optim_size, range_seed, lim
     XT = testX
 
     return compute_diff_conv_(X1, y1, X2, y2, XT, theta, sigma_f, sigma_n, beta)
+
+
+def compute_conf_band(diff_cov_mat, conf_level):
+    band = compute_conf_band_(diff_cov_mat, conf_level)
+    return band.tolist()
