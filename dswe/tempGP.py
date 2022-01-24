@@ -49,7 +49,7 @@ class TempGP(object):
 
         Returns
         -------
-        A fitted object classm TempGP.
+        A fitted object of class TempGP.
 
         thinning_number : the thinning number computed by the algorithm.
         model_F :  A dictionary containing details of the model for predicting function f(x).

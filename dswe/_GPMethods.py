@@ -54,8 +54,8 @@ def compute_loglike_GP(X, y, params):
     upper_chol_mat = cholesky(cov_mat)
     y_dash = y - beta
 
-    t1 = 0.5 * np.dot(y_dash.T, solve_triangular(upper_chol_mat,
-                                                 solve_triangular(upper_chol_mat.T, y_dash, lower=True)))
+    t1 = 0.5 * np.matmul(y_dash.T, solve_triangular(upper_chol_mat,
+                                                    solve_triangular(upper_chol_mat.T, y_dash, lower=True)))
     t2 = np.log(np.abs(upper_chol_mat.diagonal())).sum()
     t3 = np.log(2 * math.pi) * upper_chol_mat.shape[0] / 2
 
@@ -67,7 +67,7 @@ def predict_GP(train_X, weighted_y, test_X, params):
     theta, sigma_f, beta = params['theta'], params['sigma_f'], params['beta']
     test_cov_mat = math.pow(sigma_f, 2) * \
         compute_correl_mat(test_X, train_X, theta)
-    pred = beta + np.dot(test_cov_mat, weighted_y)
+    pred = beta + np.matmul(test_cov_mat, weighted_y)
 
     return pred
 
@@ -86,24 +86,25 @@ def compute_loglike_grad_GP(X, y, params):
     grad_val = np.zeros(n_theta + 3)
 
     y_dash = y - beta
-    alpha = np.dot(inv_mat, y_dash)
-    diff_mat = np.dot(alpha.reshape(-1, 1), alpha.reshape(-1, 1).T) - inv_mat
+    alpha = np.matmul(inv_mat, y_dash)
+    diff_mat = np.matmul(alpha.reshape(-1, 1),
+                         alpha.reshape(-1, 1).T) - inv_mat
     onevec = np.ones(len(y))
-    sol_onevec = np.dot(inv_mat, onevec)
+    sol_onevec = np.matmul(inv_mat, onevec)
 
     for i in range(n_theta):
         del_theta_mat = (math.pow(
             sigma_f, 2) * (np.power(outer_diff(X[:, i], X[:, i]), 2) / math.pow(theta[i], 3))) * correl_mat
-        del_theta_mat = np.dot(diff_mat, del_theta_mat)
+        del_theta_mat = np.matmul(diff_mat, del_theta_mat)
         grad_val[i] = -0.5 * np.trace(del_theta_mat)
 
     del_sigma_f_mat = 2 * sigma_f * correl_mat
-    del_sigma_f_mat = np.dot(diff_mat, del_sigma_f_mat)
+    del_sigma_f_mat = np.matmul(diff_mat, del_sigma_f_mat)
     grad_val[n_theta] = -0.5 * np.trace(del_sigma_f_mat)
     del_sigma_n_mat = 2 * sigma_n * diff_mat
     grad_val[n_theta + 1] = -0.5 * np.trace(del_sigma_n_mat)
-    grad_val[n_theta + 2] = 0.5 * (2 * beta * np.dot(onevec.T, sol_onevec) - np.dot(
-        y.T, sol_onevec) - np.dot(onevec.T, alpha + (beta * sol_onevec)))
+    grad_val[n_theta + 2] = 0.5 * (2 * beta * np.matmul(onevec.T, sol_onevec) - np.matmul(
+        y.T, sol_onevec) - np.matmul(onevec.T, alpha + (beta * sol_onevec)))
 
     return grad_val
 
@@ -122,19 +123,20 @@ def compute_loglike_grad_GP_zero_mean(X, y, params):
     grad_val = np.zeros(n_theta + 2)
 
     y_dash = y - beta
-    alpha = np.dot(inv_mat, y_dash)
-    diff_mat = np.dot(alpha.reshape(-1, 1), alpha.reshape(-1, 1).T) - inv_mat
+    alpha = np.matmul(inv_mat, y_dash)
+    diff_mat = np.matmul(alpha.reshape(-1, 1),
+                         alpha.reshape(-1, 1).T) - inv_mat
     onevec = np.ones(len(y))
-    sol_onevec = np.dot(inv_mat, onevec)
+    sol_onevec = np.matmul(inv_mat, onevec)
 
     for i in range(n_theta):
         del_theta_mat = (math.pow(
             sigma_f, 2) * (np.power(outer_diff(X[:, i], X[:, i]), 2) / math.pow(theta[i], 3))) * correl_mat
-        del_theta_mat = np.dot(diff_mat, del_theta_mat)
+        del_theta_mat = np.matmul(diff_mat, del_theta_mat)
         grad_val[i] = -0.5 * np.trace(del_theta_mat)
 
     del_sigma_f_mat = 2 * sigma_f * correl_mat
-    del_sigma_f_mat = np.dot(diff_mat, del_sigma_f_mat)
+    del_sigma_f_mat = np.matmul(diff_mat, del_sigma_f_mat)
     grad_val[n_theta] = -0.5 * np.trace(del_sigma_f_mat)
     del_sigma_n_mat = 2 * sigma_n * diff_mat
     grad_val[n_theta + 1] = -0.5 * np.trace(del_sigma_n_mat)
@@ -150,9 +152,9 @@ def compute_diff_conv_(X1, y1, X2, y2, XT, theta, sigma_f, sigma_n, beta):
     KX1X1 = None
 
     KXTX1 = math.pow(sigma_f, 2) * compute_correl_mat(XT, X1, theta)
-    mu1 = beta + np.dot(np.dot(KXTX1, inv_KX1X1), (y1 - beta))
-    K1 = np.dot(inv_KX1X1, KXTX1.T)
-    K = np.dot(KXTX1, K1)
+    mu1 = beta + np.matmul(np.matmul(KXTX1, inv_KX1X1), (y1 - beta))
+    K1 = np.matmul(inv_KX1X1, KXTX1.T)
+    K = np.matmul(KXTX1, K1)
     KXTX1 = None
     inv_KX1X1 = None
 
@@ -163,14 +165,14 @@ def compute_diff_conv_(X1, y1, X2, y2, XT, theta, sigma_f, sigma_n, beta):
     KX2X2 = None
 
     KXTX2 = math.pow(sigma_f, 2) * compute_correl_mat(XT, X2, theta)
-    mu2 = beta + np.dot(np.dot(KXTX2, inv_KX2X2), (y2 - beta))
-    K2 = np.dot(KXTX2, inv_KX2X2)
+    mu2 = beta + np.matmul(np.matmul(KXTX2, inv_KX2X2), (y2 - beta))
+    K2 = np.matmul(KXTX2, inv_KX2X2)
     inv_KX2X2 = None
-    K = K + np.dot(K2, KXTX2.T)
+    K = K + np.matmul(K2, KXTX2.T)
     KXTX2 = None
 
     KX2X1 = math.pow(sigma_f, 2) * compute_correl_mat(X2, X1, theta)
-    K = K - (2 * np.dot(np.dot(K2, KX2X1), K1))
+    K = K - (2 * np.matmul(np.matmul(K2, KX2X1), K1))
     K = (K + K.T) / 2
 
     return {'diff_cov_mat': K, 'mu1': mu1, 'mu2': mu2}
@@ -189,13 +191,13 @@ def compute_conf_band_(diff_cov_mat, conf_level):
     n = 0
     while n < n_samples:
         z_sample = np.random.randn(n_eig)
-        z_sum = np.power(z_sample, 2).sum()
+        z_sum = np.sqrt(np.power(z_sample, 2).sum())
 
         if z_sum <= radius:
             Z[:, n] = z_sample
             n += 1
 
-    G = np.dot(np.dot(eig_mat, np.sqrt(lambdaa)), Z)
+    G = np.matmul(np.matmul(eig_mat, np.sqrt(lambdaa)), Z)
     G = np.abs(G)
     band = G.max(axis=1)
 
