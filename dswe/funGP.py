@@ -77,8 +77,6 @@ class FunGP(object):
         conf_level: A numeric representing the statistical significance level for 
                     constructing the band.
         estimated_params: A list of estimated hyperparameters for GP.
-
-
         """
 
         self.X = X
