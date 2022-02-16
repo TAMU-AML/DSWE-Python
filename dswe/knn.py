@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Pratyush Kumar, Abhinav Prakash, and Yu Ding
+# Copyright (c) 2022 Pratyush Kumar, Abhinav Prakash, and Yu Ding
 
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
@@ -46,10 +46,10 @@ class KNNPowerCurve(object):
 
         Parameters
         ----------
-        X : {array-like, sparse matrix} of shape (n_samples, n_features)
+        X : array-like of shape (n_samples, n_features).
             Training data.
 
-        y : {array-like, sparse matrix} of shape (n_samples,)
+        y : array-like of shape (n_samples,).
             Target values.
 
         Returns

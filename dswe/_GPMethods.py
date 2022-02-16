@@ -1,3 +1,8 @@
+# Copyright (c) 2022 Pratyush Kumar, Abhinav Prakash, and Yu Ding
+
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
 import math
 import numpy as np
 from scipy.linalg import cholesky, solve_triangular, pinvh, eigh

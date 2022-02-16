@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Pratyush Kumar, Abhinav Prakash, and Yu Ding
+# Copyright (c) 2022 Pratyush Kumar, Abhinav Prakash, and Yu Ding
 
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
@@ -18,7 +18,7 @@ def compute_best_k(X, y, range_k):
     for i in range(len(range_k)):
         pred_y = y[indices[:, 0:range_k[i]]].mean(axis=1)
         gcv[i] = np.sqrt(
-            np.mean(np.power((y - pred_y) / (1 - (1/range_k[i])), 2)))
+            np.mean(np.power((y - pred_y) / (1 - (1 / range_k[i])), 2)))
 
     best_k = range_k[np.argmin(gcv)]
     best_rmse = min(gcv)

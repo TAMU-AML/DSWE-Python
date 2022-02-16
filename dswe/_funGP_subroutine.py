@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Pratyush Kumar, Abhinav Prakash, and Yu Ding
+# Copyright (c) 2022 Pratyush Kumar, Abhinav Prakash, and Yu Ding
 
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
@@ -148,4 +148,4 @@ def compute_diff_conv(trainX, trainy, params, testX, optim_size, range_seed, lim
 
 def compute_conf_band(diff_cov_mat, conf_level):
     band = compute_conf_band_(diff_cov_mat, conf_level)
-    return band.tolist()
+    return np.array(band.tolist())

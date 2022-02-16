@@ -1,3 +1,8 @@
+# Copyright (c) 2022 Pratyush Kumar, Abhinav Prakash, and Yu Ding
+
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
 import numpy as np
 import pandas as pd
 
@@ -42,3 +47,32 @@ def validate_features(X):
 
     if not np.issubdtype(np.array(X).dtype, np.number):
         raise ValueError("The data should have only numeric values.")
+
+
+def validate_matching(data, circ_pos, thresh):
+
+    if not isinstance(data, list):
+        raise ValueError("Data must be a list containing data sets.")
+
+    if len(data) != 2:
+        raise ValueError(
+            "The number of data sets to match should be equal to two.")
+
+    if isinstance(data, list):
+        if not (isinstance(data[0], list) or isinstance(pd.DataFrame(data[0]), pd.DataFrame) or isinstance(np.array(data[0]), np.ndarray)):
+            raise ValueError(
+                "The features of first dataset should be either of list or numpy array or dataframe.")
+        if not (isinstance(data[1], list) or isinstance(pd.DataFrame(data[1]), pd.DataFrame) or isinstance(np.array(data[1]), np.ndarray)):
+            raise ValueError(
+                "The features of second dataset should be either of list or numpy array or dataframe.")
+
+    if circ_pos:
+        if not (isinstance(circ_pos, list) or isinstance(np.array(circ_pos), np.ndarray)):
+            raise ValueError(
+                "The circular position must be provided in a list or 1d-array.")
+
+    if (isinstance(thresh, list) or isinstance(np.array(thresh), np.ndarray)):
+        if len(thresh) > 0:
+            if len(thresh) != data[0].shape[1]:
+                raise ValueError(
+                    "The thresh must be a single value, or list or 1d array with weight for each covariate.")

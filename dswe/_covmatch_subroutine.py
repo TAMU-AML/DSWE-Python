@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Pratyush Kumar, Abhinav Prakash, and Yu Ding
+# Copyright (c) 2022 Pratyush Kumar, Abhinav Prakash, and Yu Ding
 
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
@@ -10,7 +10,6 @@ def matchcov(ref, obj, thres, circ_pos, flag):
 
     row_ref = ref.shape[0]
     row_obj = obj.shape[0]
-    ncols = ref.shape[1]
 
     match = np.zeros(row_ref)
 
@@ -63,7 +62,7 @@ def matchcov(ref, obj, thres, circ_pos, flag):
     return match
 
 
-def matching(mdata, weight, circ_pos):
+def matching(mdata, thresh, circ_pos):
 
     flag = False
     if circ_pos:
@@ -75,7 +74,7 @@ def matching(mdata, weight, circ_pos):
     test_id = list(range(refid))
 
     ratio = np.std(ref, axis=0)
-    thresh = ratio * weight
+    thresh = ratio * np.array(thresh)
 
     match_id = [0] * len(test_id)
     for idx in range(len(test_id)):

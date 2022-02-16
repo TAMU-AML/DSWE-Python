@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Pratyush Kumar, Abhinav Prakash, and Yu Ding
+# Copyright (c) 2022 Pratyush Kumar, Abhinav Prakash, and Yu Ding
 
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
@@ -19,6 +19,12 @@ class TempGP(object):
                 the temporal aspect of the power curve. 
                 The model consists of two parts: f(x) and g(t).
 
+    References
+    ----------
+    Prakash, A., Tuo, R., & Ding, Y. (2020). "The temporal overfitting problem with applications
+    in wind power curve modeling." arXiv preprint arXiv:2012.01349. <https://arxiv.org/abs/
+    2012.01349>.
+
     Parameters
     ----------
     opt_method: Type of solver. The best working solver are ['L-BFGS-B', 'BFGS'].
@@ -33,18 +39,15 @@ class TempGP(object):
 
         Parameters
         ----------
-        X : A matrix with each column corresponding to one input variable. \
-            {array-like, sparse matrix} of shape (n_samples, n_features). \
+        X : A matrix with each column corresponding to one input variable. 
+            array-like of shape (n_samples, n_features).
 
-
-        y : A vector with each element corresponding to the output at the corresponding
-        row of X.
-        {array-like, sparse matrix} of shape (n_samples,)
-        Target values.
+        y : A vector with each element corresponding to the output at the corresponding row of X.
+            array-like of shape (n_samples, n_features).
 
         T : A vector for time indices of the data points. By default, the function assigns
             natural numbers starting from 1 as the time indices.
-            {array-like, sparse matrix} of shape (n_samples,)
+            array-like of shape (n_samples,)
             Temporal values.
 
         Returns
@@ -52,6 +55,7 @@ class TempGP(object):
         A fitted object of class TempGP.
 
         thinning_number : the thinning number computed by the algorithm.
+
         model_F :  A dictionary containing details of the model for predicting function f(x).
             -   X : The input variable matrix for computing the cross-covariance for predictions, same
                     as X unless the model is updated. See TempGP.update() method for details on
@@ -59,6 +63,7 @@ class TempGP(object):
             -   y : The response vector, again same as y unless the model is updated.
             -   weighted_y : The weighted response, that is, the response left multiplied by the inverse of
                              the covariance matrix.
+
         model_G: A dictionary containing details of the model for predicting function g(t).
             -   residuals : The residuals after subtracting function f(x) from the response. Used to
                             predict g(t). See TempGP.update() method for updating the residuals.
@@ -68,12 +73,6 @@ class TempGP(object):
             -   estimated_params :  estimated hyperparameters for function f(x).
             -   obj_val : objective value of the hyperparameter optimization for f(x).
             -   grad_val : gradient vector at the optimal objective value.
-
-        References
-        ----------
-        Prakash, A., Tuo, R., & Ding, Y. (2020). "The temporal overfitting problem with applications
-        in wind power curve modeling." arXiv preprint arXiv:2012.01349. <https://arxiv.org/abs/
-        2012.01349>.
         """
 
         validate_inputs(X, y)
