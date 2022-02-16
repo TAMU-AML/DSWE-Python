@@ -43,40 +43,43 @@ class CovMatch(object):
 
     """
 
-    def __new__(cls, data, circ_pos=None, thresh=0.1, priority=False):
+    def __init__(self, data, circ_pos=None, thresh=0.1, priority=False):
 
         validate_matching(data, circ_pos, thresh)
 
+        self.data = data
+        for i in range(2):
+            self.data[0] = np.array(self.data[0])
+            self.data[1] = np.array(self.data[1])
+
         if priority:
-            idx = np.argsort(-(np.abs(np.mean(data[0],
-                             axis=0) - np.mean(data[1], axis=0))))
-            data[0] = data[0][:, idx]
-            data[1] = data[1][:, idx]
+            idx = np.argsort(-(np.abs(np.mean(self.data[0],
+                                              axis=0) - np.mean(self.data[1], axis=0))))
+            self.data[0] = self.data[0][:, idx]
+            self.data[1] = self.data[1][:, idx]
 
-        dname1 = [data[0], data[1]]
-        dname2 = [data[1], data[0]]
+        self.thresh = thresh
+        self.circ_pos = circ_pos
 
-        filelist = [dname1, dname2]
-        matched_data = [[]] * 2
+        datalist = [[self.data[0], self.data[1]],
+                    [self.data[1], self.data[0]]]
+        matched_asym = [[]] * 2
 
         for i in range(2):
-            matched_data[i] = matching(filelist[i], thresh, circ_pos)
+            matched_asym[i] = matching(
+                datalist[i], self.thresh, self.circ_pos)
 
-        match1 = matched_data[0]
-        matched1 = [np.squeeze(match1[1]), np.squeeze(match1[0])]
+        matched1 = [np.squeeze(matched_asym[0][1]),
+                    np.squeeze(matched_asym[0][0])]
+        matched2 = [np.squeeze(matched_asym[1][0]),
+                    np.squeeze(matched_asym[1][1])]
 
-        match2 = matched_data[1]
-        matched2 = [np.squeeze(match2[0]), np.squeeze(match2[1])]
+        self.matched_data = [[]] * 2
 
-        result = [[]] * 2
-
-        result[0] = np.unique(np.concatenate(
+        self.matched_data[0] = np.unique(np.concatenate(
             (matched1[1], matched2[1])), axis=0)
-        result[1] = np.unique(np.concatenate(
+        self.matched_data[1] = np.unique(np.concatenate(
             (matched1[0], matched2[0])), axis=0)
 
-        min_max_original = min_max(data)
-        min_max_matched = min_max(result)
-
-        return {'original_data': data, 'matched_data': result,
-                'min_max_original': min_max_original, 'min_max_matched': min_max_matched}
+        self.min_max_original = min_max(self.data)
+        self.min_max_matched = min_max(self.matched_data)

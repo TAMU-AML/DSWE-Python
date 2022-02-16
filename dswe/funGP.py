@@ -66,26 +66,27 @@ class FunGP(object):
         estimated_params: A list of estimated hyperparameters for GP.
     """
 
-    def __new__(cls, X, y, testX, conf_level=0.95, limit_memory=False, opt_method='L-BFGS-B',
-                sample_size={'optim_size': 500, 'band_size': 5000}, range_seed=1):
+    def __init__(self, X, y, testX, conf_level=0.95, limit_memory=False, opt_method='L-BFGS-B',
+                 sample_size={'optim_size': 500, 'band_size': 5000}, range_seed=1):
 
         validate_inputs(X, y)
         validate_features(testX)
 
-        X = np.array(X)
-        y = np.array(y)
-        testX = np.array(testX)
-
-        optim_size = sample_size['optim_size']
-        band_size = sample_size['band_size']
+        self.X = np.array(X)
+        self.y = np.array(y)
+        self.testX = np.array(testX)
+        self.conf_level = conf_level
+        self.limit_memory = limit_memory
+        self.opt_method = opt_method
+        self.optim_size = sample_size['optim_size']
+        self.band_size = sample_size['band_size']
+        self.range_seed = range_seed
 
         optim_result = estimate_parameters(
-            X, y, optim_size, range_seed, opt_method=opt_method, limit_memory=limit_memory)
-        params = optim_result['estimated_params']
-        diff_cov = compute_diff_conv(
-            X, y, params, testX, band_size, range_seed)
-        mu_diff = diff_cov['mu2'] - diff_cov['mu1']
-        band = compute_conf_band(diff_cov['diff_cov_mat'], conf_level)
-
-        return {'mu_diff': mu_diff, 'mu2': diff_cov['mu2'], 'mu1': diff_cov['mu1'],
-                'band': band, 'conf_level': conf_level, 'estimated_params': params}
+            self.X, self.y, self.optim_size, self.range_seed, opt_method=self.opt_method, limit_memory=self.limit_memory)
+        self.params = optim_result['estimated_params']
+        self.diff_cov = compute_diff_conv(
+            self.X, self.y, self.params, self.testX, self.band_size, self.range_seed)
+        self.mu_diff = self.diff_cov['mu2'] - self.diff_cov['mu1']
+        self.band = compute_conf_band(
+            self.diff_cov['diff_cov_mat'], self.conf_level)
