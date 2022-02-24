@@ -149,7 +149,7 @@ def compute_loglike_grad_GP_zero_mean(X, y, params):
     return grad_val
 
 
-def compute_diff_conv_(X1, y1, X2, y2, XT, theta, sigma_f, sigma_n, beta):
+def compute_diff_cov_(X1, y1, X2, y2, XT, theta, sigma_f, sigma_n, beta):
     KX1X1 = math.pow(sigma_f, 2) * compute_correl_mat(X1, X1, theta)
     diag_idx = np.diag_indices(KX1X1.shape[0])
     KX1X1[diag_idx] += math.pow(sigma_n, 2)

@@ -69,8 +69,8 @@ class FunGP(object):
     def __init__(self, X, y, testX, conf_level=0.95, limit_memory=False, opt_method='L-BFGS-B',
                  sample_size={'optim_size': 500, 'band_size': 5000}, range_seed=1):
 
-        validate_inputs(X, y)
-        validate_features(testX)
+        # validate_inputs(X, y)
+        # validate_features(testX)
 
         self.X = np.array(X)
         self.y = np.array(y)
@@ -85,7 +85,7 @@ class FunGP(object):
         optim_result = estimate_parameters(
             self.X, self.y, self.optim_size, self.range_seed, opt_method=self.opt_method, limit_memory=self.limit_memory)
         self.params = optim_result['estimated_params']
-        self.diff_cov = compute_diff_conv(
+        self.diff_cov = compute_diff_cov(
             self.X, self.y, self.params, self.testX, self.band_size, self.range_seed)
         self.mu_diff = self.diff_cov['mu2'] - self.diff_cov['mu1']
         self.band = compute_conf_band(

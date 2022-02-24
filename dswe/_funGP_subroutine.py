@@ -123,7 +123,7 @@ def estimate_parameters(trainX, trainy, band_size, range_seed, opt_method='L-BFG
         return optim_result
 
 
-def compute_diff_conv(trainX, trainy, params, testX, optim_size, range_seed, limit_memory=False):
+def compute_diff_cov(trainX, trainy, params, testX, optim_size, range_seed, limit_memory=False):
     theta = params['theta']
     sigma_f = params['sigma_f']
     sigma_n = params['sigma_n']
@@ -143,7 +143,7 @@ def compute_diff_conv(trainX, trainy, params, testX, optim_size, range_seed, lim
     X2, y2 = trainX[1], trainy[1]
     XT = testX
 
-    return compute_diff_conv_(X1, y1, X2, y2, XT, theta, sigma_f, sigma_n, beta)
+    return compute_diff_cov_(X1, y1, X2, y2, XT, theta, sigma_f, sigma_n, beta)
 
 
 def compute_conf_band(diff_cov_mat, conf_level):
