@@ -10,10 +10,11 @@ def matchcov(ref, obj, thres, circ_pos, flag):
 
     row_ref = ref.shape[0]
     row_obj = obj.shape[0]
+    ncols = ref.shape[1]
 
     match = np.zeros(row_ref)
 
-    index = np.linspace(1, row_obj, row_obj)
+    index = np.arange(1, row_obj + 1, 1)
 
     for i in range(row_ref):
 
@@ -52,7 +53,6 @@ def matchcov(ref, obj, thres, circ_pos, flag):
             score_adjusted = score / thres[None, :]
             max_score = score_adjusted[id_index, :].max(axis=1)
             id_min = id_index[np.argmin(max_score)]
-
             match[i] = index[id_min]
             unmatched_id = np.where(index != match[i])
 

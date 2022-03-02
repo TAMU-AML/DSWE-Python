@@ -66,14 +66,20 @@ class FunGP(object):
         estimated_params: A list of estimated hyperparameters for GP.
     """
 
-    def __init__(self, X, y, testX, conf_level=0.95, limit_memory=False, opt_method='L-BFGS-B',
+    def __init__(self, Xlist, ylist, testX, conf_level=0.95, limit_memory=False, opt_method='L-BFGS-B',
                  sample_size={'optim_size': 500, 'band_size': 5000}, range_seed=1):
 
-        # validate_inputs(X, y)
+        # validate_inputs(X, y)  ## Validate input lists
         # validate_features(testX)
 
-        self.X = np.array(X)
-        self.y = np.array(y)
+        self.Xlist = Xlist
+        self.ylist = ylist
+        for i in range(2):
+            self.Xlist[0] = np.array(self.Xlist[0])
+            self.Xlist[1] = np.array(self.Xlist[1])
+            self.ylist[0] = np.array(self.ylist[0])
+            self.ylist[1] = np.array(self.ylist[1])
+
         self.testX = np.array(testX)
         self.conf_level = conf_level
         self.limit_memory = limit_memory
@@ -83,10 +89,12 @@ class FunGP(object):
         self.range_seed = range_seed
 
         optim_result = estimate_parameters(
-            self.X, self.y, self.optim_size, self.range_seed, opt_method=self.opt_method, limit_memory=self.limit_memory)
+            self.Xlist, self.ylist, self.optim_size, self.range_seed, opt_method=self.opt_method, limit_memory=self.limit_memory)
         self.params = optim_result['estimated_params']
         self.diff_cov = compute_diff_cov(
-            self.X, self.y, self.params, self.testX, self.band_size, self.range_seed)
-        self.mu_diff = self.diff_cov['mu2'] - self.diff_cov['mu1']
+            self.Xlist, self.ylist, self.params, self.testX, self.band_size, self.range_seed)
+        self.mu1 = self.diff_cov['mu1']
+        self.mu2 = self.diff_cov['mu2']
+        self.mu_diff = self.mu2 - self.mu1
         self.band = compute_conf_band(
             self.diff_cov['diff_cov_mat'], self.conf_level)

@@ -43,43 +43,72 @@ class CovMatch(object):
 
     """
 
-    def __init__(self, data, circ_pos=None, thresh=0.1, priority=False):
+    def __init__(self, Xlist, ylist=None, circ_pos=None, thresh=0.1, priority=False):
 
-        validate_matching(data, circ_pos, thresh)
+        # validate_matching(data, circ_pos, thresh)
 
-        self.data = data
-        for i in range(2):
-            self.data[0] = np.array(self.data[0])
-            self.data[1] = np.array(self.data[1])
+        self.Xlist = Xlist
+        self.ylist = ylist
+        self.Xlist[0] = np.array(self.Xlist[0])
+        self.Xlist[1] = np.array(self.Xlist[1])
+
+        if self.ylist:
+            self.ylist[0] = np.array(self.ylist[0]).reshape(-1, 1)
+            self.ylist[1] = np.array(self.ylist[1]).reshape(-1, 1)
 
         if priority:
-            idx = np.argsort(-(np.abs(np.mean(self.data[0],
-                                              axis=0) - np.mean(self.data[1], axis=0))))
-            self.data[0] = self.data[0][:, idx]
-            self.data[1] = self.data[1][:, idx]
+            idx = np.argsort(
+                -(np.abs(np.mean(self.Xlist[0], axis=0) - np.mean(self.Xlist[1], axis=0))))
+            self.Xlist[0] = self.Xlist[0][:, idx]
+            self.Xlist[1] = self.Xlist[1][:, idx]
 
         self.thresh = thresh
         self.circ_pos = circ_pos
 
-        datalist = [[self.data[0], self.data[1]],
-                    [self.data[1], self.data[0]]]
-        matched_asym = [[]] * 2
+        datalist_X = [[self.Xlist[0], self.Xlist[1]],
+                      [self.Xlist[1], self.Xlist[0]]]
+        if self.ylist:
+            datalist_y = [[self.ylist[0], self.ylist[1]],
+                          [self.ylist[1], self.ylist[0]]]
+
+        _matched_X = [[]] * 2
+
+        if self.ylist:
+            _matched_y = [[]] * 2
 
         for i in range(2):
-            matched_asym[i] = matching(
-                datalist[i], self.thresh, self.circ_pos)
+            if self.ylist:
+                _matched_X[i], _matched_y[i] = matching(
+                    datalist_X[i], datalist_y[i], self.thresh, self.circ_pos)
+            else:
+                _matched_X[i] = matching(
+                    datalist_X[i], self.ylist, self.thresh, self.circ_pos)
 
-        matched1 = [np.squeeze(matched_asym[0][1]),
-                    np.squeeze(matched_asym[0][0])]
-        matched2 = [np.squeeze(matched_asym[1][0]),
-                    np.squeeze(matched_asym[1][1])]
+        matched1_X = [_matched_X[0][1], _matched_X[0][0]]
+        matched2_X = [_matched_X[1][0], _matched_X[1][1]]
 
-        self.matched_data = [[]] * 2
+        if self.ylist:
+            matched1_y = [_matched_y[0][1], _matched_y[0][0]]
+            matched2_y = [_matched_y[1][0], _matched_y[1][1]]
 
-        self.matched_data[0] = np.unique(np.concatenate(
-            (matched1[1], matched2[1])), axis=0)
-        self.matched_data[1] = np.unique(np.concatenate(
-            (matched1[0], matched2[0])), axis=0)
+        self.matched_data_X = [[]] * 2
 
-        self.min_max_original = min_max(self.data)
-        self.min_max_matched = min_max(self.matched_data)
+        idx0 = np.sort(np.unique(np.concatenate(
+            [matched1_X[1], matched2_X[1]]).astype(int), axis=0, return_index=True)[1])
+        idx1 = np.sort(np.unique(np.concatenate(
+            [matched1_X[0], matched2_X[0]]).astype(int), axis=0, return_index=True)[1])
+        self.matched_data_X[0] = np.concatenate(
+            [matched1_X[1], matched2_X[1]]).astype(float)[idx0]
+        self.matched_data_X[1] = np.concatenate(
+            [matched1_X[0], matched2_X[0]]).astype(float)[idx1]
+
+        self.matched_data_y = None
+        if self.ylist:
+            self.matched_data_y = [[]] * 2
+            self.matched_data_y[0] = np.squeeze(np.concatenate(
+                [matched1_y[1], matched2_y[1]]).astype(float)[idx0])
+            self.matched_data_y[1] = np.squeeze(np.concatenate(
+                [matched1_y[0], matched2_y[0]]).astype(float)[idx1])
+
+        self.min_max_original = min_max(self.Xlist)
+        self.min_max_matched = min_max(self.matched_data_X)
