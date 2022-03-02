@@ -8,19 +8,19 @@ import warnings
 from sklearn.neighbors import KernelDensity
 
 
-def generate_test_set(data, grid_size):
-    if data[0].shape[1] == 1:
-        var1min = max([np.quantile(x[:, 0], 0.025) for x in data])
-        var1max = min([np.quantile(x[:, 0], 0.975) for x in data])
+def generate_test_set(data, testcol, grid_size):
+    if len(testcol) == 1:
+        var1min = max([np.quantile(x[:, testcol[0]], 0.025) for x in data])
+        var1max = min([np.quantile(x[:, testcol[0]], 0.975) for x in data])
         var1range = np.linspace(var1min, var1max, grid_size)
         return var1range
 
-    elif data[0].shape[1] == 2:
-        var1min = max([np.quantile(x[:, 0], 0.025) for x in data])
-        var1max = min([np.quantile(x[:, 0], 0.975) for x in data])
+    elif len(testcol) == 2:
+        var1min = max([np.quantile(x[:, testcol[0]], 0.025) for x in data])
+        var1max = min([np.quantile(x[:, testcol[0]], 0.975) for x in data])
         var1range = np.linspace(var1min, var1max, grid_size[0])
-        var2min = max([np.quantile(x[:, 1], 0.025) for x in data])
-        var2max = min([np.quantile(x[:, 1], 0.975) for x in data])
+        var2min = max([np.quantile(x[:, testcol[1]], 0.025) for x in data])
+        var2max = min([np.quantile(x[:, testcol[1]], 0.975) for x in data])
         var2range = np.linspace(var2min, var2max, grid_size[1])
         return np.array([[m, n] for n in var2range for m in var1range])
 #         return np.c_[var1range, var2range]
@@ -32,7 +32,7 @@ def compute_diff(mu1, mu2, baseline):
     if baseline == 1:
         avg_mu = np.mean(mu1)
     elif baseline == 2:
-        avg_mu = np.mean(mu1)
+        avg_mu = np.mean(mu2)
     else:
         avg_mu = (np.mean(mu1) + np.mean(mu2)) / 2
 
@@ -46,11 +46,12 @@ def compute_stat_diff(mu1, mu2, band, baseline):
     if baseline == 1:
         avg_mu = np.mean(mu1)
     elif baseline == 2:
-        avg_mu = np.mean(mu1)
+        avg_mu = np.mean(mu2)
     else:
         avg_mu = (np.mean(mu1) + np.mean(mu2)) / 2
 
     diff_mu = mu2 - mu1
+
     if (np.abs(diff_mu) < band).any():
         diff_mu[np.abs(diff_mu) < band] = 0
     if (diff_mu > 0).any():
@@ -64,29 +65,34 @@ def compute_stat_diff(mu1, mu2, band, baseline):
     return percent_diff
 
 
-def compute_weighted_diff(dlist, mu1, mu2, testset, baseline):
+def nrd0(x):
+    return 0.9 * min(np.std(x, ddof=1), (np.percentile(x, 75) - np.percentile(x, 25)) / 1.349) * len(x)**(-0.2)
+
+
+def compute_weighted_diff(dlist, mu1, mu2, testset, testcol, baseline):
     mixed_data = np.vstack([dlist[0], dlist[1]])
 
-    if mixed_data.shape[1] == 1:
+    if len(testcol) == 1:
         var1_range = np.linspace(min(mixed_data[:, 0]), max(
-            mixed_data[:, 0]), len(mixed_data)).reshape(-1, 1)
-        kde1 = KernelDensity(kernel='gaussian').fit(mixed_data)
+            mixed_data[:, testcol[0]]), len(mixed_data)).reshape(-1, 1)
+        kde1 = KernelDensity(kernel='gaussian', bandwidth=nrd0(
+            mixed_data[:, testcol[0]])).fit(mixed_data)
         var1_density = np.exp(kde1.score_samples(var1_range))
         var1_test = np.exp(kde1.score_samples(testset))
 
         prob_test = var1_test / sum(var1_test)
     else:
         var1_range = np.linspace(min(mixed_data[:, 0]), max(
-            mixed_data[:, 0]), len(mixed_data)).reshape(-1, 1)
-        kde1 = KernelDensity(kernel='gaussian').fit(
-            mixed_data[:, 0].reshape(-1, 1))
+            mixed_data[:, testcol[0]]), len(mixed_data)).reshape(-1, 1)
+        kde1 = KernelDensity(kernel='gaussian', bandwidth=nrd0(
+            mixed_data[:, testcol[0]])).fit(mixed_data[:, testcol[0]].reshape(-1, 1))
         var1_density = np.exp(kde1.score_samples(var1_range))
         var1_test = np.exp(kde1.score_samples(testset[:, 0].reshape(-1, 1)))
 
         var2_range = np.linspace(min(mixed_data[:, 1]), max(
-            mixed_data[:, 1]), len(mixed_data)).reshape(-1, 1)
-        kde2 = KernelDensity(kernel='gaussian').fit(
-            mixed_data[:, 1].reshape(-1, 1))
+            mixed_data[:, testcol[1]]), len(mixed_data)).reshape(-1, 1)
+        kde2 = KernelDensity(kernel='gaussian', bandwidth=nrd0(
+            mixed_data[:, testcol[1]])).fit(mixed_data[:, testcol[1]].reshape(-1, 1))
         var2_density = np.exp(kde2.score_samples(var2_range))
         var2_test = np.exp(kde2.score_samples(testset[:, 1].reshape(-1, 1)))
 
@@ -106,29 +112,29 @@ def compute_weighted_diff(dlist, mu1, mu2, testset, baseline):
     return percent_diff
 
 
-def compute_weighted_stat_diff(dlist, mu1, mu2, band, testset, baseline):
+def compute_weighted_stat_diff(dlist, mu1, mu2, band, testset, testcol, baseline):
     mixed_data = np.vstack([dlist[0], dlist[1]])
 
-    if mixed_data.shape[1] == 1:
-        var1_range = np.linspace(min(mixed_data[:, 0]), max(
-            mixed_data[:, 0]), len(mixed_data)).reshape(-1, 1)
+    if len(testcol) == 1:
+        var1_range = np.linspace(min(mixed_data[:, testcol[0]]), max(
+            mixed_data[:, testcol[0]]), len(mixed_data)).reshape(-1, 1)
         kde1 = KernelDensity(kernel='gaussian').fit(mixed_data)
         var1_density = np.exp(kde1.score_samples(var1_range))
         var1_test = np.exp(kde1.score_samples(testset))
 
         prob_test = var1_test / sum(var1_test)
     else:
-        var1_range = np.linspace(min(mixed_data[:, 0]), max(
-            mixed_data[:, 0]), len(mixed_data)).reshape(-1, 1)
+        var1_range = np.linspace(min(mixed_data[:, testcol[0]]), max(
+            mixed_data[:, testcol[0]]), len(mixed_data)).reshape(-1, 1)
         kde1 = KernelDensity(kernel='gaussian').fit(
-            mixed_data[:, 0].reshape(-1, 1))
+            mixed_data[:, testcol[0]].reshape(-1, 1))
         var1_density = np.exp(kde1.score_samples(var1_range))
         var1_test = np.exp(kde1.score_samples(testset[:, 0].reshape(-1, 1)))
 
         var2_range = np.linspace(min(mixed_data[:, 1]), max(
-            mixed_data[:, 1]), len(mixed_data)).reshape(-1, 1)
+            mixed_data[:, testcol[1]]), len(mixed_data)).reshape(-1, 1)
         kde2 = KernelDensity(kernel='gaussian').fit(
-            mixed_data[:, 1].reshape(-1, 1))
+            mixed_data[:, testcol[1]].reshape(-1, 1))
         var2_density = np.exp(kde2.score_samples(var2_range))
         var2_test = np.exp(kde2.score_samples(testset[:, 1].reshape(-1, 1)))
 
@@ -304,11 +310,11 @@ def compute_scaled_stat_diff(ylist, mu1, mu2, band, nbins, baseline):
     return round(percent_scaled_diff, 2)
 
 
-def compute_ratio(dlist1, dlist2):
+def compute_ratio(dlist1, dlist2, testcol):
     comb_list1 = np.vstack([dlist1[0], dlist1[1]])
     comb_list2 = np.vstack([dlist2[0], dlist2[1]])
-    ratio_col = (comb_list2.max(axis=0) - comb_list2.min(axis=0)) / \
-        (comb_list1.max(axis=0) - comb_list2.min(axis=0))
+    ratio_col = (comb_list2[:, testcol].max(axis=0) - comb_list2[:, testcol].min(
+        axis=0)) / (comb_list1[:, testcol].max(axis=0) - comb_list2[:, testcol].min(axis=0))
 
     if dlist1[0].shape[1] == 1:
         return {'ratio_col1': ratio_col}
