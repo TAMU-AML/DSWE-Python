@@ -4,7 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 
 import numpy as np
-from .utils import validate_features, validate_inputs
+from .utils import validate_matching
 from ._GPMethods import *
 from ._funGP_subroutine import *
 
@@ -49,7 +49,7 @@ class FunGP(object):
                  and confidence band computation, respectively, when limitMemory = TRUE. 
                  Default value is list(optimSize = 500,bandSize = 5000).
 
-    range_seed: Random seed for sampling data when limitMemory = TRUE. Default is 1. 
+    rng_seed: Random seed for sampling data when limitMemory = TRUE. Default is 1. 
 
     Returns
     -------
@@ -67,10 +67,30 @@ class FunGP(object):
     """
 
     def __init__(self, Xlist, ylist, testX, conf_level=0.95, limit_memory=False, opt_method='L-BFGS-B',
-                 sample_size={'optim_size': 500, 'band_size': 5000}, range_seed=1):
+                 sample_size={'optim_size': 500, 'band_size': 5000}, rng_seed=1):
 
-        #         validate_inputs(X, y)
-        #         validate_features(testX)
+        validate_matching(Xlist, ylist)
+
+        if type(conf_level) != int and type(conf_level) != float or conf_level < 0 or conf_level > 1:
+            raise ValueError(
+                "The conf_level be a numeric value between 0 and 1")
+
+        if type(limit_memory) != type(True):
+            raise ValueError("The limit_memory must be either True or False.")
+
+        if limit_memory:
+            if not (isinstance(sample_size, list) or isinstance(np.array(sample_size), np.ndarray)):
+                raise ValueError(
+                    "If limitMemory is True, sample_size must be a dictionary with two named items: optim_size and band_size.")
+            if ['optim_size', 'band_size'] not in list(sample_size.keys()):
+                raise ValueError(
+                    "If limitMemory is True, sample_size must be a dictionary with two named items: optim_size and band_size.")
+
+        if type(rng_seed) != int:
+            raise ValueError("The range seed must be a single integer value.")
+
+        if opt_method not in ['L-BFGS-B', 'BFGS']:
+            raise ValueError("The opt_method must be 'L-BFGS-B' or 'BFGS'.")
 
         self.Xlist = Xlist
         self.ylist = ylist
@@ -86,15 +106,15 @@ class FunGP(object):
         self.opt_method = opt_method
         self.optim_size = sample_size['optim_size']
         self.band_size = sample_size['band_size']
-        self.range_seed = range_seed
+        self.rng_seed = rng_seed
 
         optim_result = estimate_parameters(self.Xlist, self.ylist, self.optim_size,
-                                           self.range_seed, opt_method=self.opt_method, limit_memory=self.limit_memory)
+                                           self.rng_seed, opt_method=self.opt_method, limit_memory=self.limit_memory)
 
         self.params = optim_result['estimated_params']
 
         self.diff_cov = compute_diff_cov(
-            self.Xlist, self.ylist, self.params, self.testX, self.band_size, self.range_seed, self.limit_memory)
+            self.Xlist, self.ylist, self.params, self.testX, self.band_size, self.rng_seed, self.limit_memory)
 
         self.mu1 = self.diff_cov['mu1']
         self.mu2 = self.diff_cov['mu2']

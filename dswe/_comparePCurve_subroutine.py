@@ -3,6 +3,7 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
+from os import stat
 import numpy as np
 import warnings
 from sklearn.neighbors import KernelDensity
@@ -50,16 +51,16 @@ def compute_stat_diff(mu1, mu2, band, baseline):
     else:
         avg_mu = (np.mean(mu1) + np.mean(mu2)) / 2
 
-    diff_mu = mu2 - mu1
+    mu_diff = mu2 - mu1
 
-    if (np.abs(diff_mu) < band).any():
-        diff_mu[np.abs(diff_mu) < band] = 0
-    if (diff_mu > 0).any():
-        diff_mu[diff_mu > 0] = diff_mu[diff_mu > 0] - band[diff_mu > 0]
-    if (diff_mu < 0).any():
-        diff_mu[diff_mu < 0] = diff_mu[diff_mu < 0] + band[diff_mu < 0]
+    if (np.abs(mu_diff) < band).any():
+        mu_diff[np.abs(mu_diff) < band] = 0
+    if (mu_diff > 0).any():
+        mu_diff[mu_diff > 0] = mu_diff[mu_diff > 0] - band[mu_diff > 0]
+    if (mu_diff < 0).any():
+        mu_diff[mu_diff < 0] = mu_diff[mu_diff < 0] + band[mu_diff < 0]
 
-    diff = diff_mu.sum() / len(mu1)
+    diff = mu_diff.sum() / len(mu1)
     percent_diff = round((diff / avg_mu) * 100, 2)
 
     return percent_diff
@@ -140,15 +141,15 @@ def compute_weighted_stat_diff(dlist, mu1, mu2, band, testset, testcol, baseline
 
         prob_test = var1_test * var2_test / sum(var1_test * var2_test)
 
-    diff_mu = mu2 - mu1
-    if (np.abs(diff_mu) < band).any():
-        diff_mu[np.abs(diff_mu) < band] = 0
-    if (diff_mu > 0).any():
-        diff_mu[diff_mu > 0] = diff_mu[diff_mu > 0] - band[diff_mu > 0]
-    if (diff_mu < 0).any():
-        diff_mu[diff_mu < 0] = diff_mu[diff_mu < 0] + band[diff_mu < 0]
+    mu_diff = mu2 - mu1
+    if (np.abs(mu_diff) <= band).any():
+        mu_diff[np.abs(mu_diff) <= band] = 0
+    if (mu_diff > 0).any():
+        mu_diff[mu_diff > 0] = mu_diff[mu_diff > 0] - band[mu_diff > 0]
+    if (mu_diff < 0).any():
+        mu_diff[mu_diff < 0] = mu_diff[mu_diff < 0] + band[mu_diff < 0]
 
-    diff = sum(diff_mu * (prob_test))
+    diff = sum(mu_diff * (prob_test))
     if baseline == 1:
         avg_mu = sum(mu1 * prob_test)
     elif baseline == 2:
@@ -320,3 +321,21 @@ def compute_ratio(dlist1, dlist2, testcol):
         return {'ratio_col1': ratio_col}
     else:
         return {'ratio_col1': ratio_col[0], 'ratio_col2': ratio_col[1]}
+
+
+def compute_weighted_diff_extern(mu_diff, weights, base, stat_diff, conf_band):
+    if stat_diff:
+        if (np.abs(mu_diff) < conf_band).any():
+            mu_diff[np.abs(mu_diff) <= conf_band] = 0
+        if (mu_diff > 0).any():
+            mu_diff[mu_diff > 0] = mu_diff[mu_diff > 0] - \
+                conf_band[mu_diff > 0]
+        if (mu_diff < 0).any():
+            mu_diff[mu_diff < 0] = mu_diff[mu_diff < 0] + \
+                conf_band[mu_diff < 0]
+
+    diff = np.matmul(mu_diff, weights).sum()
+    avg_mu = np.matmul(base, weights).sum()
+    percent_diff = round((diff / avg_mu) * 100, 2)
+
+    return percent_diff

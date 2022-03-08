@@ -49,30 +49,46 @@ def validate_features(X):
         raise ValueError("The data should have only numeric values.")
 
 
-def validate_matching(data, circ_pos, thresh):
+def validate_matching(Xlist, ylist):
 
-    if not isinstance(data, list):
-        raise ValueError("Data must be a list containing data sets.")
+    if not (isinstance(Xlist, list) or isinstance(np.array(Xlist), np.ndarray)):
+        raise ValueError(
+            "The Xlist must be a list containing the data sets.")
 
-    if len(data) != 2:
+    if len(Xlist) != 2:
         raise ValueError(
             "The number of data sets to match should be equal to two.")
 
-    if isinstance(data, list):
-        if not (isinstance(data[0], list) or isinstance(pd.DataFrame(data[0]), pd.DataFrame) or isinstance(np.array(data[0]), np.ndarray)):
+    if len(Xlist) != len(ylist):
+        raise ValueError(
+            "The length of Xlist and ylist must be same and equal to two.")
+
+    if isinstance(Xlist, list):
+        if not (isinstance(Xlist[0], list) or isinstance(pd.DataFrame(Xlist[0]), pd.DataFrame) or isinstance(np.array(Xlist[0]), np.ndarray)):
             raise ValueError(
                 "The features of first dataset should be either of list or numpy array or dataframe.")
-        if not (isinstance(data[1], list) or isinstance(pd.DataFrame(data[1]), pd.DataFrame) or isinstance(np.array(data[1]), np.ndarray)):
+        if not (isinstance(Xlist[1], list) or isinstance(pd.DataFrame(Xlist[1]), pd.DataFrame) or isinstance(np.array(Xlist[1]), np.ndarray)):
             raise ValueError(
                 "The features of second dataset should be either of list or numpy array or dataframe.")
 
-    if circ_pos:
-        if not (isinstance(circ_pos, list) or isinstance(np.array(circ_pos), np.ndarray)):
-            raise ValueError(
-                "The circular position must be provided in a list or 1d-array.")
+    if not (isinstance(ylist[0], list) or isinstance(pd.DataFrame(ylist[0]), pd.DataFrame) or isinstance(np.array(ylist[0]), np.ndarray)):
+        raise ValueError(
+            "The target value of first dataset should be either of list or numpy array or dataframe.")
 
-    if (isinstance(thresh, list) or isinstance(np.array(thresh), np.ndarray)):
-        if len(thresh) > 0:
-            if len(thresh) != data[0].shape[1]:
-                raise ValueError(
-                    "The thresh must be a single value, or list or 1d array with weight for each covariate.")
+    if not (isinstance(ylist[1], list) or isinstance(pd.DataFrame(ylist[1]), pd.DataFrame) or isinstance(np.array(ylist[1]), np.ndarray)):
+        raise ValueError(
+            "The target value of second dataset should be either of list or numpy array or dataframe.")
+
+    if len(Xlist[0]) != len(ylist[0]):
+        raise ValueError(
+            "The features and targets values of first dataset should have same number of data points.")
+
+    if len(Xlist[1]) != len(ylist[1]):
+        raise ValueError(
+            "The features and targets values of second dataset should have same number of data points.")
+
+    if np.isnan(np.array(Xlist[0])).any() or np.isnan(np.array(Xlist[1])).any() or np.isnan(np.array(ylist[0])).any() or np.isnan(np.array(ylist[1])).any():
+        raise ValueError("The data should not contains any null value.")
+
+    if np.isinf(np.array(Xlist[0])).any() or np.isinf(np.array(Xlist[1])).any() or np.isinf(np.array(ylist[0])).any() or np.isinf(np.array(ylist[1])).any():
+        raise ValueError("The data must not have any infinity value.")

@@ -6,3 +6,7 @@ __pycache__
 DSWE.egg-info
 dist
 /build
+run/
+dswe/debug.py
+dswe/debug.ipynb
+dswe/.ipynb_checkpoints

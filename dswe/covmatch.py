@@ -45,7 +45,21 @@ class CovMatch(object):
 
     def __init__(self, Xlist, ylist=None, circ_pos=None, thresh=0.1, priority=False):
 
-        # validate_matching(data, circ_pos, thresh)
+        validate_matching(Xlist, ylist)
+
+        if circ_pos:
+            if not (isinstance(circ_pos, list) or isinstance(np.array(circ_pos), np.ndarray)):
+                raise ValueError(
+                    "The circ_pos must be provided in a list or 1d-array.")
+
+        if (isinstance(thresh, list) or isinstance(np.array(thresh), np.ndarray)):
+            if len(thresh) > 0:
+                if len(thresh) != Xlist[0].shape[1]:
+                    raise ValueError(
+                        "The thresh must be a single value, or list or 1d array with weight for each covariate.")
+
+        if type(priority) != type(True):
+            raise ValueError("The priority must be either True or False.")
 
         self.Xlist = Xlist
         self.ylist = ylist

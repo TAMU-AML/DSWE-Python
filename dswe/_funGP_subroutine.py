@@ -97,7 +97,7 @@ def estimate_binned_params(databins, opt_method='L-BFGS-B'):
     return {'estimated_params': estimated_params, 'obj_val': obj_val, 'grad_val': grad_val}
 
 
-def estimate_parameters(trainX, trainy, optim_size, range_seed, opt_method='L-BFGS-B', limit_memory=False):
+def estimate_parameters(trainX, trainy, optim_size, rng_seed, opt_method='L-BFGS-B', limit_memory=False):
     if not limit_memory:
         thinning_number = math.ceil((compute_thinning_number(
             trainX[0]) + compute_thinning_number(trainX[1])) / 2)
@@ -113,7 +113,7 @@ def estimate_parameters(trainX, trainy, optim_size, range_seed, opt_method='L-BF
         tempy = [[]] * len(trainX)
         for i in range(len(trainX)):
             if len(trainX[i]) > max_data_sample:
-                np.random.seed(range_seed)
+                np.random.seed(rng_seed)
                 idx = np.random.choice(trainX[i].shape[0], max_data_sample)
                 tempX[i] = np.array(trainX[i][idx])
                 tempy[i] = np.array(trainy[i][idx])
@@ -127,7 +127,7 @@ def estimate_parameters(trainX, trainy, optim_size, range_seed, opt_method='L-BF
         return optim_result
 
 
-def compute_diff_cov(trainX, trainy, params, testX, band_size, range_seed, limit_memory=False):
+def compute_diff_cov(trainX, trainy, params, testX, band_size, rng_seed, limit_memory=False):
     theta = params['theta']
     sigma_f = params['sigma_f']
     sigma_n = params['sigma_n']
@@ -139,7 +139,7 @@ def compute_diff_cov(trainX, trainy, params, testX, band_size, range_seed, limit
         tempy = [[]] * len(trainX)
         for i in range(len(trainX)):
             if len(trainX[i]) > max_data_sample:
-                np.random.seed(range_seed)
+                np.random.seed(rng_seed)
                 idx = np.random.choice(trainX[i].shape[0], max_data_sample)
                 tempX[i] = trainX[i][idx]
                 tempy[i] = trainy[i][idx]
