@@ -108,9 +108,10 @@ class CovMatch(object):
         self.matched_data_X = [[]] * 2
 
         idx0 = np.sort(np.unique(np.concatenate(
-            [matched1_X[1], matched2_X[1]]).astype(int), axis=0, return_index=True)[1])
+            [matched1_X[1], matched2_X[1]]).astype(float), axis=0, return_index=True)[1])
         idx1 = np.sort(np.unique(np.concatenate(
-            [matched1_X[0], matched2_X[0]]).astype(int), axis=0, return_index=True)[1])
+            [matched1_X[0], matched2_X[0]]).astype(float), axis=0, return_index=True)[1])
+
         self.matched_data_X[0] = np.concatenate(
             [matched1_X[1], matched2_X[1]]).astype(float)[idx0]
         self.matched_data_X[1] = np.concatenate(

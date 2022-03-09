@@ -33,7 +33,7 @@ def matchcov(ref, obj, thres, circ_pos, flag):
                 score_vec = score[:, j]
                 circdata_vec = circdata[:, j]
                 score_vec[id_dcor] = (
-                    360 - (circdata_vec[id_dcor] - circref[j])) / circref[j]
+                    360 - (circdata_vec[id_dcor] - circref[j])) / (circref[j] + 1e-4)
                 score[:, j] = score_vec
 
         decision = np.zeros(obj.shape)
@@ -62,39 +62,50 @@ def matchcov(ref, obj, thres, circ_pos, flag):
     return match
 
 
-def matching(mdata, thresh, circ_pos):
+def matching(Xlist, ylist, weight, circ_pos):
 
     flag = False
     if circ_pos:
         flag = True
 
-    refid = len(mdata) - 1
+    refid = len(Xlist) - 1
 
-    ref = mdata[refid]
+    ref = Xlist[refid]
     test_id = list(range(refid))
-
-    ratio = np.std(ref, axis=0)
-    thresh = ratio * np.array(thresh)
+    ratio = np.std(ref.astype(float), axis=0)
+    thresh = ratio * weight
 
     match_id = [0] * len(test_id)
-    for idx in range(len(test_id)):
+    for idx in test_id:
         match_id[idx] = matchcov(
-            ref, mdata[test_id[idx]], thresh, circ_pos, flag)
+            ref, Xlist[test_id[idx]], thresh, circ_pos, flag)
 
-    matched = [[]] * len(mdata)
+    matched_X = [[]] * len(Xlist)
+
     ref_id = match_id[0] > 0
 
-    if len(mdata) >= 3:
-        for i in range(1, len(mdata) - 1):
-            ref_id = ref_id & match_id[i]
+    if len(Xlist) >= 3:
+        for i in range(1, len(Xlist) - 1):
+            ref_id = ref_id & (match_id[i] > 0)
 
-    ref_ID = np.where(ref_id)
-    matched[refid] = mdata[refid][ref_ID, :]
+    ref_ID = np.where(ref_id)[0]
+    matched_X[refid] = Xlist[refid][ref_ID, :]
 
-    for j in range(len(mdata) - 1):
-        matched[test_id[j]] = mdata[test_id[j]][ref_ID, :]
+    if ylist:
+        matched_y = [[]] * len(Xlist)
+        matched_y[refid] = ylist[refid][ref_ID, :]
 
-    return matched
+    for j in range(len(Xlist) - 1):
+        idx = match_id[j][ref_ID].astype('int32') - 1
+        matched_X[test_id[j]] = Xlist[test_id[j]][idx, :]
+
+        if ylist:
+            matched_y[test_id[j]] = ylist[test_id[j]][idx, :]
+
+    if ylist:
+        return matched_X, matched_y
+    else:
+        return matched_X
 
 
 def min_max(data):
