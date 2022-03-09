@@ -143,18 +143,15 @@ class TempGP(object):
 
         Parameters
         ----------
-        X : A matrix with each column corresponding to one input variable.
-            {array-like, sparse matrix} of shape (n_samples, n_features)
-            New training data.
+        X : A matrix with each column corresponding to one input variable. 
+            array-like of shape (n_samples, n_features).
 
-        y : A vector with each element corresponding to the output at the corresponding
-            row of X.
-            {array-like, sparse matrix} of shape (n_samples,)
-            New target values.
+        y : A vector with each element corresponding to the output at the corresponding row of X.
+            array-like of shape (n_samples,).
 
         T : A vector with time indices of the new datapoints. If None, the function assigns
             natural numbers starting with one larger than the existing time indices in existing T.
-            {array-like, sparse matrix} of shape (n_samples,)
+            array-like of shape (n_samples,)
             New temporal values.
 
         replace : A boolean to specify whether to replace the old data with the new one, or to

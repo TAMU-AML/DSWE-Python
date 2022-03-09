@@ -59,36 +59,44 @@ def validate_matching(Xlist, ylist):
         raise ValueError(
             "The number of data sets to match should be equal to two.")
 
-    if len(Xlist) != len(ylist):
-        raise ValueError(
-            "The length of Xlist and ylist must be same and equal to two.")
-
-    if isinstance(Xlist, list):
-        if not (isinstance(Xlist[0], list) or isinstance(pd.DataFrame(Xlist[0]), pd.DataFrame) or isinstance(np.array(Xlist[0]), np.ndarray)):
+    if ylist:
+        if len(Xlist) != len(ylist):
             raise ValueError(
-                "The features of first dataset should be either of list or numpy array or dataframe.")
-        if not (isinstance(Xlist[1], list) or isinstance(pd.DataFrame(Xlist[1]), pd.DataFrame) or isinstance(np.array(Xlist[1]), np.ndarray)):
+                "The length of Xlist and ylist must be same and equal to two.")
+
+    if not (isinstance(Xlist[0], list) or isinstance(pd.DataFrame(Xlist[0]), pd.DataFrame) or isinstance(np.array(Xlist[0]), np.ndarray)):
+        raise ValueError(
+            "The features of first dataset should be either of list or numpy array or dataframe.")
+    if not (isinstance(Xlist[1], list) or isinstance(pd.DataFrame(Xlist[1]), pd.DataFrame) or isinstance(np.array(Xlist[1]), np.ndarray)):
+        raise ValueError(
+            "The features of second dataset should be either of list or numpy array or dataframe.")
+
+    if ylist:
+        if not (isinstance(ylist[0], list) or isinstance(pd.DataFrame(ylist[0]), pd.DataFrame) or isinstance(np.array(ylist[0]), np.ndarray)):
             raise ValueError(
-                "The features of second dataset should be either of list or numpy array or dataframe.")
+                "The target value of first dataset should be either of list or numpy array or dataframe.")
+        if not (isinstance(ylist[1], list) or isinstance(pd.DataFrame(ylist[1]), pd.DataFrame) or isinstance(np.array(ylist[1]), np.ndarray)):
+            raise ValueError(
+                "The target value of second dataset should be either of list or numpy array or dataframe.")
 
-    if not (isinstance(ylist[0], list) or isinstance(pd.DataFrame(ylist[0]), pd.DataFrame) or isinstance(np.array(ylist[0]), np.ndarray)):
+    if ylist:
+        if len(Xlist[0]) != len(ylist[0]):
+            raise ValueError(
+                "The features and targets values of first dataset should have same number of data points.")
+        if len(Xlist[1]) != len(ylist[1]):
+            raise ValueError(
+                "The features and targets values of second dataset should have same number of data points.")
+
+    if np.isnan(np.array(Xlist[0])).any() or np.isnan(np.array(Xlist[1])).any():
         raise ValueError(
-            "The target value of first dataset should be either of list or numpy array or dataframe.")
+            "The features data should not contains any null value.")
+    if np.isinf(np.array(Xlist[0])).any() or np.isinf(np.array(Xlist[1])).any():
+        raise ValueError("The features data must not have any infinity value.")
 
-    if not (isinstance(ylist[1], list) or isinstance(pd.DataFrame(ylist[1]), pd.DataFrame) or isinstance(np.array(ylist[1]), np.ndarray)):
-        raise ValueError(
-            "The target value of second dataset should be either of list or numpy array or dataframe.")
-
-    if len(Xlist[0]) != len(ylist[0]):
-        raise ValueError(
-            "The features and targets values of first dataset should have same number of data points.")
-
-    if len(Xlist[1]) != len(ylist[1]):
-        raise ValueError(
-            "The features and targets values of second dataset should have same number of data points.")
-
-    if np.isnan(np.array(Xlist[0])).any() or np.isnan(np.array(Xlist[1])).any() or np.isnan(np.array(ylist[0])).any() or np.isnan(np.array(ylist[1])).any():
-        raise ValueError("The data should not contains any null value.")
-
-    if np.isinf(np.array(Xlist[0])).any() or np.isinf(np.array(Xlist[1])).any() or np.isinf(np.array(ylist[0])).any() or np.isinf(np.array(ylist[1])).any():
-        raise ValueError("The data must not have any infinity value.")
+    if ylist:
+        if np.isnan(np.array(ylist[0])).any() or np.isnan(np.array(ylist[1])).any():
+            raise ValueError(
+                "The target data should not contains any null value.")
+        if np.isinf(np.array(ylist[0])).any() or np.isinf(np.array(ylist[1])).any():
+            raise ValueError(
+                "The target data must not have any infinity value.")
