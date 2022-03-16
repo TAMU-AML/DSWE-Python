@@ -157,7 +157,7 @@ def compute_diff_cov_(X1, y1, X2, y2, XT, theta, sigma_f, sigma_n, beta):
     KX1X1 = None
 
     KXTX1 = math.pow(sigma_f, 2) * compute_correl_mat(XT, X1, theta)
-    mu1 = beta + np.matmul(np.matmul(KXTX1, inv_KX1X1), (y1 - beta))
+    mu1 = beta + np.matmul(KXTX1, np.matmul(inv_KX1X1, (y1 - beta)))
     K1 = np.matmul(inv_KX1X1, KXTX1.T)
     K = np.matmul(KXTX1, K1)
     KXTX1 = None
@@ -170,7 +170,7 @@ def compute_diff_cov_(X1, y1, X2, y2, XT, theta, sigma_f, sigma_n, beta):
     KX2X2 = None
 
     KXTX2 = math.pow(sigma_f, 2) * compute_correl_mat(XT, X2, theta)
-    mu2 = beta + np.matmul(np.matmul(KXTX2, inv_KX2X2), (y2 - beta))
+    mu2 = beta + np.matmul(KXTX2, np.matmul(inv_KX2X2, (y2 - beta)))
     K2 = np.matmul(KXTX2, inv_KX2X2)
     inv_KX2X2 = None
     K = K + np.matmul(K2, KXTX2.T)
