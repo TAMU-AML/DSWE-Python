@@ -153,7 +153,7 @@ def compute_diff_cov(trainX, trainy, params, testX, band_size, rng_seed, limit_m
         X1, y1 = trainX[0], trainy[0]
         X2, y2 = trainX[1], trainy[1]
 
-    XT = testX
+    XT = testX.reshape(-1, 1)
 
     return compute_diff_cov_(X1, y1, X2, y2, XT, theta, sigma_f, sigma_n, beta)
 

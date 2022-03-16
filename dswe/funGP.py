@@ -66,7 +66,7 @@ class FunGP(object):
         estimated_params: A list of estimated hyperparameters for GP.
     """
 
-    def __init__(self, Xlist, ylist, testX, conf_level=0.95, limit_memory=False, opt_method='L-BFGS-B',
+    def __init__(self, Xlist, ylist, testX, conf_level=0.95, limit_memory=True, opt_method='L-BFGS-B',
                  sample_size={'optim_size': 500, 'band_size': 5000}, rng_seed=1):
 
         validate_matching(Xlist, ylist)
@@ -82,7 +82,7 @@ class FunGP(object):
             if not (isinstance(sample_size, list) or isinstance(np.array(sample_size), np.ndarray)):
                 raise ValueError(
                     "If limitMemory is True, sample_size must be a dictionary with two named items: optim_size and band_size.")
-            if ['optim_size', 'band_size'] not in list(sample_size.keys()):
+            if not set(['optim_size', 'band_size']) == set(list(sample_size.keys())):
                 raise ValueError(
                     "If limitMemory is True, sample_size must be a dictionary with two named items: optim_size and band_size.")
 

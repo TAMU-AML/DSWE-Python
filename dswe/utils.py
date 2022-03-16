@@ -51,7 +51,7 @@ def validate_features(X):
 
 def validate_matching(Xlist, ylist):
 
-    if not (isinstance(Xlist, list) or isinstance(np.array(Xlist), np.ndarray)):
+    if not (isinstance(Xlist, list) or isinstance(Xlist, np.ndarray)):
         raise ValueError(
             "The Xlist must be a list containing the data sets.")
 
@@ -64,18 +64,18 @@ def validate_matching(Xlist, ylist):
             raise ValueError(
                 "The length of Xlist and ylist must be same and equal to two.")
 
-    if not (isinstance(Xlist[0], list) or isinstance(pd.DataFrame(Xlist[0]), pd.DataFrame) or isinstance(np.array(Xlist[0]), np.ndarray)):
+    if not (isinstance(Xlist[0], list) or isinstance(Xlist[0], pd.DataFrame) or isinstance(Xlist[0], np.ndarray)):
         raise ValueError(
             "The features of first dataset should be either of list or numpy array or dataframe.")
-    if not (isinstance(Xlist[1], list) or isinstance(pd.DataFrame(Xlist[1]), pd.DataFrame) or isinstance(np.array(Xlist[1]), np.ndarray)):
+    if not (isinstance(Xlist[1], list) or isinstance(Xlist[1], pd.DataFrame) or isinstance(Xlist[1], np.ndarray)):
         raise ValueError(
             "The features of second dataset should be either of list or numpy array or dataframe.")
 
     if ylist:
-        if not (isinstance(ylist[0], list) or isinstance(pd.DataFrame(ylist[0]), pd.DataFrame) or isinstance(np.array(ylist[0]), np.ndarray)):
+        if not (isinstance(ylist[0], list) or isinstance(ylist[0], pd.DataFrame) or isinstance(ylist[0], np.ndarray)):
             raise ValueError(
                 "The target value of first dataset should be either of list or numpy array or dataframe.")
-        if not (isinstance(ylist[1], list) or isinstance(pd.DataFrame(ylist[1]), pd.DataFrame) or isinstance(np.array(ylist[1]), np.ndarray)):
+        if not (isinstance(ylist[1], list) or isinstance(ylist[1], pd.DataFrame) or isinstance(ylist[1], np.ndarray)):
             raise ValueError(
                 "The target value of second dataset should be either of list or numpy array or dataframe.")
 

@@ -43,7 +43,7 @@ class CovMatch(object):
 
     """
 
-    def __init__(self, Xlist, ylist=None, circ_pos=None, thresh=0.1, priority=False):
+    def __init__(self, Xlist, ylist=None, circ_pos=None, thresh=0.2, priority=False):
 
         validate_matching(Xlist, ylist)
 
@@ -52,7 +52,7 @@ class CovMatch(object):
                 raise ValueError(
                     "The circ_pos must be provided in a list or 1d-array.")
 
-        if (isinstance(thresh, list) or isinstance(np.array(thresh), np.ndarray)):
+        if (isinstance(thresh, list) or isinstance(thresh, np.ndarray)):
             if len(thresh) > 0:
                 if len(thresh) != Xlist[0].shape[1]:
                     raise ValueError(

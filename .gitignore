@@ -7,6 +7,7 @@ DSWE.egg-info
 dist
 /build
 run/
-dswe/debug.py
+debug.py
+debug_2.ipynb
 dswe/debug.ipynb
 dswe/.ipynb_checkpoints
