@@ -14,7 +14,7 @@ def generate_test_set(data, testcol, grid_size):
         var1min = max([np.quantile(x[:, testcol[0]], 0.025) for x in data])
         var1max = min([np.quantile(x[:, testcol[0]], 0.975) for x in data])
         var1range = np.linspace(var1min, var1max, grid_size)
-        return var1range
+        return var1range.reshape(-1, 1)
 
     elif len(testcol) == 2:
         var1min = max([np.quantile(x[:, testcol[0]], 0.025) for x in data])

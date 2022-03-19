@@ -79,7 +79,7 @@ class FunGP(object):
             raise ValueError("The limit_memory must be either True or False.")
 
         if limit_memory:
-            if not (isinstance(sample_size, list) or isinstance(np.array(sample_size), np.ndarray)):
+            if not isinstance(sample_size, dict):
                 raise ValueError(
                     "If limitMemory is True, sample_size must be a dictionary with two named items: optim_size and band_size.")
             if not set(['optim_size', 'band_size']) == set(list(sample_size.keys())):

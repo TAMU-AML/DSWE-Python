@@ -114,7 +114,8 @@ def estimate_parameters(trainX, trainy, optim_size, rng_seed, opt_method='L-BFGS
         for i in range(len(trainX)):
             if len(trainX[i]) > max_data_sample:
                 np.random.seed(rng_seed)
-                idx = np.random.choice(trainX[i].shape[0], max_data_sample, replace=False)
+                idx = np.random.choice(
+                    trainX[i].shape[0], max_data_sample, replace=False)
                 tempX[i] = np.array(trainX[i][idx])
                 tempy[i] = np.array(trainy[i][idx])
             else:
@@ -140,7 +141,8 @@ def compute_diff_cov(trainX, trainy, params, testX, band_size, rng_seed, limit_m
         for i in range(len(trainX)):
             if len(trainX[i]) > max_data_sample:
                 np.random.seed(rng_seed)
-                idx = np.random.choice(trainX[i].shape[0], max_data_sample, replace=False)
+                idx = np.random.choice(
+                    trainX[i].shape[0], max_data_sample, replace=False)
                 tempX[i] = trainX[i][idx]
                 tempy[i] = trainy[i][idx]
             else:
@@ -153,7 +155,7 @@ def compute_diff_cov(trainX, trainy, params, testX, band_size, rng_seed, limit_m
         X1, y1 = trainX[0], trainy[0]
         X2, y2 = trainX[1], trainy[1]
 
-    XT = testX.reshape(-1, 1)
+    XT = testX
 
     return compute_diff_cov_(X1, y1, X2, y2, XT, theta, sigma_f, sigma_n, beta)
 

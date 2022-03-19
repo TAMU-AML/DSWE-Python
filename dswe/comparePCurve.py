@@ -12,24 +12,24 @@ from .covmatch import *
 
 class ComparePCurve(object):
 
-    def __init__(self, Xlist, ylist, testcol, testX=None, circ_pos=None, thresh=0.1, conf_level=0.95, grid_size=[20, 20],
+    def __init__(self, Xlist, ylist, testcol, testX=None, circ_pos=None, thresh=0.2, conf_level=0.95, grid_size=[50, 50],
                  power_bins=15, baseline=1, limit_memory=True, opt_method='L-BFGS-B',
                  sample_size={'optim_size': 500, 'band_size': 5000}, rng_seed=1):
 
         validate_matching(Xlist, ylist)
 
-        if not (isinstance(testcol, list) or isinstance(np.array(testcol), np.ndarray)):
+        if not (isinstance(testcol, list) or isinstance(testcol, np.ndarray)):
             raise ValueError(
                 "The testcol must be provided in a list or 1d-array.")
         if len(testcol) > 2:
             raise ValueError("Maximum two columns to be used.")
 
         if circ_pos:
-            if not (isinstance(circ_pos, list) or isinstance(np.array(circ_pos), np.ndarray)):
+            if not (isinstance(circ_pos, list) or isinstance(circ_pos, np.ndarray)):
                 raise ValueError(
                     "The circ_pos must be provided in a list or 1d-array.")
 
-        if (isinstance(thresh, list) or isinstance(np.array(thresh), np.ndarray)):
+        if isinstance(thresh, list) or isinstance(thresh, np.ndarray):
             if len(thresh) > 0:
                 if len(thresh) != Xlist[0].shape[1]:
                     raise ValueError(
@@ -39,7 +39,7 @@ class ComparePCurve(object):
             raise ValueError(
                 "The conf_level be a numeric value between 0 and 1")
 
-        if (isinstance(grid_size, list) or isinstance(np.array(grid_size), np.ndarray)):
+        if not (isinstance(grid_size, list) or isinstance(grid_size, np.ndarray)):
             raise ValueError(
                 "The grid_size must be provided in a list or 1d-array.")
         elif len(grid_size) != len(testcol):
@@ -53,10 +53,10 @@ class ComparePCurve(object):
             raise ValueError("The limit_memory must be either True or False.")
 
         if limit_memory:
-            if not (isinstance(sample_size, list) or isinstance(np.array(sample_size), np.ndarray)):
+            if not isinstance(sample_size, dict):
                 raise ValueError(
                     "If limitMemory is True, sample_size must be a dictionary with two named items: optim_size and band_size.")
-            if ['optim_size', 'band_size'] not in list(sample_size.keys()):
+            if not set(['optim_size', 'band_size']) == set(list(sample_size.keys())):
                 raise ValueError(
                     "If limitMemory is True, sample_size must be a dictionary with two named items: optim_size and band_size.")
 
