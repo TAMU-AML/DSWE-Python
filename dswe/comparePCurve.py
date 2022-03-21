@@ -119,23 +119,14 @@ class ComparePCurve(object):
         self.reduction_ratio = compute_ratio(
             self.Xlist, self.matched_data_X, testcol)
 
-    def compute_weighted_difference(mu_diff, weights, base, stat_diff=False, conf_band=None):
+    def compute_weighted_difference(self, weights, baseline=1, stat_diff=False):
 
         weights = np.array(weights)
-        base = np.array(base)
-        if conf_band:
-            conf_band = np.array(conf_band)
-
-        if not (isinstance(mu_diff, list) or isinstance(np.array(mu_diff), np.ndarray)):
-            raise ValueError("The mu_diff must be a numeric vector.")
 
         if not (isinstance(weights, list) or isinstance(np.array(weights), np.ndarray)):
             raise ValueError("The weights must be a numeric vector.")
 
-        if not (isinstance(base, list) or isinstance(np.array(base), np.ndarray)):
-            raise ValueError("The base must be a numeric vector.")
-
-        if len(weights) != len(mu_diff):
+        if len(weights) != len(self.mu_diff):
             raise ValueError(
                 "The length of weights vector must be equal to the length of mu_diff which has calculated in creating this class instance")
         if abs(weights.sum() - 1) >= 1e-3:
@@ -144,14 +135,8 @@ class ComparePCurve(object):
 
         if type(stat_diff) != type(True):
             raise ValueError("The stat_diff must be either True or False.")
-        if stat_diff:
-            if not conf_band:
-                raise ValueError(
-                    "The conf_band must be provided when stat_diff is set to True.")
-            elif (isinstance(conf_band, list) or isinstance(np.array(conf_band), np.ndarray)):
-                raise ValueError("The conf_band must be a numeric vector.")
-        if len(mu_diff) != len(conf_band):
-            raise ValueError(
-                "The length of conf_band must be the same as mu_diff.")
 
-        return compute_weighted_diff_extern(mu_diff, weights, base, stat_diff, conf_band)
+        if baseline == 1:
+            return compute_weighted_diff_extern(self.mu_diff, weights, self.mu1, stat_diff, self.band)
+        else:
+            return compute_weighted_diff_extern(self.mu_diff, weights, self.mu2, stat_diff, self.band)

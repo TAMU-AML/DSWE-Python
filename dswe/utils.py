@@ -10,11 +10,11 @@ import pandas as pd
 def validate_inputs(X, y):
     """Validates the inputs to model."""
 
-    if not (isinstance(X, list) or isinstance(pd.DataFrame(X), pd.DataFrame) or isinstance(np.array(X), np.ndarray)):
+    if not (isinstance(X, list) or isinstance(X, pd.DataFrame) or isinstance(X, np.ndarray)):
         raise ValueError(
             "The features data should be either of list or numpy array or dataframe.")
 
-    if not (isinstance(y, list) or isinstance(pd.DataFrame(y), pd.DataFrame) or isinstance(np.array(y), np.ndarray)):
+    if not (isinstance(y, list) or isinstance(y, pd.DataFrame) or isinstance(y, np.ndarray)):
         raise ValueError(
             "The target data should be either of list or numpy array or dataframe.")
 
@@ -35,7 +35,7 @@ def validate_inputs(X, y):
 def validate_features(X):
     """Validates the inputs without target to model."""
 
-    if not (isinstance(X, list) or isinstance(pd.DataFrame(X), pd.DataFrame) or isinstance(np.array(X), np.ndarray)):
+    if not (isinstance(X, list) or isinstance(X, pd.DataFrame) or isinstance(X, np.ndarray)):
         raise ValueError(
             "The features data should be either of list or numpy array or dataframe.")
 
