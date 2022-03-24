@@ -55,23 +55,34 @@ mu_diff2 = -fgp2.mu_diff
 band2 = fgp2.band
 
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 5))
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(18, 6))
+fig.subplots_adjust(hspace=0.3, wspace=0.3)
 
 ax1.set_title('f1 != f2', fontsize=16)
-ax1.plot(testset1, band1, color='red', linestyle='--')
+ax1.plot(testset1, mu_diff1, color='blue', label='Difference')
+ax1.plot(testset1, band1, color='red',
+         linestyle='--', label='95% Confidence band')
 ax1.plot(testset1, -band1, color='red', linestyle='--')
-ax1.plot(testset1, mu_diff1, color='blue')
+ax1.fill_between(testset1.squeeze(), mu_diff1, band1, where=mu_diff1 >= band1,
+                 facecolor='deepskyblue', interpolate=True, label='Statistical Difference')
+ax1.axhline(y=0, color='black', linestyle='--')
 ax1.set_xlim([0, 20])
 ax1.set_ylim([-0.25, 0.25])
-ax1.set_xlabel('Wind speed', fontsize=14)
+ax1.set_xlabel('Wind speed (m/s)', fontsize=14)
+ax1.set_ylabel('Difference of normalized power', fontsize=14)
+ax1.legend(loc='upper left', fontsize=12)
 
 ax2.set_title('f1 = f2', fontsize=16)
-ax2.plot(testset2, band2, color='red', linestyle='--')
+ax2.plot(testset2, mu_diff2, color='blue', label='Difference')
+ax2.plot(testset2, band2, color='red',
+         linestyle='--', label='95% Confidence band')
 ax2.plot(testset2, -band2, color='red', linestyle='--')
-ax2.plot(testset2, mu_diff2, color='blue')
+ax2.axhline(y=0, color='black', linestyle='--')
 ax2.set_xlim([0, 20])
 ax2.set_ylim([-0.25, 0.25])
-ax2.set_xlabel('Wind speed', fontsize=14)
+ax2.set_xlabel('Wind speed (m/s)', fontsize=14)
+ax2.set_ylabel('Difference of normalized power', fontsize=14)
+ax2.legend(loc='upper left', fontsize=12)
 
 plt.show()
 
