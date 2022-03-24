@@ -26,11 +26,11 @@ class FunGP(object):
 
     Parameters
     ----------
-    X : A matrix with each column corresponding to one input variable. 
-        array-like of shape (n_samples, n_features).
+    Xlist : A list, consisting of data sets to match, also each of the individual data set can be 
+            a matrix with each column corresponding to one input variable.
 
-    y : A vector with each element corresponding to the output at the corresponding row of X.
-        array-like of shape (n_samples,).
+    ylist : A list, consisting of data sets to match, and each list is a array corresponds to target 
+            values of the data sets.
 
     testX: Test points at which the functions will be compared.
 

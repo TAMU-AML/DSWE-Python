@@ -22,8 +22,11 @@ class CovMatch(object):
 
     Parameters
     ----------
-    data : A list, consisting of data sets to match, also each of the individual data set can be 
-           a matrix with each column corresponding to one input variable. 
+    Xlist : A list, consisting of data sets to match, also each of the individual data set can be 
+            a matrix with each column corresponding to one input variable.
+
+    ylist : A list, consisting of data sets to match, and each list is a array corresponds to target 
+            values of the data sets.
 
     circ_pos : A list or array stating the column position of circular variables.
 
@@ -48,7 +51,7 @@ class CovMatch(object):
         validate_matching(Xlist, ylist)
 
         if circ_pos:
-            if not (isinstance(circ_pos, list) or isinstance(np.array(circ_pos), np.ndarray)):
+            if not (isinstance(circ_pos, list) or isinstance(circ_pos, np.ndarray)):
                 raise ValueError(
                     "The circ_pos must be provided in a list or 1d-array.")
 
