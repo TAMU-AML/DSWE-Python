@@ -83,7 +83,7 @@ class ComparePCurve(object):
         self.matched_data_X = result_matching.matched_data_X
         self.matched_data_y = result_matching.matched_data_y
 
-        if not self.testX:
+        if self.testX is None:
             self.testX = generate_test_set(
                 self.matched_data_X, testcol, grid_size)
 
@@ -123,7 +123,7 @@ class ComparePCurve(object):
 
         weights = np.array(weights)
 
-        if not (isinstance(weights, list) or isinstance(np.array(weights), np.ndarray)):
+        if not (isinstance(weights, list) or isinstance(weights, np.ndarray)):
             raise ValueError("The weights must be a numeric vector.")
 
         if len(weights) != len(self.mu_diff):

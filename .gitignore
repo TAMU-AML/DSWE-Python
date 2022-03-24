@@ -9,7 +9,7 @@ dist
 run/
 debug.py
 debug_2.ipynb
-dswe/debug.ipynb
+debug.ipynb
 dswe/.ipynb_checkpoints
 .ipynb_checkpoints/
 vg_grad.ipynb
