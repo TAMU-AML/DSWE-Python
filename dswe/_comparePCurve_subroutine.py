@@ -74,27 +74,21 @@ def compute_weighted_diff(dlist, mu1, mu2, testset, testcol, baseline):
     mixed_data = np.vstack([dlist[0], dlist[1]])
 
     if len(testcol) == 1:
-        var1_range = np.linspace(min(mixed_data[:, 0]), max(
-            mixed_data[:, testcol[0]]), len(mixed_data)).reshape(-1, 1)
+        # var1_range = np.linspace(min(mixed_data[:, 0]), max(
+        #     mixed_data[:, testcol[0]]), len(mixed_data)).reshape(-1, 1)
         kde1 = KernelDensity(kernel='gaussian', bandwidth=nrd0(
             mixed_data[:, testcol[0]])).fit(mixed_data)
-        var1_density = np.exp(kde1.score_samples(var1_range))
+        # var1_density = np.exp(kde1.score_samples(var1_range))
         var1_test = np.exp(kde1.score_samples(testset))
 
         prob_test = var1_test / sum(var1_test)
     else:
-        var1_range = np.linspace(min(mixed_data[:, 0]), max(
-            mixed_data[:, testcol[0]]), len(mixed_data)).reshape(-1, 1)
         kde1 = KernelDensity(kernel='gaussian', bandwidth=nrd0(
             mixed_data[:, testcol[0]])).fit(mixed_data[:, testcol[0]].reshape(-1, 1))
-        var1_density = np.exp(kde1.score_samples(var1_range))
         var1_test = np.exp(kde1.score_samples(testset[:, 0].reshape(-1, 1)))
 
-        var2_range = np.linspace(min(mixed_data[:, 1]), max(
-            mixed_data[:, testcol[1]]), len(mixed_data)).reshape(-1, 1)
         kde2 = KernelDensity(kernel='gaussian', bandwidth=nrd0(
             mixed_data[:, testcol[1]])).fit(mixed_data[:, testcol[1]].reshape(-1, 1))
-        var2_density = np.exp(kde2.score_samples(var2_range))
         var2_test = np.exp(kde2.score_samples(testset[:, 1].reshape(-1, 1)))
 
         prob_test = var1_test * var2_test / sum(var1_test * var2_test)
@@ -117,26 +111,17 @@ def compute_weighted_stat_diff(dlist, mu1, mu2, band, testset, testcol, baseline
     mixed_data = np.vstack([dlist[0], dlist[1]])
 
     if len(testcol) == 1:
-        var1_range = np.linspace(min(mixed_data[:, testcol[0]]), max(
-            mixed_data[:, testcol[0]]), len(mixed_data)).reshape(-1, 1)
         kde1 = KernelDensity(kernel='gaussian').fit(mixed_data)
-        var1_density = np.exp(kde1.score_samples(var1_range))
         var1_test = np.exp(kde1.score_samples(testset))
 
         prob_test = var1_test / sum(var1_test)
     else:
-        var1_range = np.linspace(min(mixed_data[:, testcol[0]]), max(
-            mixed_data[:, testcol[0]]), len(mixed_data)).reshape(-1, 1)
         kde1 = KernelDensity(kernel='gaussian').fit(
             mixed_data[:, testcol[0]].reshape(-1, 1))
-        var1_density = np.exp(kde1.score_samples(var1_range))
         var1_test = np.exp(kde1.score_samples(testset[:, 0].reshape(-1, 1)))
 
-        var2_range = np.linspace(min(mixed_data[:, 1]), max(
-            mixed_data[:, testcol[1]]), len(mixed_data)).reshape(-1, 1)
         kde2 = KernelDensity(kernel='gaussian').fit(
             mixed_data[:, testcol[1]].reshape(-1, 1))
-        var2_density = np.exp(kde2.score_samples(var2_range))
         var2_test = np.exp(kde2.score_samples(testset[:, 1].reshape(-1, 1)))
 
         prob_test = var1_test * var2_test / sum(var1_test * var2_test)
