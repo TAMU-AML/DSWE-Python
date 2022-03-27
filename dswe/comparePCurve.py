@@ -4,7 +4,6 @@
 # LICENSE file in the root directory of this source tree.
 
 import numpy as np
-import pandas as pd
 from ._comparePCurve_subroutine import *
 from .funGP import *
 from .covmatch import *
@@ -12,7 +11,108 @@ from .covmatch import *
 
 class ComparePCurve(object):
 
-    def __init__(self, Xlist, ylist, testcol, testX=None, circ_pos=None, thresh=0.2, conf_level=0.95, grid_size=[50, 50],
+    """
+    Power curve comparison (ComparePCurve)
+    --------------------------------------
+
+    References
+    ----------
+    Ding et al. (2020) available on arxiv at <https://arxiv.org/abs/2005.08652>.
+
+    Parameters
+    ----------
+    Xlist : A list, consisting of data sets to match, also each of the individual data set can be 
+            a matrix with each column corresponding to one input variable.
+
+    ylist : A list, consisting of data sets to match, and each list is a array corresponds to target 
+            values of the data sets.
+
+    testcol : A list stating column number of covariates to used in generating test set. 
+             Maximum of two columns to be used.
+
+    testset : Test points at which the functions will be compared.
+
+    circ_pos : A list or array stating the column position of circular variables.
+
+    thresh : A numerical or a list of threshold values for each covariates, against which matching happens.
+            It should be a single value or a list of values representing threshold for each of the covariate.
+
+    conf_level : A single value representing the statistical significance level for 
+                constructing the band.
+
+    grid_size : A list or numpy array to be used in constructing test set, should be provided when
+               testset is None, else it is ignored. Default is [50,50] for 2-dim input which
+               is converted internally to a default of [1000] for 1-dim input. Total number of
+               test points (product of grid_size elements components) must be less than or equal
+               to 2500.
+
+    power_bins : A numeric stating the number of power bins for computing the scaled difference,
+                default is 15.
+
+    bseline : An integer between 0 to 2, where 1 indicates to use power curve of first dataset
+             as the base for metric calculation, 2 indicates to use the power curve of second
+             dataset as the base, and 0 indicates to use the average of both power curves as
+             the base. Default is set to 1.
+
+    limit_memory : A boolean (True/False) indicating whether to limit the memory use or not. 
+                  Default is true. If set to true, 5000 datapoints are randomly sampled 
+                  from each dataset under comparison for inference.  
+
+    opt_method : A string specifying the optimization method to be used for hyperparameter 
+                estimation. The best working solver are ['L-BFGS-B', 'BFGS'].
+
+    sample_size : A dictionary with two keys: optimSize and bandSize, 
+                 denoting the sample size for each dataset for hyperparameter optimization 
+                 and confidence band computation, respectively, when limitMemory = TRUE. 
+                 Default value is list(optimSize = 500,bandSize = 5000).
+
+    rng_seed : Random seed for sampling data when limitMemory = TRUE. Default is 1. 
+
+    Returns
+    -------
+    A fitted object (dictionary) of class FunGP.
+
+        weighted_diff : a numeric, % difference between the functions weighted using the density of
+                        the covariates.
+
+        weighted_stat_diff : a numeric, % statistically significant difference between the functions
+                             weighted using the density of the covariates.
+
+        scaled_diff : a numeric, % difference between the functions scaled to the orginal data.
+
+        scaled_stat_diff : a numeric, % statistically significant difference between the functions scaled
+                           to the orginal data.
+
+        unweighted_diff : a numeric, % difference between the functions unweighted.
+
+        unweighted_stat_diff : a numeric, % statistically significant difference between the functions
+                               unweighted.
+
+        reduction_ratio : a list consisting of shrinkage ratio of features used in testset.
+
+        mu1 : An array of test prediction for first data set.
+
+        mu2 : An array of test prediction for second data set.
+
+        mu_diff : An array of pointwise difference between the predictions 
+                  from the two datasets (mu2-mu1).
+
+        band : An array of the allowed statistical difference between functions at 
+               testpoints in testset.
+
+        conf_level : A numeric representing the statistical significance level for 
+                     constructing the band.
+
+        estimated_params : A list of estimated hyperparameters for GP.
+
+        testset : an array/matrix of the test points either provided by user, or generated internally.
+
+        matched_data_X : a list of features of two matched datasets as generated by covariate matching.
+
+        matched_data_y : a list of target of two matched datasets as generated by covariate matching.
+    """
+
+    def __init__(self, Xlist, ylist, testcol, testset=None, circ_pos=None, thresh=0.2, conf_level=0.95, grid_size=[50, 50],
                  power_bins=15, baseline=1, limit_memory=True, opt_method='L-BFGS-B',
                  sample_size={'optim_size': 500, 'band_size': 5000}, rng_seed=1):
 
@@ -23,6 +123,25 @@ class ComparePCurve(object):
                 "The testcol must be provided in a list or 1d-array.")
         if len(testcol) > 2:
             raise ValueError("Maximum two columns to be used.")
+
+        if testset is None:
+            if not (isinstance(grid_size, list) or isinstance(grid_size, np.ndarray)):
+                raise ValueError(
+                    "The grid_size must be provided in a list or 1d-array.")
+            elif len(grid_size) != 2 and len(testcol) == 2:
+                raise ValueError(
+                    "The length of grid_size should be equal to two when length of testcol is equal to two.")
+
+            if len(testcol) == 1 and len(grid_size) == 2 and grid_size == [50, 50]:
+                # Convert the 2-dim default grid_size to 1-dim default internally when len(testcol) == 1.
+                grid_size = [1000]
+            elif len(testcol) == 1 and len(grid_size) != 1:
+                raise ValueError(
+                    "The length of grid_size should be equal to one when length of testcol is equal to one, or use the default grid_size option.")
+
+            if np.prod(grid_size) > 2500:
+                raise ValueError(
+                    "The number of test points should be less than or equal to 2500; reduce grid_size. The total number of test points are product of values in grid_size.")
 
         if circ_pos:
             if not (isinstance(circ_pos, list) or isinstance(circ_pos, np.ndarray)):
@@ -38,13 +157,6 @@ class ComparePCurve(object):
         if type(conf_level) != int and type(conf_level) != float or conf_level < 0 or conf_level > 1:
             raise ValueError(
                 "The conf_level be a numeric value between 0 and 1")
-
-        if not (isinstance(grid_size, list) or isinstance(grid_size, np.ndarray)):
-            raise ValueError(
-                "The grid_size must be provided in a list or 1d-array.")
-        elif len(grid_size) != len(testcol):
-            raise ValueError(
-                "The length of grid_size should be equal to two when length of testCol is equal to two.")
 
         if baseline not in [0, 1, 2]:
             raise ValueError("The basline must be an integer between 0 and 2.")
@@ -77,20 +189,22 @@ class ComparePCurve(object):
         self.ylist[0] = np.array(self.ylist[0]).reshape(-1, 1)
         self.ylist[1] = np.array(self.ylist[1]).reshape(-1, 1)
 
-        self.testX = testX
+        self.testset = testset
+        if len(self.testset.shape) == 1:
+            self.testset = self.testset.reshape(-1, 1)
 
         result_matching = CovMatch(self.Xlist, self.ylist, circ_pos, thresh)
         self.matched_data_X = result_matching.matched_data_X
         self.matched_data_y = result_matching.matched_data_y
 
-        if self.testX is None:
-            self.testX = generate_test_set(
+        if self.testset is None:
+            self.testset = generate_test_set(
                 self.matched_data_X, testcol, grid_size)
 
         _mdata_X = [self.matched_data_X[0][:, testcol],
                     self.matched_data_X[1][:, testcol]]
         _mdata_y = [self.matched_data_y[0], self.matched_data_y[1]]
-        result_GP = FunGP(_mdata_X, _mdata_y, self.testX, self.conf_level,
+        result_GP = FunGP(_mdata_X, _mdata_y, self.testset, self.conf_level,
                           limit_memory, self.opt_method, sample_size=sample_size, rng_seed=self.rng_seed)
 
         self.mu1 = result_GP.mu1
@@ -100,10 +214,10 @@ class ComparePCurve(object):
         self.estimated_params = result_GP.params
 
         self.weighted_diff = compute_weighted_diff(
-            self.Xlist, self.mu1, self.mu2, self.testX, testcol, baseline)
+            self.Xlist, self.mu1, self.mu2, self.testset, testcol, baseline)
 
         self.weighted_stat_diff = compute_weighted_stat_diff(
-            self.Xlist, self.mu1, self.mu2, self.band, self.testX, testcol, baseline)
+            self.Xlist, self.mu1, self.mu2, self.band, self.testset, testcol, baseline)
 
         self.scaled_diff = compute_scaled_diff(
             self.ylist, self.mu1, self.mu2, power_bins, baseline)
@@ -120,6 +234,27 @@ class ComparePCurve(object):
             self.Xlist, self.matched_data_X, testcol)
 
     def compute_weighted_difference(self, weights, baseline=1, stat_diff=False):
+        """Computes percentage weighted difference between power curves based on user provided weights
+           instead of the weights computed from the data.
+
+        Parameters
+        ----------
+        weights : a list of user specified weights for each element of mu_diff. It can be based
+                  on any probability distribution of user choice. The weights must sum to 1.
+
+        baseline : An integer between 1 to 2, where 1 indicates to use mu1 predictions from the power curve and 
+                   2 indicates to use mu2 predictions from the power curve as obtained from ComparePCurve() function. 
+                   The mu1 and mu2 corresponds to test prediction for first and second data set respectively.
+
+        stat_diff : a boolean (True/False) specifying whether to compute the statistical significant difference or not.
+                   Default is set to False, i.e. statistical significant difference is not computed.
+                   If set to true, band generated from ComparePCurve() function to be used.
+
+        Returns
+        -------
+        a numeric percentage weighted difference or statistical significant percetage weighted difference
+        based on whether statDiff is set to False or True.
+        """
 
         weights = np.array(weights)
 
