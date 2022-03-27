@@ -32,22 +32,22 @@ class FunGP(object):
     ylist : A list, consisting of data sets to match, and each list is a array corresponds to target 
             values of the data sets.
 
-    testX: Test points at which the functions will be compared.
+    testset : Test points at which the functions will be compared.
 
-    conf_level: A single value representing the statistical significance level for 
-                constructing the band.
+    conf_level : A single value representing the statistical significance level for 
+                 constructing the band.
 
-    limit_memory: A boolean (True/False) indicating whether to limit the memory use or not. 
-                  Default is true. If set to true, 5000 datapoints are randomly sampled 
-                  from each dataset under comparison for inference.  
+    limit_memory : A boolean (True/False) indicating whether to limit the memory use or not. 
+                   Default is true. If set to true, 5000 datapoints are randomly sampled 
+                   from each dataset under comparison for inference.  
 
-    opt_method: A string specifying the optimization method to be used for hyperparameter 
-                estimation. The best working solver are ['L-BFGS-B', 'BFGS'].
+    opt_method : A string specifying the optimization method to be used for hyperparameter 
+                 estimation. The best working solver are ['L-BFGS-B', 'BFGS'].
 
-    sample_size: A dictionary with two keys: optimSize and bandSize, 
-                 denoting the sample size for each dataset for hyperparameter optimization 
-                 and confidence band computation, respectively, when limitMemory = TRUE. 
-                 Default value is list(optimSize = 500,bandSize = 5000).
+    sample_size : A dictionary with two keys: optimSize and bandSize, 
+                  denoting the sample size for each dataset for hyperparameter optimization 
+                  and confidence band computation, respectively, when limitMemory = TRUE. 
+                  Default value is list(optimSize = 500,bandSize = 5000).
 
     rng_seed: Random seed for sampling data when limitMemory = TRUE. Default is 1. 
 
@@ -55,18 +55,23 @@ class FunGP(object):
     -------
     A fitted object (dictionary) of class FunGP.
 
-        mu_diff: An array of pointwise difference between the predictions 
-                    from the two datasets (mu2-mu1).
-        mu1: An array of test prediction for first data set.
-        mu2: An array of test prediction for second data set.
-        band: An array of the allowed statistical difference between functions at 
-                testpoints in testset.
-        conf_level: A numeric representing the statistical significance level for 
-                    constructing the band.
-        estimated_params: A list of estimated hyperparameters for GP.
+        mu1 : An array of test prediction for first data set.
+
+        mu2 : An array of test prediction for second data set.
+
+        mu_diff : An array of pointwise difference between the predictions 
+                  from the two datasets (mu2-mu1).
+
+        band : An array of the allowed statistical difference between functions at 
+               testpoints in testset.
+
+        conf_level : A numeric representing the statistical significance level for 
+                     constructing the band.
+
+        estimated_params : A list of estimated hyperparameters for GP.
     """
 
-    def __init__(self, Xlist, ylist, testX, conf_level=0.95, limit_memory=True, opt_method='L-BFGS-B',
+    def __init__(self, Xlist, ylist, testset, conf_level=0.95, limit_memory=True, opt_method='L-BFGS-B',
                  sample_size={'optim_size': 500, 'band_size': 5000}, rng_seed=1):
 
         validate_matching(Xlist, ylist)
@@ -100,7 +105,10 @@ class FunGP(object):
             self.ylist[0] = np.array(self.ylist[0])
             self.ylist[1] = np.array(self.ylist[1])
 
-        self.testX = np.array(testX)
+        self.testset = np.array(testset)
+        if len(self.testset.shape) == 1:
+            self.testset = self.testset.reshape(-1, 1)
+
         self.conf_level = conf_level
         self.limit_memory = limit_memory
         self.opt_method = opt_method
@@ -114,7 +122,7 @@ class FunGP(object):
         self.params = optim_result['estimated_params']
 
         self.diff_cov = compute_diff_cov(
-            self.Xlist, self.ylist, self.params, self.testX, self.band_size, self.rng_seed, self.limit_memory)
+            self.Xlist, self.ylist, self.params, self.testset, self.band_size, self.rng_seed, self.limit_memory)
 
         self.mu1 = self.diff_cov['mu1']
         self.mu2 = self.diff_cov['mu2']

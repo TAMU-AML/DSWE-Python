@@ -30,19 +30,22 @@ class CovMatch(object):
 
     circ_pos : A list or array stating the column position of circular variables.
 
-    thresh: A numerical or a list of threshold values for each covariates, against which matching happens.
+    thresh : A numerical or a list of threshold values for each covariates, against which matching happens.
             It should be a single value or a list of values representing threshold for each of the covariate.
 
-    priority: A boolean, default value False, otherwise computes the sequence of matching.
+    priority : A boolean, default value False, otherwise computes the sequence of matching.
 
     Returns
     -------
     A matched object (dictionary) of class CovMatch.
 
-        original_data: The data sets provided for matching.
-        matched_data: The data sets after matching.
-        min_max_original: The minimum and maximum value in original data for each covariates used in matching.
-        min_max_matched: The minimum and maximum value in matched data for each covariates used in matching.
+        original_data : The data sets provided for matching.
+
+        matched_data : The data sets after matching.
+
+        min_max_original : The minimum and maximum value in original data for each covariates used in matching.
+
+        min_max_matched : The minimum and maximum value in matched data for each covariates used in matching.
 
     """
 
