@@ -190,8 +190,9 @@ class ComparePCurve(object):
         self.ylist[1] = np.array(self.ylist[1]).reshape(-1, 1)
 
         self.testset = testset
-        if len(self.testset.shape) == 1:
-            self.testset = self.testset.reshape(-1, 1)
+        if self.testset is not None:
+            if len(self.testset.shape) == 1:
+                self.testset = self.testset.reshape(-1, 1)
 
         result_matching = CovMatch(self.Xlist, self.ylist, circ_pos, thresh)
         self.matched_data_X = result_matching.matched_data_X
