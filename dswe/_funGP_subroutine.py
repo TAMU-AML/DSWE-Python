@@ -97,67 +97,84 @@ def estimate_binned_params(databins, opt_method='L-BFGS-B'):
     return {'estimated_params': estimated_params, 'obj_val': obj_val, 'grad_val': grad_val}
 
 
-def estimate_parameters(trainX, trainy, optim_size, rng_seed, opt_method='L-BFGS-B', limit_memory=False):
+def estimate_parameters(trainX, trainy, optim_size, rng_seed, opt_method='L-BFGS-B', limit_memory=False, optim_idx=None):
     if not limit_memory:
         thinning_number = math.ceil((compute_thinning_number(
             trainX[0]) + compute_thinning_number(trainX[1])) / 2)
         databins1 = create_thinned_bins(trainX[0], trainy[0], thinning_number)
         databins2 = create_thinned_bins(trainX[1], trainy[1], thinning_number)
         databins = np.concatenate([databins1, databins2])
-        optim_result = estimate_binned_params(databins)
+        optim_result = estimate_binned_params(databins, opt_method)
         return optim_result
 
     elif limit_memory:
-        max_data_sample = optim_size
-        tempX = [[]] * len(trainX)
-        tempy = [[]] * len(trainX)
-        for i in range(len(trainX)):
-            if len(trainX[i]) > max_data_sample:
-                np.random.seed(rng_seed)
-                idx = np.random.choice(
-                    trainX[i].shape[0], max_data_sample, replace=False)
-                tempX[i] = np.array(trainX[i][idx])
-                tempy[i] = np.array(trainy[i][idx])
-            else:
-                tempX[i] = trainX[i]
-                tempy[i] = trainy[i]
-        databins = []
-        for i in range(len(trainX)):
-            databins.append({'X': tempX[i], 'y': tempy[i]})
-        optim_result = estimate_binned_params(databins)
-        return optim_result
+        if optim_idx is not None:
+            databins = []
+            for i in range(len(trainX)):
+                databins.append(
+                    {'X': trainX[i][optim_idx[i]], 'y': trainy[i][optim_idx[i]]})
+        else:
+            optim_idx = [None] * len(trainX)
+            max_data_sample = optim_size
+            tempX = [[]] * len(trainX)
+            tempy = [[]] * len(trainX)
+            for i in range(len(trainX)):
+                if len(trainX[i]) > max_data_sample:
+                    np.random.seed(rng_seed)
+                    idx = np.random.choice(
+                        trainX[i].shape[0], max_data_sample, replace=False)
+                    tempX[i] = np.array(trainX[i][idx])
+                    tempy[i] = np.array(trainy[i][idx])
+                    optim_idx[i] = idx
+                else:
+                    tempX[i] = trainX[i]
+                    tempy[i] = trainy[i]
+            databins = []
+            for i in range(len(trainX)):
+                databins.append({'X': tempX[i], 'y': tempy[i]})
+
+        optim_result = estimate_binned_params(databins, opt_method)
+        return optim_result, optim_idx
 
 
-def compute_diff_cov(trainX, trainy, params, testX, band_size, rng_seed, limit_memory=False):
+def compute_diff_cov(trainX, trainy, params, testX, band_size, rng_seed, limit_memory=False, band_idx=None):
     theta = params['theta']
     sigma_f = params['sigma_f']
     sigma_n = params['sigma_n']
     beta = params['beta']
 
     if limit_memory:
-        max_data_sample = band_size
-        tempX = [[]] * len(trainX)
-        tempy = [[]] * len(trainX)
-        for i in range(len(trainX)):
-            if len(trainX[i]) > max_data_sample:
-                np.random.seed(rng_seed)
-                idx = np.random.choice(
-                    trainX[i].shape[0], max_data_sample, replace=False)
-                tempX[i] = trainX[i][idx]
-                tempy[i] = trainy[i][idx]
-            else:
-                tempX[i] = trainX[i]
-                tempy[i] = trainy[i]
+        if band_idx is not None:
+            for i in range(len(band_idx)):
+                if len(trainX[i]) > band_size:
+                    X1, y1 = trainX[i][band_idx[i]], trainy[i][band_idx[i]]
+                else:
+                    X2, y2 = trainX[i], trainy[i]
+        else:
+            band_idx = [None] * len(trainX)
+            tempX = [[]] * len(trainX)
+            tempy = [[]] * len(trainX)
+            for i in range(len(trainX)):
+                if len(trainX[i]) > band_size:
+                    np.random.seed(rng_seed)
+                    idx = np.random.choice(
+                        trainX[i].shape[0], band_size, replace=False)
+                    tempX[i] = trainX[i][idx]
+                    tempy[i] = trainy[i][idx]
+                    band_idx[i] = idx
+                else:
+                    tempX[i] = trainX[i]
+                    tempy[i] = trainy[i]
 
-        X1, y1 = np.array(tempX[0]), np.array(tempy[0])
-        X2, y2 = np.array(tempX[1]), np.array(tempy[1])
+            X1, y1 = np.array(tempX[0]), np.array(tempy[0])
+            X2, y2 = np.array(tempX[1]), np.array(tempy[1])
     else:
         X1, y1 = trainX[0], trainy[0]
         X2, y2 = trainX[1], trainy[1]
 
     XT = testX
 
-    return compute_diff_cov_(X1, y1, X2, y2, XT, theta, sigma_f, sigma_n, beta)
+    return compute_diff_cov_(X1, y1, X2, y2, XT, theta, sigma_f, sigma_n, beta), band_idx
 
 
 def compute_conf_band(diff_cov_mat, conf_level):

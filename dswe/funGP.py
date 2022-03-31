@@ -72,7 +72,7 @@ class FunGP(object):
     """
 
     def __init__(self, Xlist, ylist, testset, conf_level=0.95, limit_memory=True, opt_method='L-BFGS-B',
-                 sample_size={'optim_size': 500, 'band_size': 5000}, rng_seed=1):
+                 sample_size={'optim_size': 500, 'band_size': 5000}, rng_seed=1, optim_idx=None, band_idx=None, params=None):
 
         validate_matching(Xlist, ylist)
 
@@ -115,14 +115,17 @@ class FunGP(object):
         self.optim_size = sample_size['optim_size']
         self.band_size = sample_size['band_size']
         self.rng_seed = rng_seed
+        self.optim_idx = optim_idx
+        self.band_idx = band_idx
+        self.params = params
 
-        optim_result = estimate_parameters(self.Xlist, self.ylist, self.optim_size,
-                                           self.rng_seed, opt_method=self.opt_method, limit_memory=self.limit_memory)
+        if self.params is None:
+            optim_result, self.optim_idx = estimate_parameters(self.Xlist, self.ylist, self.optim_size,
+                                                               self.rng_seed, opt_method=self.opt_method, limit_memory=self.limit_memory, optim_idx=self.optim_idx)
+            self.params = optim_result['estimated_params']
 
-        self.params = optim_result['estimated_params']
-
-        self.diff_cov = compute_diff_cov(
-            self.Xlist, self.ylist, self.params, self.testset, self.band_size, self.rng_seed, self.limit_memory)
+        self.diff_cov, self.band_idx = compute_diff_cov(
+            self.Xlist, self.ylist, self.params, self.testset, self.band_size, self.rng_seed, self.limit_memory, band_idx=self.band_idx)
 
         self.mu1 = self.diff_cov['mu1']
         self.mu2 = self.diff_cov['mu2']
