@@ -1,0 +1,7 @@
+Experiment,optim_idx,estimated_params,band_idx,Weighted diff,R
+1,False,False,False,5.6,5.3
+2,True,False,False,5.31,5.3
+3,True,False,True,5.3,5.3
+4,False,False,True,5.51,5.3
+5,,False,True,5.31,5.3
+6,,True,True,5.3,5.3
