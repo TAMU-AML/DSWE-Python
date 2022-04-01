@@ -84,9 +84,9 @@ def estimate_binned_params(databins, opt_method='L-BFGS-B'):
                                                                          'sigma_f': par[ncov:ncov + 1], 'sigma_n': par[ncov + 1:ncov + 2], 'beta': par[ncov + 2]})
 
     optim_result = minimize(fun=obj_fun, x0=par_init,
-                            method=opt_method, jac=obj_grad, options={'gtol': 1e-6, 'disp': True})
+                            method=opt_method, jac=obj_grad, options={'gtol': 1e-6, 'disp': False})
 
-    estimated_params = {'theta': abs(optim_result.x[0:ncov]),
+    estimated_params = {'theta': abs(optim_result.x[0:ncov]).tolist(),
                         'sigma_f': abs(optim_result.x[ncov:ncov + 1]).item(),
                         'sigma_n': abs(optim_result.x[ncov + 1:ncov + 2]).item(),
                         'beta': optim_result.x[ncov + 2:ncov + 3].item()}
@@ -125,7 +125,7 @@ def estimate_parameters(trainX, trainy, optim_size, rng_seed, opt_method='L-BFGS
                         trainX[i].shape[0], max_data_sample, replace=False)
                     tempX[i] = np.array(trainX[i][idx])
                     tempy[i] = np.array(trainy[i][idx])
-                    optim_idx[i] = idx
+                    optim_idx[i] = idx.tolist()
                 else:
                     tempX[i] = trainX[i]
                     tempy[i] = trainy[i]
@@ -161,7 +161,7 @@ def compute_diff_cov(trainX, trainy, params, testX, band_size, rng_seed, limit_m
                         trainX[i].shape[0], band_size, replace=False)
                     tempX[i] = trainX[i][idx]
                     tempy[i] = trainy[i][idx]
-                    band_idx[i] = idx
+                    band_idx[i] = idx.tolist()
                 else:
                     tempX[i] = trainX[i]
                     tempy[i] = trainy[i]
