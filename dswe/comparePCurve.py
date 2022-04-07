@@ -61,10 +61,10 @@ class ComparePCurve(object):
     opt_method : A string specifying the optimization method to be used for hyperparameter 
                 estimation. The best working solver are ['L-BFGS-B', 'BFGS'].
 
-    sample_size : A dictionary with two keys: optimSize and bandSize, 
+    sample_size : A dictionary with two keys: optim_size and band_size, 
                  denoting the sample size for each dataset for hyperparameter optimization 
-                 and confidence band computation, respectively, when limitMemory = TRUE. 
-                 Default value is list(optimSize = 500,bandSize = 5000).
+                 and confidence band computation, respectively, when limit_memory = TRUE. 
+                 Default value is list(optim_size = 500,band_size = 5000).
 
     rng_seed : Random seed for sampling data when limitMemory = TRUE. Default is 1. 
 
