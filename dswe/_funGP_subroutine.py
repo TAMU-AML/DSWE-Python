@@ -104,7 +104,7 @@ def estimate_parameters(trainX, trainy, optim_size, rng_seed, opt_method='L-BFGS
         databins1 = create_thinned_bins(trainX[0], trainy[0], thinning_number)
         databins2 = create_thinned_bins(trainX[1], trainy[1], thinning_number)
         databins = np.concatenate([databins1, databins2])
-        optim_result = estimate_binned_params(databins)
+        optim_result = estimate_binned_params(databins, opt_method)
         return optim_result
 
     elif limit_memory:
@@ -124,7 +124,7 @@ def estimate_parameters(trainX, trainy, optim_size, rng_seed, opt_method='L-BFGS
         databins = []
         for i in range(len(trainX)):
             databins.append({'X': tempX[i], 'y': tempy[i]})
-        optim_result = estimate_binned_params(databins)
+        optim_result = estimate_binned_params(databins, opt_method)
         return optim_result
 
 
