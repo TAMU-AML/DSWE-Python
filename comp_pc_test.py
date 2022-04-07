@@ -3,7 +3,7 @@ import pandas as pd
 import json
 from dswe import FunGP
 from dswe import CovMatch
-from dswe import generate_test_set, compute_weighted_diff
+from dswe import generate_test_set, compute_weighted_diff, compute_weighted_stat_diff
 
 
 # Provide dataset path, xcol, ycol, circ_pos, testcol, grid_size, limit_memory etc.
@@ -18,7 +18,8 @@ limit_memory = True
 conf_level = 0.95
 opt_method = 'L-BFGS-B'
 sample_size = {'optim_size': 500, 'band_size': 5000}
-rng_seed = [1, 10, 150, 1337, 2222, 5000]
+# seed to run many iterartions to average result
+rng_seed = [1, 10, 150, 343, 769, 1001, 1337, 2222, 3456, 5000]
 baseline = 1
 
 
@@ -78,24 +79,28 @@ matched_data_y = result_matching.matched_data_y
 
 testset = generate_test_set(matched_data_X, testcol, grid_size)
 
-weighted_diff = []
-order = []
-
 print("Accuracy of testset matching: {}%".format(
     np.mean(np.round(testset, 2) == np.round(testset_R, 2)) * 100))
 print("Accuracy of Covmatching: {}%".format((np.mean(np.round(matched_data_X[0], 2) == np.round(
     matched_data_X_R[0], 2)) * 100 + np.mean(np.round(matched_data_X[1], 2) == np.round(matched_data_X_R[1], 2)) * 100) / 2.))
 
 
+weighted_diff = {}
+weighted_stat_diff = {}
+order = []
+
 # Experiment 1: Base case (Everything generated from Python)
 mlist_X = [matched_data_X[0][:, testcol], matched_data_X[1][:, testcol]]
 mlist_y = [matched_data_y[0], matched_data_y[1]]
 wd = []
+wsd = []
 for rsd in rng_seed:
     result_GP = FunGP(mlist_X, mlist_y, testset, conf_level=conf_level, limit_memory=limit_memory, opt_method=opt_method,
                       sample_size=sample_size, rng_seed=rsd, optim_idx=None, band_idx=None, params=None)
     wd.append(compute_weighted_diff(Xlist, result_GP.mu1,
               result_GP.mu2, testset, testcol, baseline=baseline))
+    wsd.append(compute_weighted_stat_diff(Xlist, result_GP.mu1,
+               result_GP.mu2, testset, testcol, baseline=baseline))
     # saving indices and paramaters. Override after each iter. Better to set rng_seed list to one value.
     with open('ablation/optim_idx.json', 'w') as f:
         json.dump(result_GP.optim_idx, f)
@@ -104,7 +109,8 @@ for rsd in rng_seed:
     with open('ablation/estimated_params.json', 'w') as f:
         json.dump(result_GP.params, f)
 order.append([False, False, False])
-weighted_diff.append(round(np.array(wd).mean(), 2))
+weighted_diff['experiment 1'] = wd
+weighted_stat_diff['experiment 1'] = wsd
 print("Experiment 1 finished.")
 
 
@@ -112,13 +118,17 @@ print("Experiment 1 finished.")
 mlist_X = [matched_data_X[0][:, testcol], matched_data_X[1][:, testcol]]
 mlist_y = [matched_data_y[0], matched_data_y[1]]
 wd = []
+wsd = []
 for rsd in rng_seed:
     result_GP = FunGP(mlist_X, mlist_y, testset, conf_level=conf_level, limit_memory=limit_memory, opt_method=opt_method,
                       sample_size=sample_size, rng_seed=rsd, optim_idx=optim_idx_R, band_idx=None, params=None)
     wd.append(compute_weighted_diff(Xlist, result_GP.mu1,
               result_GP.mu2, testset, testcol, baseline=baseline))
+    wsd.append(compute_weighted_stat_diff(Xlist, result_GP.mu1,
+               result_GP.mu2, testset, testcol, baseline=baseline))
 order.append([True, False, False])
-weighted_diff.append(round(np.array(wd).mean(), 2))
+weighted_diff['experiment 2'] = wd
+weighted_stat_diff['experiment 2'] = wsd
 print("Experiment 2 finished.")
 
 
@@ -128,8 +138,10 @@ mlist_y = [matched_data_y[0], matched_data_y[1]]
 result_GP = FunGP(mlist_X, mlist_y, testset, conf_level=conf_level, limit_memory=limit_memory, opt_method=opt_method,
                   sample_size=sample_size, optim_idx=optim_idx_R, band_idx=band_idx_R, params=None)
 order.append([True, False, True])
-weighted_diff.append(compute_weighted_diff(
-    Xlist, result_GP.mu1, result_GP.mu2, testset, testcol, baseline=baseline))
+weighted_diff['experiment 3'] = [compute_weighted_diff(
+    Xlist, result_GP.mu1, result_GP.mu2, testset, testcol, baseline=baseline)]
+weighted_stat_diff['experiment 3'] = [compute_weighted_stat_diff(
+    Xlist, result_GP.mu1, result_GP.mu2, testset, testcol, baseline=baseline)]
 print("Experiment 3 finished.")
 
 
@@ -137,13 +149,17 @@ print("Experiment 3 finished.")
 mlist_X = [matched_data_X[0][:, testcol], matched_data_X[1][:, testcol]]
 mlist_y = [matched_data_y[0], matched_data_y[1]]
 wd = []
+wsd = []
 for rsd in rng_seed:
     result_GP = FunGP(mlist_X, mlist_y, testset, conf_level=conf_level, limit_memory=limit_memory, opt_method=opt_method,
                       sample_size=sample_size, rng_seed=rsd, optim_idx=None, band_idx=band_idx_R, params=None)
     wd.append(compute_weighted_diff(Xlist, result_GP.mu1,
               result_GP.mu2, testset, testcol, baseline=baseline))
+    wsd.append(compute_weighted_stat_diff(Xlist, result_GP.mu1,
+               result_GP.mu2, testset, testcol, baseline=baseline))
 order.append([False, False, True])
-weighted_diff.append(round(np.array(wd).mean(), 2))
+weighted_diff['experiment 4'] = wd
+weighted_stat_diff['experiment 4'] = wsd
 print("Experiment 4 finished.")
 
 
@@ -151,13 +167,17 @@ print("Experiment 4 finished.")
 mlist_X = [matched_data_X[0][:, testcol], matched_data_X[1][:, testcol]]
 mlist_y = [matched_data_y[0], matched_data_y[1]]
 wd = []
+wsd = []
 for rsd in rng_seed:
     result_GP = FunGP(mlist_X, mlist_y, testset, conf_level=conf_level, limit_memory=limit_memory, opt_method=opt_method,
                       sample_size=sample_size, rng_seed=rsd, optim_idx=None, band_idx=None, params=estimated_params_R)
     wd.append(compute_weighted_diff(Xlist, result_GP.mu1,
               result_GP.mu2, testset, testcol, baseline=baseline))
-order.append([None, False, True])
-weighted_diff.append(round(np.array(wd).mean(), 2))
+    wsd.append(compute_weighted_stat_diff(Xlist, result_GP.mu1,
+               result_GP.mu2, testset, testcol, baseline=baseline))
+order.append([None, True, False])
+weighted_diff['experiment 5'] = wd
+weighted_stat_diff['experiment 5'] = wsd
 print("Experiment 5 finished.")
 
 
@@ -167,8 +187,11 @@ mlist_y = [matched_data_y[0], matched_data_y[1]]
 result_GP = FunGP(mlist_X, mlist_y, testset, conf_level=conf_level, limit_memory=limit_memory, opt_method=opt_method,
                   sample_size=sample_size, optim_idx=None, band_idx=band_idx_R, params=estimated_params_R)
 order.append([None, True, True])
-weighted_diff.append(compute_weighted_diff(
-    Xlist, result_GP.mu1, result_GP.mu2, testset, testcol, baseline=baseline))
+weighted_diff['experiment 6'] = [compute_weighted_diff(
+    Xlist, result_GP.mu1, result_GP.mu2, testset, testcol, baseline=baseline)]
+weighted_stat_diff['experiment 6'] = [compute_weighted_stat_diff(
+    Xlist, result_GP.mu1, result_GP.mu2, testset, testcol, baseline=baseline)]
+
 print("Experiment 6 finished.")
 
 
