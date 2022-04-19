@@ -9,7 +9,7 @@ import pandas as pd
 
 class AMK(object):
 
-    def __init__(self, X_train, y_train, X_test, bw='dpi_gap', n_multi_cov=3, fixed_cov=[1, 2], cir_cov=None):
+    def __init__(self, X_train, y_train, X_test, bw='dpi_gap', n_multi_cov=3, fixed_cov=[0, 1], cir_cov=None):
 
         if not (isinstance(X_train, list) or isinstance(X_train, pd.DataFrame) or isinstance(X_train, np.ndarray)):
             raise ValueError(
@@ -31,7 +31,7 @@ class AMK(object):
             raise ValueError(
                 "The X_train and y_train should have same number of data points.")
 
-        if len(X_train.shape) > 1:
+        if len(X_train.shape) == 2:
             ncov = X_train.shape[1]
         else:
             ncov = 1
@@ -56,7 +56,7 @@ class AMK(object):
                 n_multi_cov = 'all'
 
         if n_multi_cov not in ['all', 'none']:
-            if n_multi_cov < 1 and n_multi_cov > ncov:
+            if n_multi_cov < 1 or n_multi_cov > ncov:
                 raise ValueError(
                     "if n_multi_cov is not set to 'all' or 'none', then it must be set to an integer greater than 1, and less than or equal to the number of covariates.")
             elif n_multi_cov == ncov:
