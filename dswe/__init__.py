@@ -5,3 +5,4 @@ from .covmatch import CovMatch
 from .comparePCurve import ComparePCurve
 from .AMK import AMK
 from .svm import SVMPowerCurve
+from .bayes_tree import BayesTreePowerCurve
