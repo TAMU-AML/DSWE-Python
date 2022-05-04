@@ -67,9 +67,9 @@ class AMK(object):
                 raise ValueError(
                     "The number of features in train and test set must be same.")
 
-        if not (isinstance(y_train, list) or isinstance(y_train, np.ndarray)):
+        if not (isinstance(y_train, list) or isinstance(y_train, np.ndarray)) or isinstance(y_train, pd.DataFrame):
             raise ValueError(
-                "The target data should be either a list or numpy array.")
+                "The target data should be either a list or numpy array or dataframe.")
 
         if len(X_train) != len(y_train):
             raise ValueError(
