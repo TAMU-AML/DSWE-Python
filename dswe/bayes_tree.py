@@ -38,6 +38,9 @@ class BayesTreePowerCurve(object):
             raise ValueError(
                 "The X_train and y_train should have same number of data points.")
 
+        if not isinstance(n_trees, int):
+            raise ValueError("The number of trees must be an integer value.")
+
         self.X_train = np.array(X_train)
         self.y_train = np.array(y_train)
         self.n_trees = n_trees
