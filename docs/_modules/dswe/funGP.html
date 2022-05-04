@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dswe.funGP &mdash; DSWE 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> DSWE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing DSWE package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AMK.html">AMK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bayes_tree.html">BayesTreePowerCurve</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../comparePCurve.html">ComparePCurve</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../covmatch.html">CovMatch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../funGP.html">FunGP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../knn.html">KNNPowerCurve</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../svm.html">SVMPowerCurve</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tempGP.html">TempGP</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DSWE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>dswe.funGP</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for dswe.funGP</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) 2021 Pratyush Kumar, Abhinav Prakash, and Yu Ding</span>
+
+<span class="c1"># This source code is licensed under the MIT license found in the</span>
+<span class="c1"># LICENSE file in the root directory of this source tree.</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">validate_matching</span>
+<span class="kn">from</span> <span class="nn">._GPMethods</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">._funGP_subroutine</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="FunGP"><a class="viewcode-back" href="../../funGP.html#dswe.funGP.FunGP">[docs]</a><span class="k">class</span> <span class="nc">FunGP</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gaussian process aided function comparison using noisy scattered data. </span>
+<span class="sd">    Estimates the functions for different data samples using Gaussian process models.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Prakash, A., Tuo, R., &amp; Ding, Y. (2020). &quot;Gaussian process aided </span>
+<span class="sd">    function comparison using noisy scattered data.&quot; arXiv preprint arXiv:2003.07899. </span>
+<span class="sd">    &lt;https://arxiv.org/abs/2003.07899&gt;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Xlist: list</span>
+<span class="sd">        A list, consisting of data sets to match, also each of the individual data set can be </span>
+<span class="sd">        a matrix with each column corresponding to one input variable.</span>
+
+<span class="sd">    ylist: list</span>
+<span class="sd">        A list, consisting of data sets to match, and each list is a array corresponds to target </span>
+<span class="sd">        values of the data sets.</span>
+
+<span class="sd">    testset: np.array</span>
+<span class="sd">        Test points at which the functions will be compared.</span>
+
+<span class="sd">    conf_level: float</span>
+<span class="sd">        A single value representing the statistical significance level for </span>
+<span class="sd">        constructing the band.</span>
+
+<span class="sd">    limit_memory: bool</span>
+<span class="sd">        A boolean (True/False) indicating whether to limit the memory use or not. </span>
+<span class="sd">        Default is true. If set to true, 5000 datapoints are randomly sampled </span>
+<span class="sd">        from each dataset under comparison for inference.  </span>
+
+<span class="sd">    opt_method: string</span>
+<span class="sd">        A string specifying the optimization method to be used for hyperparameter </span>
+<span class="sd">        estimation. The best working solver are [&#39;L-BFGS-B&#39;, &#39;BFGS&#39;].</span>
+
+<span class="sd">    sample_size: dict</span>
+<span class="sd">        A dictionary with two keys: optimSize and bandSize, </span>
+<span class="sd">        denoting the sample size for each dataset for hyperparameter optimization </span>
+<span class="sd">        and confidence band computation, respectively, when limitMemory = TRUE. </span>
+<span class="sd">        Default value is list(optimSize = 500,bandSize = 5000).</span>
+
+<span class="sd">    rng_seed: int</span>
+<span class="sd">        Random seed for sampling data when limitMemory = TRUE. Default is 1. </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    FunGP</span>
+<span class="sd">        self with trained parameters. \n</span>
+<span class="sd">        - mu1: An array of test prediction for first data set.</span>
+<span class="sd">        - mu2: An array of test prediction for second data set.</span>
+<span class="sd">        - mu_diff: An array of pointwise difference between the predictions from the two datasets (mu2-mu1).</span>
+<span class="sd">        - band: An array of the allowed statistical difference between functions at testpoints in testset.</span>
+<span class="sd">        - conf_level: A numeric representing the statistical significance level for constructing the band.</span>
+<span class="sd">        - estimated_params: A list of estimated hyperparameters for GP.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Xlist</span><span class="p">,</span> <span class="n">ylist</span><span class="p">,</span> <span class="n">testset</span><span class="p">,</span> <span class="n">conf_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">limit_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">opt_method</span><span class="o">=</span><span class="s1">&#39;L-BFGS-B&#39;</span><span class="p">,</span>
+                 <span class="n">sample_size</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;optim_size&#39;</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span> <span class="s1">&#39;band_size&#39;</span><span class="p">:</span> <span class="mi">5000</span><span class="p">},</span> <span class="n">rng_seed</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="n">validate_matching</span><span class="p">(</span><span class="n">Xlist</span><span class="p">,</span> <span class="n">ylist</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">conf_level</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">int</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">conf_level</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">conf_level</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">conf_level</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The conf_level be a numeric value between 0 and 1&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">limit_memory</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The limit_memory must be either True or False.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">limit_memory</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sample_size</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;If limitMemory is True, sample_size must be a dictionary with two named items: optim_size and band_size.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;optim_size&#39;</span><span class="p">,</span> <span class="s1">&#39;band_size&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">sample_size</span><span class="o">.</span><span class="n">keys</span><span class="p">())):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;If limitMemory is True, sample_size must be a dictionary with two named items: optim_size and band_size.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">rng_seed</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The range seed must be a single integer value.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">opt_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;L-BFGS-B&#39;</span><span class="p">,</span> <span class="s1">&#39;BFGS&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The opt_method must be &#39;L-BFGS-B&#39; or &#39;BFGS&#39;.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Xlist</span> <span class="o">=</span> <span class="n">Xlist</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ylist</span> <span class="o">=</span> <span class="n">ylist</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Xlist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Xlist</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Xlist</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Xlist</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ylist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ylist</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ylist</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ylist</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">testset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">testset</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testset</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">testset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">testset</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">conf_level</span> <span class="o">=</span> <span class="n">conf_level</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">limit_memory</span> <span class="o">=</span> <span class="n">limit_memory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opt_method</span> <span class="o">=</span> <span class="n">opt_method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optim_size</span> <span class="o">=</span> <span class="n">sample_size</span><span class="p">[</span><span class="s1">&#39;optim_size&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">band_size</span> <span class="o">=</span> <span class="n">sample_size</span><span class="p">[</span><span class="s1">&#39;band_size&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rng_seed</span> <span class="o">=</span> <span class="n">rng_seed</span>
+
+        <span class="n">optim_result</span> <span class="o">=</span> <span class="n">estimate_parameters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Xlist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ylist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">optim_size</span><span class="p">,</span>
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">rng_seed</span><span class="p">,</span> <span class="n">opt_method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">opt_method</span><span class="p">,</span> <span class="n">limit_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">limit_memory</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">optim_result</span><span class="p">[</span><span class="s1">&#39;estimated_params&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">diff_cov</span> <span class="o">=</span> <span class="n">compute_diff_cov</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Xlist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ylist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">testset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">band_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rng_seed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit_memory</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diff_cov</span><span class="p">[</span><span class="s1">&#39;mu1&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diff_cov</span><span class="p">[</span><span class="s1">&#39;mu2&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu_diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">band</span> <span class="o">=</span> <span class="n">compute_conf_band</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diff_cov</span><span class="p">[</span><span class="s1">&#39;diff_cov_mat&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf_level</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Pratyush Kumar, Abhinav Prakash, and Yu Ding.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

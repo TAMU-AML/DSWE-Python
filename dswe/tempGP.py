@@ -12,12 +12,9 @@ from ._tempGP_subroutine import *
 class TempGP(object):
 
     """
-    Temporal Gaussian Process (TempGP)
-    ---------------------------------
-    Paper: The temporal overfitting problem with applications in wind power curve modeling.
-    Description: A Gaussian process based power curve model which explicitly models 
-                the temporal aspect of the power curve. 
-                The model consists of two parts: f(x) and g(t).
+    The temporal overfitting problem with applications in wind power curve modeling.
+    A Gaussian process based power curve model which explicitly models the temporal aspect of the power curve. 
+    The model consists of two parts: f(x) and g(t).
 
     References
     ----------
@@ -27,7 +24,8 @@ class TempGP(object):
 
     Parameters
     ----------
-    opt_method: Type of solver. The best working solver are ['L-BFGS-B', 'BFGS'].
+    opt_method: string
+        Type of solver. The best working solver are ['L-BFGS-B', 'BFGS'].
 
     """
 
@@ -39,40 +37,32 @@ class TempGP(object):
 
         Parameters
         ----------
-        X : A matrix with each column corresponding to one input variable. 
-            array-like of shape (n_samples, n_features).
+        X: np.ndarray or pd.DataFrame
+            A matrix or dataframe of input variable values in the training dataset.
 
-        y : A vector with each element corresponding to the output at the corresponding row of X.
-            array-like of shape (n_samples, n_features).
+        y: np.array
+            A numeric array for response values in the training dataset.
 
-        T : A vector for time indices of the data points. By default, the function assigns
+        T: np.array
+            A temporal array for time indices of the data points. By default, the function assigns
             natural numbers starting from 1 as the time indices.
-            array-like of shape (n_samples,)
-            Temporal values.
 
         Returns
         -------
-        A fitted object of class TempGP.
-
-        thinning_number : the thinning number computed by the algorithm.
-
-        model_F :  A dictionary containing details of the model for predicting function f(x).
-            -   X : The input variable matrix for computing the cross-covariance for predictions, same
-                    as X unless the model is updated. See TempGP.update() method for details on
-                    updating the model.
-            -   y : The response vector, again same as y unless the model is updated.
-            -   weighted_y : The weighted response, that is, the response left multiplied by the inverse of
-                             the covariance matrix.
-
-        model_G: A dictionary containing details of the model for predicting function g(t).
-            -   residuals : The residuals after subtracting function f(x) from the response. Used to
-                            predict g(t). See TempGP.update() method for updating the residuals.
-            -   T : The time indices of the residuals, same as T.
-
-        optim_result : A dictionary containing optimized values of model f(x).
-            -   estimated_params :  estimated hyperparameters for function f(x).
-            -   obj_val : objective value of the hyperparameter optimization for f(x).
-            -   grad_val : gradient vector at the optimal objective value.
+        TempGP
+            self with trained parameters. \n
+            - thinning_number: the thinning number computed by the algorithm.
+            - model_F: A dictionary containing details of the model for predicting function f(x). 
+                - 'X' is the input variable matrix for computing the cross-covariance for predictions, same as X unless the model is updated. See TempGP.update() method for details on updating the model.
+                - 'y' is the response vector, again same as y unless the model is updated.
+                - 'weighted_y' is the weighted response, that is, the response left multiplied by the inverse of the covariance matrix.
+            - model_G: A dictionary containing details of the model for predicting function g(t).
+                - 'residuals' is the residuals after subtracting function f(x) from the response. Used to predict g(t). See TempGP.update() method for updating the residuals.
+                - 'T' is the time indices of the residuals, same as T.
+            - optim_result: A dictionary containing optimized values of model f(x).
+                - 'estimated_params' is estimated hyperparameters for function f(x).
+                - 'obj_val' is objective value of the hyperparameter optimization for f(x).
+                - 'grad_val' is gradient vector at the optimal objective value.
         """
 
         validate_inputs(X, y)
@@ -102,22 +92,21 @@ class TempGP(object):
         return self
 
     def predict(self, X, T=[]):
-        """Predict the target for the provided data.
+        """
+        Predict the target for the provided data.
 
         Parameters
         ----------
-        X : A matrix with each column corresponding to one input variable.
-            array-like of shape (n_samples, n_features)
-            Test samples.
+        X: np.ndarray or pd.DataFrame
+            A matrix or dataframe of test input variable values to compute predictions.
 
-        T : A vector for time indices of the data points.
-            {array-like, sparse matrix} of shape (n_samples,)
-            Temporal values.
+        T: np.array
+            Temporal values of test data points.
 
         Returns
         -------
-        y : ndarray of shape (n_samples,)
-           Predicted target values.
+        np.array
+            Predicted target values.
 
         """
 
@@ -143,29 +132,31 @@ class TempGP(object):
 
         Parameters
         ----------
-        X : A matrix with each column corresponding to one input variable. 
-            array-like of shape (n_samples, n_features).
+        X: np.ndarray or pd.DataFrame
+            A matrix or dataframe of input variable values in the new added dataset.
 
-        y : A vector with each element corresponding to the output at the corresponding row of X.
-            array-like of shape (n_samples,).
+        y: np.array
+            A numeric array for response values in the new added dataset.
 
-        T : A vector with time indices of the new datapoints. If None, the function assigns
-            natural numbers starting with one larger than the existing time indices in existing T.
-            array-like of shape (n_samples,)
-            New temporal values.
+        T: np.array
+            A temporal array for time indices of the data points. By default, the function assigns
+            natural numbers starting from 1 as the time indices.
 
-        replace : A boolean to specify whether to replace the old data with the new one, or to
-                add the new data while still keeping all the old data. Default is True, which
-                replaces the top m rows from the old data, where m is the number of data points
-                in the new data.
+        replace: bool
+            A boolean to specify whether to replace the old data with the new one, or to
+            add the new data while still keeping all the old data. Default is True, which
+            replaces the top m rows from the old data, where m is the number of data points
+            in the new data.
 
-        update_model_F : A boolean to specify whether to update model_F as well. If the original TempGP
-                        model is trained on a sufficiently large dataset (say one year), updating model_F
-                        regularly may not result in any significant improvement, but can be computationally expensive.
+        update_model_F: bool
+            A boolean to specify whether to update model_F as well. If the original TempGP
+            model is trained on a sufficiently large dataset (say one year), updating model_F
+            regularly may not result in any significant improvement, but can be computationally expensive.
 
         Returns
         -------
-        An updated object of class TempGP.
+        TempGP
+            self with updated trained parameter values.
         """
 
         validate_inputs(X, y)

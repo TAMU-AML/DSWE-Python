@@ -11,46 +11,50 @@ from ._AMK_subroutine import *
 class AMK(object):
 
     """
-    Additive Multiplicative Kernel Regression (AMK)
-    -----------------------------------------------
-    Paper: Power Curve Estimation With Multivariate Environmental Factors for Inland and Offshore Wind Farms
+    Power Curve Estimation With Multivariate Environmental Factors for Inland and Offshore Wind Farms.
 
-    Reference
-    ---------
+    References
+    ----------
     Lee, Ding, Genton, and Xie, 2015, “Power curve estimation with multivariate environmental factors
     for inland and offshore wind farms,” Journal of the American Statistical Association, Vol. 110, pp.
     56-67, DOI:10.1080/01621459.2014.977385.
 
     Parameters
     ----------
-    X_train : A matrix or dataframe of input variable values in the training dataset.
+    X_train: np.ndarray or pd.DataFrame
+        A matrix or dataframe of input variable values in the training dataset.
 
-    y_train : A numeric array for response values in the training dataset.
+    y_train: np.array
+        A numeric array for response values in the training dataset.
 
-    X_test : A matrix or dataframe of test input variable values to compute predictions.
+    X_test: np.ndarray or pd.DataFrame
+        A matrix or dataframe of test input variable values to compute predictions.
 
-    bw : A numeric array or a character input for bandwidth. If character, bandwidth
-         computed internally; the input should be either 'dpi' or 'dpi_gap'. Default is
-         'dpi_gap'.
+    bw: string or int
+        A numeric array or a character input for bandwidth. If character, bandwidth
+        computed internally; the input should be either 'dpi' or 'dpi_gap'. Default is
+        'dpi_gap'.
 
-    n_multi_cov : An integer or a character input specifying the number of multiplicative covariates
-                  in each additive term. Default is 3 (same as Lee et al., 2015). The character
-                  inputs can be: 'all' for a completely multiplicative model, or 'none' for a
-                  completely additive model. Ignored if the number of covariates is 1.
+    n_multi_cov: int
+        An integer or a character input specifying the number of multiplicative covariates
+        in each additive term. Default is 3 (same as Lee et al., 2015). The character
+        inputs can be: 'all' for a completely multiplicative model, or 'none' for a
+        completely additive model. Ignored if the number of covariates is 1.
 
-    fixed_cov : An integer array specifying the fixed covariates column number(s), default value
-                is [0,1]. Ignored if n_multi_cov is set to 'all' or 'none' or if the number of
-                covariates is less than 3.
+    fixed_cov: list
+        An integer list specifying the fixed covariates column number(s), default value
+        is [0,1]. Ignored if n_multi_cov is set to 'all' or 'none' or if the number of
+        covariates is less than 3.
 
-    cir_cov : An integer array specifying the circular covariates column number(s) in X_train,
-              default value is None.
+    cir_cov: list
+        An integer list specifying the circular covariates column number(s) in X_train,
+        default value is None.
 
     Returns
     -------
-    A fitted object of class AMK.
-
-    predictions : A numeric array for predictions at the data points in X_test.
-
+    AMK
+        self with trained parameter values. \n
+        - predictions: stored numeric array of model output at the data points in X_test.
     """
 
     def __init__(self, X_train, y_train, X_test, bw='dpi', n_multi_cov=3, fixed_cov=[0, 1], cir_cov=None):

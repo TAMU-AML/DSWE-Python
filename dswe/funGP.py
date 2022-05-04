@@ -12,11 +12,8 @@ from ._funGP_subroutine import *
 class FunGP(object):
 
     """
-    Function comparison using Gaussian Process and Hypothesis testing (FunGP)
-    -------------------------------------------------------------------------
-    Paper: Gaussian process aided function comparison using noisy scattered data.
-    Description: Estimates the functions for different data samples using 
-                 Gaussian process models.
+    Gaussian process aided function comparison using noisy scattered data. 
+    Estimates the functions for different data samples using Gaussian process models.
 
     References
     ----------
@@ -26,49 +23,49 @@ class FunGP(object):
 
     Parameters
     ----------
-    Xlist : A list, consisting of data sets to match, also each of the individual data set can be 
-            a matrix with each column corresponding to one input variable.
+    Xlist: list
+        A list, consisting of data sets to match, also each of the individual data set can be 
+        a matrix with each column corresponding to one input variable.
 
-    ylist : A list, consisting of data sets to match, and each list is a array corresponds to target 
-            values of the data sets.
+    ylist: list
+        A list, consisting of data sets to match, and each list is a array corresponds to target 
+        values of the data sets.
 
-    testset : Test points at which the functions will be compared.
+    testset: np.array
+        Test points at which the functions will be compared.
 
-    conf_level : A single value representing the statistical significance level for 
-                 constructing the band.
+    conf_level: float
+        A single value representing the statistical significance level for 
+        constructing the band.
 
-    limit_memory : A boolean (True/False) indicating whether to limit the memory use or not. 
-                   Default is true. If set to true, 5000 datapoints are randomly sampled 
-                   from each dataset under comparison for inference.  
+    limit_memory: bool
+        A boolean (True/False) indicating whether to limit the memory use or not. 
+        Default is true. If set to true, 5000 datapoints are randomly sampled 
+        from each dataset under comparison for inference.  
 
-    opt_method : A string specifying the optimization method to be used for hyperparameter 
-                 estimation. The best working solver are ['L-BFGS-B', 'BFGS'].
+    opt_method: string
+        A string specifying the optimization method to be used for hyperparameter 
+        estimation. The best working solver are ['L-BFGS-B', 'BFGS'].
 
-    sample_size : A dictionary with two keys: optimSize and bandSize, 
-                  denoting the sample size for each dataset for hyperparameter optimization 
-                  and confidence band computation, respectively, when limitMemory = TRUE. 
-                  Default value is list(optimSize = 500,bandSize = 5000).
+    sample_size: dict
+        A dictionary with two keys: optimSize and bandSize, 
+        denoting the sample size for each dataset for hyperparameter optimization 
+        and confidence band computation, respectively, when limitMemory = TRUE. 
+        Default value is list(optimSize = 500,bandSize = 5000).
 
-    rng_seed: Random seed for sampling data when limitMemory = TRUE. Default is 1. 
+    rng_seed: int
+        Random seed for sampling data when limitMemory = TRUE. Default is 1. 
 
     Returns
     -------
-    A fitted object (dictionary) of class FunGP.
-
-        mu1 : An array of test prediction for first data set.
-
-        mu2 : An array of test prediction for second data set.
-
-        mu_diff : An array of pointwise difference between the predictions 
-                  from the two datasets (mu2-mu1).
-
-        band : An array of the allowed statistical difference between functions at 
-               testpoints in testset.
-
-        conf_level : A numeric representing the statistical significance level for 
-                     constructing the band.
-
-        estimated_params : A list of estimated hyperparameters for GP.
+    FunGP
+        self with trained parameters. \n
+        - mu1: An array of test prediction for first data set.
+        - mu2: An array of test prediction for second data set.
+        - mu_diff: An array of pointwise difference between the predictions from the two datasets (mu2-mu1).
+        - band: An array of the allowed statistical difference between functions at testpoints in testset.
+        - conf_level: A numeric representing the statistical significance level for constructing the band.
+        - estimated_params: A list of estimated hyperparameters for GP.
     """
 
     def __init__(self, Xlist, ylist, testset, conf_level=0.95, limit_memory=True, opt_method='L-BFGS-B',

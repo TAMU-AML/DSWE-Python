@@ -12,15 +12,16 @@ from bartpy.sklearnmodel import SklearnModel
 class BayesTreePowerCurve(object):
 
     """
-    Tree based power curve estimate.
-
     Parameters
     ----------
-    X_train : A matrix or dataframe of input variable values in the training dataset.
+    X_train: np.ndarray or pd.DataFrame
+        A matrix or dataframe of input variable values in the training dataset.
 
-    y_train : A numeric array for response values in the training dataset.
+    y_train: np.array
+        A numeric array for response values in the training dataset.
 
-    n_trees : Number of trees to use. An integer greater than 0.
+    n_trees: int
+        Number of trees to use. An integer greater than 0.
 
     """
 
@@ -73,11 +74,13 @@ class BayesTreePowerCurve(object):
         """
         Parameters
         ----------
-        X_test : A matrix or dataframe of test input variable values to compute predictions.
+        X_test: np.ndarray or pd.DataFrame
+            A matrix or dataframe of test input variable values to compute predictions.
 
         Returns
         -------
-        A numeric array for predictions at the data points in X_test.
+        np.array
+            A numeric array for predictions at the data points in X_test.
 
         """
 

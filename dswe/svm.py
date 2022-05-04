@@ -12,24 +12,28 @@ from sklearn.preprocessing import StandardScaler
 class SVMPowerCurve(object):
 
     """
-    Support Vector Machine (SVM) based power curve modelling.
-
     Parameters
     ----------
-    X_train : A matrix or dataframe of input variable values in the training dataset.
+    X_train: np.ndarray or pd.DataFrame
+        A matrix or dataframe of input variable values in the training dataset.
 
-    y_train : A numeric array for response values in the training dataset.
+    y_train: np.array
+        A numeric array for response values in the training dataset.
 
-    kernel : Kernel type to be used in the algorithm. Default is 'rbf' else can be 'linear', 'poly', 'sigmoid'. 
-             'poly' mean polynomial and 'rbf' means radial basis function.
+    kernel: string
+        Kernel type to be used in the algorithm. Default is 'rbf' else can be 'linear', 'poly', 'sigmoid'. 
+        'poly' mean polynomial and 'rbf' means radial basis function.
 
-    degree : Degree of the polynomial kernel function ('poly'). Ignored by all other kernels.
+    degree: int
+        Degree of the polynomial kernel function ('poly'). Ignored by all other kernels.
 
-    gamma : Kernel coefficient for 'poly', 'radial' and 'sigmoid'. Can take 'scale' or 'auto' or float value.
-            If 'scale' (default), the gamma value is 1/(number_of_features*variance_of_X_train).
-            If 'auto', the gamma value is 1/number_of_features.
+    gamma: string
+        Kernel coefficient for 'poly', 'radial' and 'sigmoid'. Can take 'scale' or 'auto' or float value.
+        If 'scale' (default), the gamma value is 1/(number_of_features*variance_of_X_train).
+        If 'auto', the gamma value is 1/number_of_features.
 
-    C : Regularization parameter. The strength of the regularization is inversely proportional to C. 
+    C: float
+        Regularization parameter. The strength of the regularization is inversely proportional to C. 
         Must be strictly positive.
 
     """
@@ -118,11 +122,13 @@ class SVMPowerCurve(object):
         """
         Parameters
         ----------
-        X_test : A matrix or dataframe of test input variable values to compute predictions.
+        X_test: np.ndarray or pd.DataFrame
+            A matrix or dataframe of test input variable values to compute predictions.
 
         Returns
         -------
-        A numeric array for predictions at the data points in X_test.
+        np.array
+            A numeric array for predictions at the data points in X_test.
 
         """
 

@@ -14,47 +14,40 @@ from ._knn_subroutine import compute_best_k
 class KNNPowerCurve(object):
 
     """
-    k-nearest neighbors regression model.
-
     All the parameters are fine-tuned automatically using GridSearch.
     No need to explicitly pass anything.
 
     Parameters
     ----------
-    algorithms : Algorithm used to compute the nearest neighbors.
-        - 'auto' will attempt to decide the most appropriate algorithm
-          based on the values passed to 'fit' method.
+    algorithm: 
+        Algorithm used to compute the nearest neighbors.
+        'auto' attempt to decide the most appropriate algorithm based on the values passed to 'fit' method.
 
-    weights : {'uniform', 'distance'}
-        - 'uniform' : uniform weights.  All points in each neighborhood
-          are weighted equally.
-        - 'distance' : weight points by the inverse of their distance.
-          in this case, closer neighbors of a query point will have a
-          greater influence than neighbors which are further away.
+    weights: 
+        Weight function used in prediction. Can take either 'uniform' or 'distance'.
+        'uniform' means uniform weights i.e., all points in each neighborhood are weighted equally.
+        'distance' means weight points by the inverse of their distance.
     """
 
-    def __init__(
-            self,
-            algorithms=['auto'],
-            weights=['uniform', 'distance']):
+    def __init__(self, algorithm=['auto'], weights=['uniform', 'distance']):
 
-        self.algorithms = algorithms
+        self.algorithm = algorithm
         self.weights = weights
 
     def fit(self, X, y, subset_selection=False):
-        """Fit the KNNPowerCurve from the training dataset.
-
+        """
         Parameters
         ----------
-        X : array-like of shape (n_samples, n_features).
-            Training data.
+        X: np.ndarray or pd.DataFrame
+            A matrix or dataframe of input variable values in the training dataset.
 
-        y : array-like of shape (n_samples,).
-            Target values.
+        y: np.array
+            A numeric array for response values in the training dataset.
 
         Returns
         -------
-        A fitted object of class KNNPowerCurve.
+        KNNPowerCurve
+            self with trained parameter values.
         """
 
         validate_inputs(X, y)
@@ -76,7 +69,7 @@ class KNNPowerCurve(object):
             result = compute_best_k(self.normalized_X, self.y, range_k)
 
             knn = KNeighborsRegressor(n_neighbors=result['best_k'])
-            parameters = {'algorithm': self.algorithms,
+            parameters = {'algorithm': self.algorithm,
                           'weights': self.weights}
             regressor = GridSearchCV(knn, parameters)
             regressor.fit(self.normalized_X, self.y)
@@ -92,17 +85,16 @@ class KNNPowerCurve(object):
             print("Subset selection choice is not available yet.")
 
     def predict(self, X):
-        """Predict the target for the provided data.
-
+        """
         Parameters
         ----------
-        X : array-like of shape (n_samples, n_features)
-           Test samples.
+        X: np.ndarray or pd.DataFrame
+            A matrix or dataframe of input variable values in the test dataset.
 
         Returns
         -------
-        y : ndarray of shape (n_samples,)
-           Predicted target values.
+        np.array
+            A numeric array for predictions at the data points in the test dataset.
         """
 
         normlized_X = (X - self.scaler_min) / \
@@ -114,19 +106,19 @@ class KNNPowerCurve(object):
         return y_pred
 
     def update(self, X, y):
-        """Update the model when new training dataset will arrive.
-
+        """
         Parameters
         ----------
-        X : {array-like, sparse matrix} of shape (n_samples, n_features)
-            New training data.
+        X: np.ndarray or pd.DataFrame
+            A matrix or dataframe of input variable values in the new added dataset.
 
-        y : {array-like, sparse matrix} of shape (n_samples,)
-            New target values.
+        y: np.array
+            A numeric array for response values in the new added dataset.
 
         Returns
         -------
-        An updated object of class KNNPowerCurve.
+        KNNPowerCurve
+            self with updated trained parameter values.
         """
 
         validate_inputs(X, y)

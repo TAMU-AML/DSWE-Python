@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FunGP &mdash; DSWE 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="KNNPowerCurve" href="knn.html" />
+    <link rel="prev" title="CovMatch" href="covmatch.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> DSWE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing DSWE package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AMK.html">AMK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bayes_tree.html">BayesTreePowerCurve</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparePCurve.html">ComparePCurve</a></li>
+<li class="toctree-l1"><a class="reference internal" href="covmatch.html">CovMatch</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FunGP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="knn.html">KNNPowerCurve</a></li>
+<li class="toctree-l1"><a class="reference internal" href="svm.html">SVMPowerCurve</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tempGP.html">TempGP</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DSWE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>FunGP</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/funGP.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fungp">
+<h1>FunGP<a class="headerlink" href="#fungp" title="Permalink to this headline"></a></h1>
+<p>Function comparison using Gaussian Process and Hypothesis testing (FunGP)</p>
+<span class="target" id="module-dswe.funGP"></span><dl class="py class">
+<dt class="sig sig-object py" id="dswe.funGP.FunGP">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dswe.funGP.</span></span><span class="sig-name descname"><span class="pre">FunGP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Xlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conf_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opt_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'L-BFGS-B'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'band_size':</span> <span class="pre">5000,</span> <span class="pre">'optim_size':</span> <span class="pre">500}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/funGP.html#FunGP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.funGP.FunGP" title="Permalink to this definition"></a></dt>
+<dd><p>Gaussian process aided function comparison using noisy scattered data.
+Estimates the functions for different data samples using Gaussian process models.</p>
+<p class="rubric">References</p>
+<p>Prakash, A., Tuo, R., &amp; Ding, Y. (2020). “Gaussian process aided
+function comparison using noisy scattered data.” arXiv preprint arXiv:2003.07899.
+&lt;https://arxiv.org/abs/2003.07899&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Xlist</strong> (<em>list</em>) – A list, consisting of data sets to match, also each of the individual data set can be
+a matrix with each column corresponding to one input variable.</p></li>
+<li><p><strong>ylist</strong> (<em>list</em>) – A list, consisting of data sets to match, and each list is a array corresponds to target
+values of the data sets.</p></li>
+<li><p><strong>testset</strong> (<em>np.array</em>) – Test points at which the functions will be compared.</p></li>
+<li><p><strong>conf_level</strong> (<em>float</em>) – A single value representing the statistical significance level for
+constructing the band.</p></li>
+<li><p><strong>limit_memory</strong> (<em>bool</em>) – A boolean (True/False) indicating whether to limit the memory use or not.
+Default is true. If set to true, 5000 datapoints are randomly sampled
+from each dataset under comparison for inference.</p></li>
+<li><p><strong>opt_method</strong> (<em>string</em>) – A string specifying the optimization method to be used for hyperparameter
+estimation. The best working solver are [‘L-BFGS-B’, ‘BFGS’].</p></li>
+<li><p><strong>sample_size</strong> (<em>dict</em>) – A dictionary with two keys: optimSize and bandSize,
+denoting the sample size for each dataset for hyperparameter optimization
+and confidence band computation, respectively, when limitMemory = TRUE.
+Default value is list(optimSize = 500,bandSize = 5000).</p></li>
+<li><p><strong>rng_seed</strong> (<em>int</em>) – Random seed for sampling data when limitMemory = TRUE. Default is 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>self with trained parameters.</p>
+<ul class="simple">
+<li><p>mu1: An array of test prediction for first data set.</p></li>
+<li><p>mu2: An array of test prediction for second data set.</p></li>
+<li><p>mu_diff: An array of pointwise difference between the predictions from the two datasets (mu2-mu1).</p></li>
+<li><p>band: An array of the allowed statistical difference between functions at testpoints in testset.</p></li>
+<li><p>conf_level: A numeric representing the statistical significance level for constructing the band.</p></li>
+<li><p>estimated_params: A list of estimated hyperparameters for GP.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dswe.funGP.FunGP" title="dswe.funGP.FunGP">FunGP</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="covmatch.html" class="btn btn-neutral float-left" title="CovMatch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="knn.html" class="btn btn-neutral float-right" title="KNNPowerCurve" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Pratyush Kumar, Abhinav Prakash, and Yu Ding.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

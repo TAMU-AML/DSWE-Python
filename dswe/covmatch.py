@@ -11,8 +11,6 @@ from ._covmatch_subroutine import *
 class CovMatch(object):
 
     """
-    Covariate Matching
-    ------------------
     The class aims to take list of two data sets and returns the after matched data sets using user
     specified covariates and threshold.
 
@@ -22,30 +20,32 @@ class CovMatch(object):
 
     Parameters
     ----------
-    Xlist : A list, consisting of data sets to match, also each of the individual data set can be 
-            a matrix with each column corresponding to one input variable.
+    Xlist: list
+        A list, consisting of data sets to match, also each of the individual data set can be 
+        a matrix with each column corresponding to one input variable.
 
-    ylist : A list, consisting of data sets to match, and each list is a array corresponds to target 
-            values of the data sets.
+    ylist: list
+        A list, consisting of data sets to match, and each list is a array corresponds to target 
+        values of the data sets.
 
-    circ_pos : A list or array stating the column position of circular variables.
+    circ_pos: list
+        A list or array stating the column position of circular variables.
 
-    thresh : A numerical or a list of threshold values for each covariates, against which matching happens.
-            It should be a single value or a list of values representing threshold for each of the covariate.
+    thresh: float or list
+        A numerical or a list of threshold values for each covariates, against which matching happens.
+        It should be a single value or a list of values representing threshold for each of the covariate.
 
-    priority : A boolean, default value False, otherwise computes the sequence of matching.
+    priority: bool
+        A boolean, default value False, otherwise computes the sequence of matching.
 
     Returns
     -------
-    A matched object (dictionary) of class CovMatch.
-
-        original_data : The data sets provided for matching.
-
-        matched_data : The data sets after matching.
-
-        min_max_original : The minimum and maximum value in original data for each covariates used in matching.
-
-        min_max_matched : The minimum and maximum value in matched data for each covariates used in matching.
+    CovMatch
+        self with trained parameters. \n
+        - original_data: The data sets provided for matching.
+        - matched_data: The data sets after matching.
+        - min_max_original: The minimum and maximum value in original data for each covariates used in matching.
+        - min_max_matched: The minimum and maximum value in matched data for each covariates used in matching.
 
     """
 
