@@ -76,6 +76,14 @@
   <section id="tempgp">
 <h1>TempGP<a class="headerlink" href="#tempgp" title="Permalink to this headline"></a></h1>
 <p>Temporal Gaussian Process (TempGP)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dwse</span> <span class="kn">import</span> <span class="n">TempGP</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">TempGP</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">X_update</span><span class="p">,</span> <span class="n">y_update</span><span class="p">)</span>
+<span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_new</span><span class="p">)</span>
+</pre></div>
+</div>
 <span class="target" id="module-dswe.tempGP"></span><dl class="py class">
 <dt class="sig sig-object py" id="dswe.tempGP.TempGP">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dswe.tempGP.</span></span><span class="sig-name descname"><span class="pre">TempGP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opt_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'L-BFGS-B'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/tempGP.html#TempGP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.tempGP.TempGP" title="Permalink to this definition"></a></dt>
@@ -93,14 +101,14 @@ in wind power curve modeling.” arXiv preprint arXiv:2012.01349. &lt;https://ar
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="dswe.tempGP.TempGP.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/tempGP.html#TempGP.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.tempGP.TempGP.fit" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/tempGP.html#TempGP.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.tempGP.TempGP.fit" title="Permalink to this definition"></a></dt>
 <dd><p>Fit the TempGP from the training dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of input variable values in the training dataset.</p></li>
-<li><p><strong>y</strong> (<em>np.array</em>) – A numeric array for response values in the training dataset.</p></li>
-<li><p><strong>T</strong> (<em>np.array</em>) – A temporal array for time indices of the data points. By default, the function assigns
+<li><p><strong>X_train</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of input variable values in the training dataset.</p></li>
+<li><p><strong>y_train</strong> (<em>np.array</em>) – A numeric array for response values in the training dataset.</p></li>
+<li><p><strong>T_train</strong> (<em>np.array</em>) – A temporal array for time indices of the data points. By default, the function assigns
 natural numbers starting from 1 as the time indices.</p></li>
 </ul>
 </dd>
@@ -110,8 +118,8 @@ natural numbers starting from 1 as the time indices.</p></li>
 <li><p>thinning_number: the thinning number computed by the algorithm.</p></li>
 <li><dl class="simple">
 <dt>model_F: A dictionary containing details of the model for predicting function f(x).</dt><dd><ul>
-<li><p>’X’ is the input variable matrix for computing the cross-covariance for predictions, same as X unless the model is updated. See TempGP.update() method for details on updating the model.</p></li>
-<li><p>’y’ is the response vector, again same as y unless the model is updated.</p></li>
+<li><p>’X_train’ is the input variable matrix for computing the cross-covariance for predictions, same as X_train unless the model is updated. See TempGP.update() method for details on updating the model.</p></li>
+<li><p>’y_train’ is the response vector, again same as y_train unless the model is updated.</p></li>
 <li><p>’weighted_y’ is the weighted response, that is, the response left multiplied by the inverse of the covariance matrix.</p></li>
 </ul>
 </dd>
@@ -120,7 +128,7 @@ natural numbers starting from 1 as the time indices.</p></li>
 <li><dl class="simple">
 <dt>model_G: A dictionary containing details of the model for predicting function g(t).</dt><dd><ul>
 <li><p>’residuals’ is the residuals after subtracting function f(x) from the response. Used to predict g(t). See TempGP.update() method for updating the residuals.</p></li>
-<li><p>’T’ is the time indices of the residuals, same as T.</p></li>
+<li><p>’T_train’ is the time indices of the residuals, same as T_train.</p></li>
 </ul>
 </dd>
 </dl>
@@ -145,13 +153,13 @@ natural numbers starting from 1 as the time indices.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dswe.tempGP.TempGP.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/tempGP.html#TempGP.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.tempGP.TempGP.predict" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/tempGP.html#TempGP.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.tempGP.TempGP.predict" title="Permalink to this definition"></a></dt>
 <dd><p>Predict the target for the provided data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of test input variable values to compute predictions.</p></li>
-<li><p><strong>T</strong> (<em>np.array</em>) – Temporal values of test data points.</p></li>
+<li><p><strong>X_test</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of test input variable values to compute predictions.</p></li>
+<li><p><strong>T_test</strong> (<em>np.array</em>) – Temporal values of test data points.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -165,14 +173,14 @@ natural numbers starting from 1 as the time indices.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dswe.tempGP.TempGP.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_model_F</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/tempGP.html#TempGP.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.tempGP.TempGP.update" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_model_F</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/tempGP.html#TempGP.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.tempGP.TempGP.update" title="Permalink to this definition"></a></dt>
 <dd><p>Update the model when new training dataset will arrive.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of input variable values in the new added dataset.</p></li>
-<li><p><strong>y</strong> (<em>np.array</em>) – A numeric array for response values in the new added dataset.</p></li>
-<li><p><strong>T</strong> (<em>np.array</em>) – A temporal array for time indices of the data points. By default, the function assigns
+<li><p><strong>X_update</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of input variable values in the new added dataset.</p></li>
+<li><p><strong>y_update</strong> (<em>np.array</em>) – A numeric array for response values in the new added dataset.</p></li>
+<li><p><strong>T_update</strong> (<em>np.array</em>) – A temporal array for time indices of the data points. By default, the function assigns
 natural numbers starting from 1 as the time indices.</p></li>
 <li><p><strong>replace</strong> (<em>bool</em>) – A boolean to specify whether to replace the old data with the new one, or to
 add the new data while still keeping all the old data. Default is True, which

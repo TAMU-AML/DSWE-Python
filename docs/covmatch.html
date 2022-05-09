@@ -77,6 +77,12 @@
   <section id="covmatch">
 <h1>CovMatch<a class="headerlink" href="#covmatch" title="Permalink to this headline"></a></h1>
 <p>Covariate Matching</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dwse</span> <span class="kn">import</span> <span class="n">CovMatch</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">CovMatch</span><span class="p">(</span><span class="n">Xlist</span><span class="p">,</span> <span class="n">ylist</span><span class="p">)</span>
+<span class="n">matched_X</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">matched_data_X</span>
+<span class="n">matched_y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">matched_data_y</span>
+</pre></div>
+</div>
 <span class="target" id="module-dswe.covmatch"></span><dl class="py class">
 <dt class="sig sig-object py" id="dswe.covmatch.CovMatch">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dswe.covmatch.</span></span><span class="sig-name descname"><span class="pre">CovMatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Xlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circ_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/covmatch.html#CovMatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.covmatch.CovMatch" title="Permalink to this definition"></a></dt>
@@ -100,8 +106,8 @@ It should be a single value or a list of values representing threshold for each 
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>self with trained parameters.</p>
 <ul class="simple">
-<li><p>original_data: The data sets provided for matching.</p></li>
-<li><p>matched_data: The data sets after matching.</p></li>
+<li><p>matched_data_X: The variable values of datasets after matching.</p></li>
+<li><p>matched_data_y: The response values of datasets after matching (if provided, otherwise None).</p></li>
 <li><p>min_max_original: The minimum and maximum value in original data for each covariates used in matching.</p></li>
 <li><p>min_max_matched: The minimum and maximum value in matched data for each covariates used in matching.</p></li>
 </ul>

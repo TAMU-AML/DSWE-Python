@@ -77,6 +77,11 @@
   <section id="bayestreepowercurve">
 <h1>BayesTreePowerCurve<a class="headerlink" href="#bayestreepowercurve" title="Permalink to this headline"></a></h1>
 <p>Bayesian Additive Regressions Trees (BART) based power curve estimate.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dwse</span> <span class="kn">import</span> <span class="n">BayesTreePowerCurve</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">BayesTreePowerCurve</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
 <span class="target" id="module-dswe.bayes_tree"></span><dl class="py class">
 <dt class="sig sig-object py" id="dswe.bayes_tree.BayesTreePowerCurve">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dswe.bayes_tree.</span></span><span class="sig-name descname"><span class="pre">BayesTreePowerCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_trees</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/bayes_tree.html#BayesTreePowerCurve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.bayes_tree.BayesTreePowerCurve" title="Permalink to this definition"></a></dt>

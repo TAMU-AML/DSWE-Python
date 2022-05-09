@@ -77,6 +77,14 @@
   <section id="knnpowercurve">
 <h1>KNNPowerCurve<a class="headerlink" href="#knnpowercurve" title="Permalink to this headline"></a></h1>
 <p>k-nearest neighbors (KNN) regression model.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dwse</span> <span class="kn">import</span> <span class="n">KNNPowerCurve</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">KNNPowerCurve</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">X_update</span><span class="p">,</span> <span class="n">y_update</span><span class="p">)</span>
+<span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_new</span><span class="p">)</span>
+</pre></div>
+</div>
 <span class="target" id="module-dswe.knn"></span><dl class="py class">
 <dt class="sig sig-object py" id="dswe.knn.KNNPowerCurve">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dswe.knn.</span></span><span class="sig-name descname"><span class="pre">KNNPowerCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['auto']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['uniform',</span> <span class="pre">'distance']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/knn.html#KNNPowerCurve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.knn.KNNPowerCurve" title="Permalink to this definition"></a></dt>
@@ -95,12 +103,12 @@ No need to explicitly pass anything.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="dswe.knn.KNNPowerCurve.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subset_selection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/knn.html#KNNPowerCurve.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.knn.KNNPowerCurve.fit" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subset_selection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/knn.html#KNNPowerCurve.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.knn.KNNPowerCurve.fit" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of input variable values in the training dataset.</p></li>
-<li><p><strong>y</strong> (<em>np.array</em>) – A numeric array for response values in the training dataset.</p></li>
+<li><p><strong>X_train</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of input variable values in the training dataset.</p></li>
+<li><p><strong>y_train</strong> (<em>np.array</em>) – A numeric array for response values in the training dataset.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -114,10 +122,10 @@ No need to explicitly pass anything.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dswe.knn.KNNPowerCurve.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/knn.html#KNNPowerCurve.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.knn.KNNPowerCurve.predict" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/knn.html#KNNPowerCurve.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.knn.KNNPowerCurve.predict" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of input variable values in the test dataset.</p>
+<dd class="field-odd"><p><strong>X_test</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of input variable values in the test dataset.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A numeric array for predictions at the data points in the test dataset.</p>
@@ -130,12 +138,12 @@ No need to explicitly pass anything.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dswe.knn.KNNPowerCurve.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/knn.html#KNNPowerCurve.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.knn.KNNPowerCurve.update" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_update</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/knn.html#KNNPowerCurve.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.knn.KNNPowerCurve.update" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of input variable values in the new added dataset.</p></li>
-<li><p><strong>y</strong> (<em>np.array</em>) – A numeric array for response values in the new added dataset.</p></li>
+<li><p><strong>X_update</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of input variable values in the new added dataset.</p></li>
+<li><p><strong>y_update</strong> (<em>np.array</em>) – A numeric array for response values in the new added dataset.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
