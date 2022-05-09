@@ -42,8 +42,8 @@ class CovMatch(object):
     -------
     CovMatch
         self with trained parameters. \n
-        - original_data: The data sets provided for matching.
-        - matched_data: The data sets after matching.
+        - matched_data_X: The variable values of datasets after matching.
+        - matched_data_y: The response values of datasets after matching (if provided, otherwise None).
         - min_max_original: The minimum and maximum value in original data for each covariates used in matching.
         - min_max_matched: The minimum and maximum value in matched data for each covariates used in matching.
 
