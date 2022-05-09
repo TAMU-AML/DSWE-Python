@@ -10,11 +10,11 @@ import pandas as pd
 def validate_inputs(X, y):
     """Validates the inputs to model."""
 
-    if not (isinstance(X, list) or isinstance(X, pd.DataFrame) or isinstance(X, np.ndarray)):
+    if not (isinstance(X, list) or isinstance(X, pd.DataFrame) or isinstance(X, pd.Series) or isinstance(X, np.ndarray)):
         raise ValueError(
             "The features data should be either of list or numpy array or dataframe.")
 
-    if not (isinstance(y, list) or isinstance(y, pd.DataFrame) or isinstance(y, np.ndarray)):
+    if not (isinstance(y, list) or isinstance(y, pd.DataFrame) or isinstance(y, pd.Series) or isinstance(y, np.ndarray)):
         raise ValueError(
             "The target data should be either of list or numpy array or dataframe.")
 
@@ -35,7 +35,7 @@ def validate_inputs(X, y):
 def validate_features(X):
     """Validates the inputs without target to model."""
 
-    if not (isinstance(X, list) or isinstance(X, pd.DataFrame) or isinstance(X, np.ndarray)):
+    if not (isinstance(X, list) or isinstance(X, pd.DataFrame) or isinstance(X, pd.Series) or isinstance(X, np.ndarray)):
         raise ValueError(
             "The features data should be either of list or numpy array or dataframe.")
 
@@ -64,18 +64,18 @@ def validate_matching(Xlist, ylist):
             raise ValueError(
                 "The length of Xlist and ylist must be same and equal to two.")
 
-    if not (isinstance(Xlist[0], list) or isinstance(Xlist[0], pd.DataFrame) or isinstance(Xlist[0], np.ndarray)):
+    if not (isinstance(Xlist[0], list) or isinstance(Xlist[0], pd.DataFrame) or isinstance(Xlist[0], pd.Series) or isinstance(Xlist[0], np.ndarray)):
         raise ValueError(
             "The features of first dataset should be either of list or numpy array or dataframe.")
-    if not (isinstance(Xlist[1], list) or isinstance(Xlist[1], pd.DataFrame) or isinstance(Xlist[1], np.ndarray)):
+    if not (isinstance(Xlist[1], list) or isinstance(Xlist[1], pd.DataFrame) or isinstance(Xlist[1], pd.Series) or isinstance(Xlist[1], np.ndarray)):
         raise ValueError(
             "The features of second dataset should be either of list or numpy array or dataframe.")
 
     if ylist:
-        if not (isinstance(ylist[0], list) or isinstance(ylist[0], pd.DataFrame) or isinstance(ylist[0], np.ndarray)):
+        if not (isinstance(ylist[0], list) or isinstance(ylist[0], pd.DataFrame) or isinstance(ylist[0], pd.Series) or isinstance(ylist[0], np.ndarray)):
             raise ValueError(
                 "The target value of first dataset should be either of list or numpy array or dataframe.")
-        if not (isinstance(ylist[1], list) or isinstance(ylist[1], pd.DataFrame) or isinstance(ylist[1], np.ndarray)):
+        if not (isinstance(ylist[1], list) or isinstance(ylist[1], pd.DataFrame) or isinstance(ylist[1], pd.Series) or isinstance(ylist[1], np.ndarray)):
             raise ValueError(
                 "The target value of second dataset should be either of list or numpy array or dataframe.")
 

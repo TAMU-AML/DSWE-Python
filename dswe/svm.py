@@ -40,11 +40,11 @@ class SVMPowerCurve(object):
 
     def __init__(self, X_train, y_train, kernel='rbf', degree=3, gamma='scale', C=1.0):
 
-        if not (isinstance(X_train, list) or isinstance(X_train, pd.DataFrame) or isinstance(X_train, np.ndarray)):
+        if not (isinstance(X_train, list) or isinstance(X_train, pd.DataFrame) or isinstance(X_train, pd.Series) or isinstance(X_train, np.ndarray)):
             raise ValueError(
                 "The X_train should be either a list or numpy array or dataframe.")
 
-        if not (isinstance(y_train, list) or isinstance(y_train, np.ndarray)) or isinstance(y_train, pd.DataFrame):
+        if not (isinstance(y_train, list) or isinstance(y_train, np.ndarray)) or isinstance(y_train, pd.Series) or isinstance(y_train, pd.DataFrame):
             raise ValueError(
                 "The target data should be either a list or numpy array or dataframe.")
 
@@ -132,7 +132,7 @@ class SVMPowerCurve(object):
 
         """
 
-        if not (isinstance(X_test, list) or isinstance(X_test, pd.DataFrame) or isinstance(X_test, np.ndarray)):
+        if not (isinstance(X_test, list) or isinstance(X_test, pd.DataFrame) or isinstance(X_test, pd.Series) or isinstance(X_test, np.ndarray)):
             raise ValueError(
                 "The X_test should be either a list or numpy array or dataframe.")
 

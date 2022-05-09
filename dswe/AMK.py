@@ -59,10 +59,10 @@ class AMK(object):
 
     def __init__(self, X_train, y_train, X_test, bw='dpi', n_multi_cov=3, fixed_cov=[0, 1], cir_cov=None):
 
-        if not (isinstance(X_train, list) or isinstance(X_train, pd.DataFrame) or isinstance(X_train, np.ndarray)):
+        if not (isinstance(X_train, list) or isinstance(X_train, pd.DataFrame) or isinstance(X_train, pd.Series) or isinstance(X_train, np.ndarray)):
             raise ValueError(
                 "The X_train should be either a list or numpy array or dataframe.")
-        if not (isinstance(X_test, list) or isinstance(X_test, pd.DataFrame) or isinstance(X_test, np.ndarray)):
+        if not (isinstance(X_test, list) or isinstance(X_test, pd.DataFrame) or isinstance(X_test, pd.Series) or isinstance(X_test, np.ndarray)):
             raise ValueError(
                 "The X_test should be either a list or numpy array or dataframe.")
 
@@ -71,7 +71,7 @@ class AMK(object):
                 raise ValueError(
                     "The number of features in train and test set must be same.")
 
-        if not (isinstance(y_train, list) or isinstance(y_train, np.ndarray)) or isinstance(y_train, pd.DataFrame):
+        if not (isinstance(y_train, list) or isinstance(y_train, np.ndarray)) or isinstance(y_train, pd.Series) or isinstance(y_train, pd.DataFrame):
             raise ValueError(
                 "The target data should be either a list or numpy array or dataframe.")
 
