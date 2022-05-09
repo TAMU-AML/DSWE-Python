@@ -34,14 +34,14 @@ class KNNPowerCurve(object):
         self.algorithm = algorithm
         self.weights = weights
 
-    def fit(self, X, y, subset_selection=False):
+    def fit(self, X_train, y_train, subset_selection=False):
         """
         Parameters
         ----------
-        X: np.ndarray or pd.DataFrame
+        X_train: np.ndarray or pd.DataFrame
             A matrix or dataframe of input variable values in the training dataset.
 
-        y: np.array
+        y_train: np.array
             A numeric array for response values in the training dataset.
 
         Returns
@@ -50,45 +50,50 @@ class KNNPowerCurve(object):
             self with trained parameter values.
         """
 
-        validate_inputs(X, y)
+        validate_inputs(X_train, y_train)
 
-        self.X = np.array(X)
-        self.y = np.array(y)
+        self.X_train = np.array(X_train)
+        self.y_train = np.array(y_train)
 
-        if len(self.X.shape) == 1:
-            self.X = self.X.reshape(-1, 1)
+        if len(self.X_train.shape) == 1:
+            self.X_train = self.X_train.reshape(-1, 1)
 
-        self.scaler_min = self.X.min(axis=0)
-        self.scaler_max = self.X.max(axis=0)
+        self.scaler_min = self.X_train.min(axis=0)
+        self.scaler_max = self.X_train.max(axis=0)
 
-        self.normalized_X = (self.X - self.scaler_min) / \
+        self.normalized_X_train = (self.X_train - self.scaler_min) / \
             (self.scaler_max - self.scaler_min)
         range_k = np.linspace(5, 50, 10, dtype=int)
 
         if not subset_selection:
-            result = compute_best_k(self.normalized_X, self.y, range_k)
+            result = compute_best_k(
+                self.normalized_X_train, self.y_train, range_k)
 
             knn = KNeighborsRegressor(n_neighbors=result['best_k'])
             parameters = {'algorithm': self.algorithm,
                           'weights': self.weights}
             regressor = GridSearchCV(knn, parameters)
-            regressor.fit(self.normalized_X, self.y)
-            mae = np.mean(abs(regressor.predict(self.normalized_X) - self.y))
+            regressor.fit(self.normalized_X_train, self.y_train)
+            mae = np.mean(abs(regressor.predict(
+                self.normalized_X_train) - self.y_train))
 
             self.best_k = result['best_k']
             self.best_rmse = result['best_rmse']
             self.mae = mae
+
+            self.model = KNeighborsRegressor(n_neighbors=self.best_k).fit(
+                self.normalized_X_train, self.y_train)
 
             return self
 
         else:
             print("Subset selection choice is not available yet.")
 
-    def predict(self, X):
+    def predict(self, X_test):
         """
         Parameters
         ----------
-        X: np.ndarray or pd.DataFrame
+        X_test: np.ndarray or pd.DataFrame
             A matrix or dataframe of input variable values in the test dataset.
 
         Returns
@@ -97,22 +102,23 @@ class KNNPowerCurve(object):
             A numeric array for predictions at the data points in the test dataset.
         """
 
-        normlized_X = (X - self.scaler_min) / \
+        X_test = np.array(X_test)
+
+        normlized_X_test = (X_test - self.scaler_min) / \
             (self.scaler_max - self.scaler_min)
 
-        y_pred = KNeighborsRegressor(n_neighbors=self.best_k).fit(
-            self.normalized_X, self.y).predict(normlized_X)
+        y_pred = self.model.predict(normlized_X_test)
 
         return y_pred
 
-    def update(self, X, y):
+    def update(self, X_update, y_update):
         """
         Parameters
         ----------
-        X: np.ndarray or pd.DataFrame
+        X_update: np.ndarray or pd.DataFrame
             A matrix or dataframe of input variable values in the new added dataset.
 
-        y: np.array
+        y_update: np.array
             A numeric array for response values in the new added dataset.
 
         Returns
@@ -121,18 +127,23 @@ class KNNPowerCurve(object):
             self with updated trained parameter values.
         """
 
-        validate_inputs(X, y)
+        validate_inputs(X_update, y_update)
 
-        if X.shape[0] <= self.X.shape[0]:
-            self.X = np.concatenate([self.X[X.shape[0]:], X])
-            self.y = np.concatenate([self.y[y.shape[0]:], y])
+        X_update = np.array(X_update)
+        y_update = np.array(y_update)
+
+        if X_update.shape[0] <= self.X_train.shape[0]:
+            self.X_train = np.concatenate(
+                [self.X_train[X_update.shape[0]:], X_update])
+            self.y_train = np.concatenate(
+                [self.y_train[y_update.shape[0]:], y_update])
         else:
             print("Please run fit function again.")
 
-        self.scaler_min = self.X.min(axis=0)
-        self.scaler_max = self.X.max(axis=0)
+        self.scaler_min = self.X_train.min(axis=0)
+        self.scaler_max = self.X_train.max(axis=0)
 
-        self.normalized_X = (self.X - self.scaler_min) / \
+        self.normalized_X_train = (self.X_train - self.scaler_min) / \
             (self.scaler_max - self.scaler_min)
 
         ubk = 1.2
@@ -144,7 +155,10 @@ class KNNPowerCurve(object):
         min_k = min_k - (max_k // interval_k)
         range_k = np.linspace(min_k, max_k, interval_k, dtype=int)
 
-        result = compute_best_k(self.normalized_X, self.y, range_k)
+        result = compute_best_k(self.normalized_X_train, self.y_train, range_k)
         self.best_k = result['best_k']
+
+        self.model = KNeighborsRegressor(n_neighbors=self.best_k).fit(
+            self.normalized_X_train, self.y_train)
 
         return self
