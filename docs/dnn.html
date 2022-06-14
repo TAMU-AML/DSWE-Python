@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DNNPowerCurve &mdash; DSWE 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="TempGP" href="tempGP.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> DSWE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing DSWE package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AMK.html">AMK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bayes_tree.html">BayesTreePowerCurve</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comparePCurve.html">ComparePCurve</a></li>
+<li class="toctree-l1"><a class="reference internal" href="covmatch.html">CovMatch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="funGP.html">FunGP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="knn.html">KNNPowerCurve</a></li>
+<li class="toctree-l1"><a class="reference internal" href="svm.html">SVMPowerCurve</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tempGP.html">TempGP</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">DNNPowerCurve</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DSWE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>DNNPowerCurve</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/dnn.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="dnnpowercurve">
+<h1>DNNPowerCurve<a class="headerlink" href="#dnnpowercurve" title="Permalink to this headline"></a></h1>
+<p>Calculate power predictions using Deep Neural Network (DNN)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dwse</span> <span class="kn">import</span> <span class="n">DNNPowerCurve</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">DNNPowerCurve</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">rmse</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">calculate_rmse</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+</pre></div>
+</div>
+<span class="target" id="module-dswe.dnn"></span><dl class="py class">
+<dt class="sig sig-object py" id="dswe.dnn.DNNPowerCurve">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dswe.dnn.</span></span><span class="sig-name descname"><span class="pre">DNNPowerCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_feats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feats_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_all</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sgd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'l2_loss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">momentum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/dnn.html#DNNPowerCurve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.dnn.DNNPowerCurve" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_feats</strong> (<em>int</em>) – Number of input features to Deep Neural Network (DNN).</p></li>
+<li><p><strong>feats_scale</strong> (<em>int</em>) – It mutliplies number of neurons in each layer.</p></li>
+<li><p><strong>train_all</strong> (<em>bool</em>) – A boolean to specify whether to train model on the entire dataset and do not separate dataset for cross-validation).</p></li>
+<li><p><strong>n_folds</strong> (<em>int</em>) – Number of folds for cross_validation.</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – Number of batch_size in the training.</p></li>
+<li><p><strong>lr</strong> (<em>float</em>) – Learning rate.</p></li>
+<li><p><strong>n_epochs</strong> (<em>int</em>) – Number of epochs to the train the model.</p></li>
+<li><p><strong>optimizer</strong> (<em>string</em>) – A string specifying which optimization algorithm to be used to update model weights.
+The best working optimizers are [‘sgd’, ‘adam’, ‘rmsprop’, ‘adagrad’].</p></li>
+<li><p><strong>loss_fn</strong> (<em>string</em>) – A string specifying which loss functions to be used to compute the errors.
+The common loss functions for continuous labels are [‘l1_loss’, ‘l2_loss’].</p></li>
+<li><p><strong>momentum</strong> (<em>float</em>) – Momentum value for ‘sgd’ and ‘rmsprop’ optimizers. Default value is set to 0.</p></li>
+<li><p><strong>print_loss</strong> (<em>bool</em>) – A boolean to specify whether to print loss value after each epoch during training.</p></li>
+<li><p><strong>save_fig</strong> (<em>bool</em>) – A boolean to specify whether to plot and save loss values during training and validation.
+The plot(s) save in a pdf format.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="dswe.dnn.DNNPowerCurve.calculate_rmse">
+<span class="sig-name descname"><span class="pre">calculate_rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/dnn.html#DNNPowerCurve.calculate_rmse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.dnn.DNNPowerCurve.calculate_rmse" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X_test</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of test input variable values to compute predictions.</p></li>
+<li><p><strong>y_test</strong> (<em>np.array</em>) – A numeric array for response values in the testing dataset.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A numeric Root Mean Square Error (RMSE) value calculated on the X_test.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dswe.dnn.DNNPowerCurve.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/dnn.html#DNNPowerCurve.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.dnn.DNNPowerCurve.predict" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X_test</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of test input variable values to compute predictions.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A numeric array for predictions at the data points in X_test.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dswe.dnn.DNNPowerCurve.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/dnn.html#DNNPowerCurve.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.dnn.DNNPowerCurve.train" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X_train</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of input variable values in the training dataset.</p></li>
+<li><p><strong>y_train</strong> (<em>np.array</em>) – A numeric array for response values in the training dataset.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tempGP.html" class="btn btn-neutral float-left" title="TempGP" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Pratyush Kumar, Abhinav Prakash, and Yu Ding.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

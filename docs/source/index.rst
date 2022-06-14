@@ -19,6 +19,7 @@ Welcome to DSWE's documentation!
    knn
    svm
    tempGP
+   dnn
 
 
 
