@@ -163,7 +163,11 @@ class DNNPowerCurve(object):
 
         if self.train_all:
             print("--Initiating training on the entire dataset--")
-            dl = DataLoader(self.dataset, self.batch_size)
+            train_sampler = SubsetRandomSampler(
+                list(range(self.X_train.shape[0])))
+            dl = DataLoader(self.dataset,
+                            self.batch_size,
+                            sampler=train_sampler)
             self.model = NeuralNets(
                 n_feats=self.n_feats, feats_scale=self.feats_scale)
             to_device(self.model, self.device)
