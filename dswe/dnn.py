@@ -14,11 +14,8 @@ class DNNPowerCurve(object):
     """
     Parameters
     ----------
-    n_feats: int
-        Number of input features to Deep Neural Network (DNN).
-
     feats_scale: int
-        It mutliplies number of neurons in each layer.
+        It increases number of neurons in each layer by multiplying the number of neurons with its value.
 
     train_all: bool
         A boolean to specify whether to train model on the entire dataset and do not separate dataset for cross-validation).
@@ -54,8 +51,7 @@ class DNNPowerCurve(object):
         The plot(s) save in a pdf format.
     """
 
-    def __init__(self, n_feats=5,
-                 feats_scale=12,
+    def __init__(self, feats_scale=12,
                  train_all=False,
                  n_folds=5,
                  batch_size=64,
@@ -66,9 +62,6 @@ class DNNPowerCurve(object):
                  momentum=0.8,
                  print_log=False,
                  save_fig=True):
-
-        if not isinstance(n_feats, int):
-            raise ValueError("The n_feats must be an integer value.")
 
         if not isinstance(feats_scale, int):
             raise ValueError("The feats_scale must be an integer value.")
@@ -105,7 +98,6 @@ class DNNPowerCurve(object):
         if type(save_fig) != type(True):
             raise ValueError("The save_fig must be either True or False.")
 
-        self.n_feats = n_feats
         self.feats_scale = feats_scale
         self.train_all = train_all
         self.n_folds = n_folds
@@ -147,14 +139,20 @@ class DNNPowerCurve(object):
         self.X_train = np.array(X_train)
         self.y_train = np.array(y_train)
 
+        if len(self.X_train.shape) == 1:
+            self.X_train = self.X_train.reshape(-1, 1)
+
+        self.y_train = self.y_train.reshape(-1, 1)
+
+        self.n_feats = self.X_train.shape[1]
+
         self.scaler_features = StandardScaler()
         self.scaler_features.fit(self.X_train)
         self.X_train = self.scaler_features.transform(self.X_train)
 
         self.scaler_target = StandardScaler()
-        self.scaler_target.fit(y_train.reshape(-1, 1))
-        self.y_train = self.scaler_target.transform(
-            self.y_train.reshape(-1, 1))
+        self.scaler_target.fit(self.y_train)
+        self.y_train = self.scaler_target.transform(self.y_train)
 
         self.dataset = []
         for i in range(self.X_train.shape[0]):
@@ -248,14 +246,17 @@ class DNNPowerCurve(object):
             raise ValueError(
                 "The X_test should be either a list or numpy array or dataframe.")
 
+        X_test = np.array(X_test)
+        if len(X_test.shape) == 1:
+            X_test = X_test.reshape(-1, 1)
+
         if len(self.X_train.shape) > 1:
             if X_test.shape[1] != self.X_train.shape[1]:
                 raise ValueError(
                     "The number of features in train and test set must be same.")
 
-        X_test = np.array(X_test)
-
         X_test = self.scaler_features.transform(X_test)
+
         test_dataset = []
         for i in range(X_test.shape[0]):
             test_dataset.append(Tensor(X_test[i]))
@@ -267,7 +268,7 @@ class DNNPowerCurve(object):
             pred = self.scaler_target.inverse_transform(
                 self.model(data).cpu().detach().numpy())
             predictions.extend(pred)
-        predictions = np.array(predictions)
+        predictions = np.array(predictions).squeeze()
 
         return predictions
 
@@ -286,9 +287,29 @@ class DNNPowerCurve(object):
         float
             A numeric Root Mean Square Error (RMSE) value calculated on the X_test.
         """
+        if not (isinstance(X_test, list) or isinstance(X_test, pd.DataFrame) or isinstance(X_test, pd.Series) or isinstance(X_test, np.ndarray)):
+            raise ValueError(
+                "The X_test should be either a list or numpy array or dataframe.")
+
+        if not (isinstance(y_test, list) or isinstance(y_test, np.ndarray)) or isinstance(y_test, pd.Series) or isinstance(y_test, pd.DataFrame):
+            raise ValueError(
+                "The target data should be either a list or numpy array or dataframe.")
+
+        if len(X_test) != len(y_test):
+            raise ValueError(
+                "The X_test and y_test should have same number of data points.")
 
         X_test = np.array(X_test)
+        if len(X_test.shape) == 1:
+            X_test = X_test.reshape(-1, 1)
+
+        if len(self.X_train.shape) > 1:
+            if X_test.shape[1] != self.X_train.shape[1]:
+                raise ValueError(
+                    "The number of features in train and test set must be same.")
+
         X_test = self.scaler_features.transform(X_test)
+        y_test = y_test.reshape(-1, 1)
 
         test_dataset = []
         for i in range(X_test.shape[0]):
@@ -303,6 +324,6 @@ class DNNPowerCurve(object):
             predictions.extend(pred)
         predictions = np.array(predictions)
 
-        rmse = np.sqrt(np.square(predictions - y_test.reshape(-1, 1)).mean())
+        rmse = np.sqrt(np.square(predictions - y_test).mean())
 
         return rmse
