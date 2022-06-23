@@ -136,14 +136,15 @@ class SVMPowerCurve(object):
             raise ValueError(
                 "The X_test should be either a list or numpy array or dataframe.")
 
+        X_test = np.array(X_test)
+        if len(X_test.shape) == 1:
+            X_test = X_test.reshape(-1, 1)
+
         if len(self.X_train.shape) > 1:
             if X_test.shape[1] != self.X_train.shape[1]:
                 raise ValueError(
                     "The number of features in train and test set must be same.")
 
-        X_test = np.array(X_test)
-        if len(X_test.shape) == 1:
-            X_test = X_test.reshape(-1, 1)
         X_test = self.scale_features.transform(X_test)
 
         predictions = self.model.predict(X_test)

@@ -4,6 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 
 import numpy as np
+import pandas as pd
 import math
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.model_selection import GridSearchCV
@@ -101,8 +102,18 @@ class KNNPowerCurve(object):
         np.array
             A numeric array for predictions at the data points in the test dataset.
         """
+        if not (isinstance(X_test, list) or isinstance(X_test, pd.DataFrame) or isinstance(X_test, pd.Series) or isinstance(X_test, np.ndarray)):
+            raise ValueError(
+                "The X_test should be either a list or numpy array or dataframe.")
 
         X_test = np.array(X_test)
+        if len(X_test.shape) == 1:
+            X_test = X_test.reshape(-1, 1)
+
+        if len(self.X_train.shape) > 1:
+            if X_test.shape[1] != self.X_train.shape[1]:
+                raise ValueError(
+                    "The number of features in train and test set must be same.")
 
         normlized_X_test = (X_test - self.scaler_min) / \
             (self.scaler_max - self.scaler_min)
@@ -131,6 +142,14 @@ class KNNPowerCurve(object):
 
         X_update = np.array(X_update)
         y_update = np.array(y_update)
+
+        if len(X_update.shape) == 1:
+            X_update = X_update.reshape(-1, 1)
+
+        if len(self.X_train.shape) > 1:
+            if X_update.shape[1] != self.X_train.shape[1]:
+                raise ValueError(
+                    "The number of features in train and update set must be same.")
 
         if X_update.shape[0] <= self.X_train.shape[0]:
             self.X_train = np.concatenate(
