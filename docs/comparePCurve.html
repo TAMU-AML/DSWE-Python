@@ -97,28 +97,32 @@ a matrix with each column corresponding to one input variable.</p></li>
 values of the data sets.</p></li>
 <li><p><strong>testcol</strong> (<em>list</em>) – A list stating column number of covariates to used in generating test set.
 Maximum of two columns to be used.</p></li>
-<li><p><strong>testset</strong> (<em>np.array</em>) – Test points at which the functions will be compared.</p></li>
-<li><p><strong>circ_pos</strong> (<em>list</em>) – A list or array stating the column position of circular variables.</p></li>
+<li><p><strong>testset</strong> (<em>np.array</em>) – Test points at which the functions will be compared.
+Default is set to None, means calculate at the runtime.</p></li>
+<li><p><strong>circ_pos</strong> (<em>list</em><em> or </em><em>int</em>) – A list or array stating the column position of circular variables.
+An integer when only one circular variable present. Default value is None.</p></li>
 <li><p><strong>thresh</strong> (<em>float</em><em> or </em><em>list</em>) – A numerical or a list of threshold values for each covariates, against which matching happens.
-It should be a single value or a list of values representing threshold for each of the covariate.</p></li>
-<li><p><strong>conf_level</strong> (<em>float</em>) – A single value representing the statistical significance level for
-constructing the band.</p></li>
+It should be a single value or a list of values representing threshold for each of the covariate.
+Default value is 0.2.</p></li>
+<li><p><strong>conf_level</strong> (<em>float</em>) – A single value representing the statistical significance level for constructing the band.
+Default value is 0.95.</p></li>
 <li><p><strong>grid_size</strong> (<em>list</em>) – A list or numpy array to be used in constructing test set, should be provided when
 testset is None, else it is ignored. Default is [50,50] for 2-dim input which
 is converted internally to a default of [1000] for 1-dim input. Total number of
 test points (product of grid_size elements components) must be less than or equal
 to 2500.</p></li>
-<li><p><strong>power_bins</strong> (<em>int</em>) – A integer stating the number of power bins for computing the scaled difference,
-default is 15.</p></li>
+<li><p><strong>power_bins</strong> (<em>int</em>) – A integer stating the number of power bins for computing the scaled difference.
+Default is 15.</p></li>
 <li><p><strong>bseline</strong> (<em>int</em>) – An integer between 0 to 2, where 1 indicates to use power curve of first dataset
 as the base for metric calculation, 2 indicates to use the power curve of second
 dataset as the base, and 0 indicates to use the average of both power curves as
 the base. Default is set to 1.</p></li>
 <li><p><strong>limit_memory</strong> (<em>bool</em>) – A boolean (True/False) indicating whether to limit the memory use or not.
-Default is true. If set to true, 5000 datapoints are randomly sampled
+Default is True. If set to True, 5000 datapoints are randomly sampled
 from each dataset under comparison for inference.</p></li>
 <li><p><strong>opt_method</strong> (<em>string</em>) – A string specifying the optimization method to be used for hyperparameter
-estimation. The best working solver are [‘L-BFGS-B’, ‘BFGS’].</p></li>
+estimation. The best working solver are [‘L-BFGS-B’, ‘BFGS’].
+Default is set to ‘L-BFGS-B’.</p></li>
 <li><p><strong>sample_size</strong> (<em>dict</em>) – A dictionary with two keys: optim_size and band_size,
 denoting the sample size for each dataset for hyperparameter optimization
 and confidence band computation, respectively, when limit_memory = TRUE.
@@ -164,7 +168,8 @@ instead of the weights computed from the data.</p>
 on any probability distribution of user choice. The weights must sum to 1.</p></li>
 <li><p><strong>baseline</strong> (<em>int</em>) – An integer between 1 to 2, where 1 indicates to use mu1 predictions from the power curve and
 2 indicates to use mu2 predictions from the power curve as obtained from ComparePCurve() function.
-The mu1 and mu2 corresponds to test prediction for first and second data set respectively.</p></li>
+The mu1 and mu2 corresponds to test prediction for first and second data set respectively.
+Default is set to 1.</p></li>
 <li><p><strong>stat_diff</strong> (<em>bool</em>) – a boolean (True/False) specifying whether to compute the statistical significant difference or not.
 Default is set to False, i.e. statistical significant difference is not computed.
 If set to true, band generated from ComparePCurve() function to be used.</p></li>

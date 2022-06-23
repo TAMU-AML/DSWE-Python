@@ -107,8 +107,8 @@ completely additive model. Ignored if the number of covariates is 1.</p></li>
 <li><p><strong>fixed_cov</strong> (<em>list</em>) – An integer list specifying the fixed covariates column number(s), default value
 is [0,1]. Ignored if n_multi_cov is set to ‘all’ or ‘none’ or if the number of
 covariates is less than 3.</p></li>
-<li><p><strong>cir_cov</strong> (<em>list</em>) – An integer list specifying the circular covariates column number(s) in X_train,
-default value is None.</p></li>
+<li><p><strong>cir_cov</strong> (<em>list</em><em> or </em><em>int</em>) – A list specifying the circular covariates column number(s) in X_train,
+An integer when only one circular covariates present. default value is None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

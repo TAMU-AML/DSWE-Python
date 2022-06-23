@@ -98,10 +98,13 @@ specified covariates and threshold.</p>
 a matrix with each column corresponding to one input variable.</p></li>
 <li><p><strong>ylist</strong> (<em>list</em>) – A list, consisting of data sets to match, and each list is a array corresponds to target
 values of the data sets.</p></li>
-<li><p><strong>circ_pos</strong> (<em>list</em>) – A list or array stating the column position of circular variables.</p></li>
+<li><p><strong>circ_pos</strong> (<em>list</em><em> or </em><em>int</em>) – A list or array stating the column position of circular variables.
+An integer when only one circular variable present. Default is set to None.</p></li>
 <li><p><strong>thresh</strong> (<em>float</em><em> or </em><em>list</em>) – A numerical or a list of threshold values for each covariates, against which matching happens.
-It should be a single value or a list of values representing threshold for each of the covariate.</p></li>
-<li><p><strong>priority</strong> (<em>bool</em>) – A boolean, default value False, otherwise computes the sequence of matching.</p></li>
+It should be a single value or a list of values representing threshold for each of the covariate.
+Default value is 0.2.</p></li>
+<li><p><strong>priority</strong> (<em>bool</em>) – A boolean, default value False, otherwise computes the sequence of matching.
+Default is False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

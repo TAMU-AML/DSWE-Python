@@ -79,7 +79,7 @@
 <h1>FunGP<a class="headerlink" href="#fungp" title="Permalink to this headline"></a></h1>
 <p>Function comparison using Gaussian Process and Hypothesis testing (FunGP)</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dwse</span> <span class="kn">import</span> <span class="n">FunGP</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">FunGP</span><span class="p">(</span><span class="n">Xlist</span><span class="p">,</span> <span class="n">ylist</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">FunGP</span><span class="p">(</span><span class="n">Xlist</span><span class="p">,</span> <span class="n">ylist</span><span class="p">,</span> <span class="n">testset</span><span class="p">)</span>
 <span class="n">mu1</span><span class="p">,</span> <span class="n">mu2</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">mu1</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">mu2</span>
 </pre></div>
 </div>
@@ -101,9 +101,9 @@ a matrix with each column corresponding to one input variable.</p></li>
 values of the data sets.</p></li>
 <li><p><strong>testset</strong> (<em>np.array</em>) – Test points at which the functions will be compared.</p></li>
 <li><p><strong>conf_level</strong> (<em>float</em>) – A single value representing the statistical significance level for
-constructing the band.</p></li>
+constructing the band. Default value is 0.95.</p></li>
 <li><p><strong>limit_memory</strong> (<em>bool</em>) – A boolean (True/False) indicating whether to limit the memory use or not.
-Default is true. If set to true, 5000 datapoints are randomly sampled
+Default is True. If set to True, 5000 datapoints are randomly sampled
 from each dataset under comparison for inference.</p></li>
 <li><p><strong>opt_method</strong> (<em>string</em>) – A string specifying the optimization method to be used for hyperparameter
 estimation. The best working solver are [‘L-BFGS-B’, ‘BFGS’].</p></li>

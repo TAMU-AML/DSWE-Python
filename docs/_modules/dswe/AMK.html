@@ -121,9 +121,9 @@
 <span class="sd">        is [0,1]. Ignored if n_multi_cov is set to &#39;all&#39; or &#39;none&#39; or if the number of</span>
 <span class="sd">        covariates is less than 3.</span>
 
-<span class="sd">    cir_cov: list</span>
-<span class="sd">        An integer list specifying the circular covariates column number(s) in X_train,</span>
-<span class="sd">        default value is None.</span>
+<span class="sd">    cir_cov: list or int</span>
+<span class="sd">        A list specifying the circular covariates column number(s) in X_train,</span>
+<span class="sd">        An integer when only one circular covariates present. default value is None.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -200,9 +200,11 @@
             <span class="n">fixed_cov</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">cir_cov</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">cir_cov</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cir_cov</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">cir_cov</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cir_cov</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">cir_cov</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;The cir_cov should be a list or an array or set to None.&quot;</span><span class="p">)</span>
+                    <span class="s2">&quot;The circ_cov should be a list or 1d-array or single integer value or set to None.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">cir_cov</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">:</span>
+                <span class="n">cir_cov</span> <span class="o">=</span> <span class="p">[</span><span class="n">cir_cov</span><span class="p">]</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">cir_cov</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">ncov</span><span class="p">)))))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cir_cov</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s2">&quot;Any or all the values in cir_cov exceeds the number of columns in X_train.&quot;</span><span class="p">)</span>
