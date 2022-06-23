@@ -28,15 +28,18 @@ class CovMatch(object):
         A list, consisting of data sets to match, and each list is a array corresponds to target 
         values of the data sets.
 
-    circ_pos: list
+    circ_pos: list or int
         A list or array stating the column position of circular variables.
+        An integer when only one circular variable present. Default is set to None.
 
     thresh: float or list
         A numerical or a list of threshold values for each covariates, against which matching happens.
         It should be a single value or a list of values representing threshold for each of the covariate.
+        Default value is 0.2.
 
     priority: bool
         A boolean, default value False, otherwise computes the sequence of matching.
+        Default is False.
 
     Returns
     -------
@@ -54,9 +57,11 @@ class CovMatch(object):
         validate_matching(Xlist, ylist)
 
         if circ_pos:
-            if not (isinstance(circ_pos, list) or isinstance(circ_pos, np.ndarray)):
+            if not (isinstance(circ_pos, list) or isinstance(circ_pos, np.ndarray) or type(circ_pos) == int):
                 raise ValueError(
-                    "The circ_pos must be provided in a list or 1d-array.")
+                    "The circ_pos should be a list or 1d-array or single integer value or set to None.")
+            if type(circ_pos) == int:
+                circ_pos = [circ_pos]
 
         if (isinstance(thresh, list) or isinstance(thresh, np.ndarray)):
             if len(thresh) > 0:

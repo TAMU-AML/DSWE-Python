@@ -32,17 +32,20 @@ class ComparePCurve(object):
 
     testset: np.array
         Test points at which the functions will be compared.
+        Default is set to None, means calculate at the runtime.
 
-    circ_pos: list
+    circ_pos: list or int
         A list or array stating the column position of circular variables.
+        An integer when only one circular variable present. Default value is None.
 
     thresh: float or list
         A numerical or a list of threshold values for each covariates, against which matching happens.
         It should be a single value or a list of values representing threshold for each of the covariate.
+        Default value is 0.2.
 
     conf_level: float
-        A single value representing the statistical significance level for 
-        constructing the band.
+        A single value representing the statistical significance level for constructing the band.
+        Default value is 0.95.
 
     grid_size: list
         A list or numpy array to be used in constructing test set, should be provided when
@@ -52,8 +55,8 @@ class ComparePCurve(object):
         to 2500.
 
     power_bins: int
-        A integer stating the number of power bins for computing the scaled difference,
-        default is 15.
+        A integer stating the number of power bins for computing the scaled difference.
+        Default is 15.
 
     bseline: int
         An integer between 0 to 2, where 1 indicates to use power curve of first dataset
@@ -63,12 +66,13 @@ class ComparePCurve(object):
 
     limit_memory: bool
         A boolean (True/False) indicating whether to limit the memory use or not. 
-        Default is true. If set to true, 5000 datapoints are randomly sampled 
+        Default is True. If set to True, 5000 datapoints are randomly sampled 
         from each dataset under comparison for inference.  
 
     opt_method: string
         A string specifying the optimization method to be used for hyperparameter 
         estimation. The best working solver are ['L-BFGS-B', 'BFGS'].
+        Default is set to 'L-BFGS-B'.
 
     sample_size: dict
         A dictionary with two keys: optim_size and band_size, 
@@ -133,9 +137,11 @@ class ComparePCurve(object):
                     "The number of test points should be less than or equal to 2500; reduce grid_size. The total number of test points are product of values in grid_size.")
 
         if circ_pos:
-            if not (isinstance(circ_pos, list) or isinstance(circ_pos, np.ndarray)):
+            if not (isinstance(circ_pos, list) or isinstance(circ_pos, np.ndarray) or type(circ_pos) == int):
                 raise ValueError(
-                    "The circ_pos must be provided in a list or 1d-array.")
+                    "The circ_pos should be a list or 1d-array or single integer value or set to None.")
+            if type(circ_pos) == int:
+                circ_pos = [circ_pos]
 
         if isinstance(thresh, list) or isinstance(thresh, np.ndarray):
             if len(thresh) > 0:
@@ -238,6 +244,7 @@ class ComparePCurve(object):
             An integer between 1 to 2, where 1 indicates to use mu1 predictions from the power curve and 
             2 indicates to use mu2 predictions from the power curve as obtained from ComparePCurve() function. 
             The mu1 and mu2 corresponds to test prediction for first and second data set respectively.
+            Default is set to 1.
 
         stat_diff: bool
             a boolean (True/False) specifying whether to compute the statistical significant difference or not.

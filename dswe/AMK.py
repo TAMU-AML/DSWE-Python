@@ -46,9 +46,9 @@ class AMK(object):
         is [0,1]. Ignored if n_multi_cov is set to 'all' or 'none' or if the number of
         covariates is less than 3.
 
-    cir_cov: list
-        An integer list specifying the circular covariates column number(s) in X_train,
-        default value is None.
+    cir_cov: list or int
+        A list specifying the circular covariates column number(s) in X_train,
+        An integer when only one circular covariates present. default value is None.
 
     Returns
     -------
@@ -125,9 +125,11 @@ class AMK(object):
             fixed_cov = None
 
         if cir_cov is not None:
-            if not (isinstance(cir_cov, list) or isinstance(cir_cov, np.ndarray)):
+            if not (isinstance(cir_cov, list) or isinstance(cir_cov, np.ndarray) or type(cir_cov) == int):
                 raise ValueError(
-                    "The cir_cov should be a list or an array or set to None.")
+                    "The circ_cov should be a list or 1d-array or single integer value or set to None.")
+            if type(cir_cov) == int:
+                cir_cov = [cir_cov]
             elif len(list(set(cir_cov).intersection(list(range(ncov))))) != len(cir_cov):
                 raise ValueError(
                     "Any or all the values in cir_cov exceeds the number of columns in X_train.")

@@ -36,11 +36,11 @@ class FunGP(object):
 
     conf_level: float
         A single value representing the statistical significance level for 
-        constructing the band.
+        constructing the band. Default value is 0.95.
 
     limit_memory: bool
         A boolean (True/False) indicating whether to limit the memory use or not. 
-        Default is true. If set to true, 5000 datapoints are randomly sampled 
+        Default is True. If set to True, 5000 datapoints are randomly sampled 
         from each dataset under comparison for inference.  
 
     opt_method: string
