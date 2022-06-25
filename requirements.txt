@@ -4,4 +4,4 @@ scikit-learn>=1.0
 scipy>=1.7.0
 statsmodels>=0.13.0
 # bartpy>=0.0.2
-pytorch>=1.0.0
+torch>=1.0.0
