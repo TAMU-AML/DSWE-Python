@@ -15,40 +15,55 @@ class DNNPowerCurve(object):
     Parameters
     ----------
     feats_scale: int
-        It increases number of neurons in each layer by multiplying the number of neurons with its value.
+        It multiplies the neurons count in each layer.
+        Suppose, a DNN has four 4 hidden layers with default neurons count as [8, 16, 32, 64], 
+        after giving feats_scale=12, it increases the number of neurons to [8*12, 16*12, 32*12, 64*12],
+        which is equal to [96, 192, 384, 768].
+        Default value is 12.
 
     train_all: bool
-        A boolean to specify whether to train model on the entire dataset and do not separate dataset for cross-validation).
+        A boolean (True/False) to specify whether to train the model on the entire dataset or separate the dataset for cross-validation.
+        Generally, it should be set to False to check how the model is performing on validation set. Once it's verified that the model
+        is converging and performing well then, set this to True to train it on the entire dataset.
+        Default is set to False.
 
     n_folds: int
-        Number of folds for cross_validation.
+        Number of folds for cross-validation.
+        Default value is 5.
 
     batch_size: int
-        Number of batch_size in the training.
+        Number of training points sampled at each iteration of the model training.
+        Default value is 64.
 
     lr: float
-        Learning rate.
+        The step size or learning rate for the optimizer.
+        Default value is 0.1.
 
     n_epochs: int
-        Number of epochs to the train the model.
+        Number of epochs for training the model.
+        Default value is 30.
 
     optimizer: string
         A string specifying which optimization algorithm to be used to update model weights.
-        The best working optimizers are ['sgd', 'adam', 'rmsprop', 'adagrad'].
+        The available optimizers are ['sgd', 'adam', 'rmsprop', 'adagrad'].
+        Default is set to 'sgd'.
 
     loss_fn: string
         A string specifying which loss functions to be used to compute the errors.
-        The common loss functions for continuous labels are ['l1_loss', 'l2_loss']. 
+        The common loss functions for continuous response variables are ['l1_loss', 'l2_loss']. 
+        Default is set to 'l2_loss'.
 
     momentum: float
-        Momentum value for 'sgd' and 'rmsprop' optimizers. Default value is set to 0.
+        Momentum value for 'sgd' and 'rmsprop' optimizers. Default is set to 0.
 
     print_loss: bool
-        A boolean to specify whether to print loss value after each epoch during training.
+        A boolean (True/False) to specify whether to print loss values after each epoch during training.
+        Default is set to False.
 
     save_fig: bool
-        A boolean to specify whether to plot and save loss values during training and validation.
+        A boolean (True/False) to specify whether to plot and save loss values during training and validation.
         The plot(s) save in a pdf format.
+        Default is set to True.
     """
 
     def __init__(self, feats_scale=12,

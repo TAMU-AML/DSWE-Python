@@ -23,7 +23,7 @@ class ComparePCurve(object):
         a matrix with each column corresponding to one input variable.
 
     ylist: list
-        A list, consisting of data sets to match, and each list is a array corresponds to target 
+        A list, consisting of data sets to match, and each list is an array that corresponds to target 
         values of the data sets.
 
     testcol: list
@@ -36,7 +36,8 @@ class ComparePCurve(object):
 
     circ_pos: list or int
         A list or array stating the column position of circular variables.
-        An integer when only one circular variable present. Default value is None.
+        An integer when only one circular variable present. 
+        Default value is None.
 
     thresh: float or list
         A numerical or a list of threshold values for each covariates, against which matching happens.
@@ -56,7 +57,7 @@ class ComparePCurve(object):
 
     power_bins: int
         A integer stating the number of power bins for computing the scaled difference.
-        Default is 15.
+        Default value is 15.
 
     bseline: int
         An integer between 0 to 2, where 1 indicates to use power curve of first dataset
@@ -75,13 +76,12 @@ class ComparePCurve(object):
         Default is set to 'L-BFGS-B'.
 
     sample_size: dict
-        A dictionary with two keys: optim_size and band_size, 
-        denoting the sample size for each dataset for hyperparameter optimization 
-        and confidence band computation, respectively, when limit_memory = TRUE. 
+        A dictionary with two keys: optim_size and band_size, denoting the sample size for each dataset for 
+        hyperparameter optimization and confidence band computation, respectively, when limit_memory = TRUE. 
         Default value is list(optim_size = 500,band_size = 5000).
 
     rng_seed: int
-        Random seed for sampling data when limitMemory = TRUE. Default is 1. 
+        Random number genrator (rng) seed for sampling data when limit_memory = TRUE. Default value is 1.  
 
     Returns
     -------

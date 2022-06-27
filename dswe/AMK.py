@@ -32,8 +32,8 @@ class AMK(object):
 
     bw: string or int
         A numeric array or a character input for bandwidth. If character, bandwidth
-        computed internally; the input should be either 'dpi' or 'dpi_gap'. Default is
-        'dpi_gap'.
+        computed internally; the input should be either 'dpi' or 'dpi_gap'. 
+        Default value is 'dpi_gap'.
 
     n_multi_cov: int
         An integer or a character input specifying the number of multiplicative covariates
@@ -42,13 +42,14 @@ class AMK(object):
         completely additive model. Ignored if the number of covariates is 1.
 
     fixed_cov: list
-        An integer list specifying the fixed covariates column number(s), default value
-        is [0,1]. Ignored if n_multi_cov is set to 'all' or 'none' or if the number of
-        covariates is less than 3.
+        An integer list specifying the fixed covariates column number(s).
+        Ignored if n_multi_cov is set to 'all' or 'none' or if the number of covariates is less than 3.
+        Default value is [0,1].
 
     cir_cov: list or int
         A list specifying the circular covariates column number(s) in X_train,
-        An integer when only one circular covariates present. default value is None.
+        An integer when only one circular covariates present. 
+        Default value is None.
 
     Returns
     -------

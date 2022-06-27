@@ -28,7 +28,7 @@ class FunGP(object):
         a matrix with each column corresponding to one input variable.
 
     ylist: list
-        A list, consisting of data sets to match, and each list is a array corresponds to target 
+        A list, consisting of data sets to match, and each list is an array that corresponds to target 
         values of the data sets.
 
     testset: np.array
@@ -46,15 +46,15 @@ class FunGP(object):
     opt_method: string
         A string specifying the optimization method to be used for hyperparameter 
         estimation. The best working solver are ['L-BFGS-B', 'BFGS'].
+        Default value is 'L-BFGS-B'.
 
     sample_size: dict
-        A dictionary with two keys: optimSize and bandSize, 
-        denoting the sample size for each dataset for hyperparameter optimization 
-        and confidence band computation, respectively, when limitMemory = TRUE. 
-        Default value is list(optimSize = 500,bandSize = 5000).
+        A dictionary with two keys: optim_size and band_size, denoting the sample size for each dataset for 
+        hyperparameter optimization and confidence band computation, respectively, when limit_memory = TRUE. 
+        Default value is {optim_size: 500, band_size: 5000}.
 
     rng_seed: int
-        Random seed for sampling data when limitMemory = TRUE. Default is 1. 
+        Random number genrator (rng) seed for sampling data when limit_memory = TRUE. Default value is 1. 
 
     Returns
     -------
@@ -83,13 +83,14 @@ class FunGP(object):
         if limit_memory:
             if not isinstance(sample_size, dict):
                 raise ValueError(
-                    "If limitMemory is True, sample_size must be a dictionary with two named items: optim_size and band_size.")
+                    "If limit_memory is True, sample_size must be a dictionary with two named items: optim_size and band_size.")
             if not set(['optim_size', 'band_size']) == set(list(sample_size.keys())):
                 raise ValueError(
-                    "If limitMemory is True, sample_size must be a dictionary with two named items: optim_size and band_size.")
+                    "If limit_memory is True, sample_size must be a dictionary with two named items: optim_size and band_size.")
 
         if type(rng_seed) != int:
-            raise ValueError("The range seed must be a single integer value.")
+            raise ValueError(
+                "The rng_seed must be a single integer value.")
 
         if opt_method not in ['L-BFGS-B', 'BFGS']:
             raise ValueError("The opt_method must be 'L-BFGS-B' or 'BFGS'.")
