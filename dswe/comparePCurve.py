@@ -179,15 +179,32 @@ class ComparePCurve(object):
 
         self.Xlist = Xlist
         self.ylist = ylist
-        self.Xlist[0] = np.array(self.Xlist[0])
-        self.Xlist[1] = np.array(self.Xlist[1])
-        self.ylist[0] = np.array(self.ylist[0]).reshape(-1, 1)
-        self.ylist[1] = np.array(self.ylist[1]).reshape(-1, 1)
+
+        for i in range(2):
+            self.Xlist[i] = np.array(self.Xlist[i])
+            self.ylist[i] = np.array(self.ylist[i]).reshape(-1, 1)
+
+        for i in range(2):
+            if len(self.Xlist[i].shape) == 1:
+                self.Xlist[i] = self.Xlist[i].reshape(-1, 1)
+
+        if self.Xlist[0].shape[1] != self.Xlist[1].shape[1]:
+            raise ValueError(
+                "The number of columns in both the dataset should be the same.")
 
         self.testset = testset
         if self.testset is not None:
             if len(self.testset.shape) == 1:
                 self.testset = self.testset.reshape(-1, 1)
+
+            if self.Xlist[0].shape[1] != self.testset.shape[1]:
+                raise ValueError(
+                    "The number of columns in input and testset should be same.")
+
+        if self.testset is None:
+            if self.Xlist[0].shape[1] != len(testcol):
+                raise ValueError(
+                    "The length of testcol should match the number of input columns.")
 
         result_matching = CovMatch(self.Xlist, self.ylist, circ_pos, thresh)
         self.matched_data_X = result_matching.matched_data_X

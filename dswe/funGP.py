@@ -98,14 +98,24 @@ class FunGP(object):
         self.Xlist = Xlist
         self.ylist = ylist
         for i in range(2):
-            self.Xlist[0] = np.array(self.Xlist[0])
-            self.Xlist[1] = np.array(self.Xlist[1])
-            self.ylist[0] = np.array(self.ylist[0])
-            self.ylist[1] = np.array(self.ylist[1])
+            self.Xlist[i] = np.array(self.Xlist[i])
+            self.ylist[i] = np.array(self.ylist[i])
+
+        for i in range(2):
+            if len(self.Xlist[i].shape) == 1:
+                self.Xlist[i] = self.Xlist[i].reshape(-1, 1)
+
+        if self.Xlist[0].shape[1] != self.Xlist[1].shape[1]:
+            raise ValueError(
+                "The number of columns in both the dataset should be the same.")
 
         self.testset = np.array(testset)
         if len(self.testset.shape) == 1:
             self.testset = self.testset.reshape(-1, 1)
+
+        if self.Xlist[0].shape[1] != self.testset.shape[1]:
+            raise ValueError(
+                "The number of columns in input and testset should be same.")
 
         self.conf_level = conf_level
         self.limit_memory = limit_memory
