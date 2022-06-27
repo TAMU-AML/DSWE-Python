@@ -26,11 +26,64 @@ class TempGP(object):
     ----------
     opt_method: string
         Type of solver. The best working solver are ['L-BFGS-B', 'BFGS'].
+        Default value is 'L-BFGS-B'.
+
+    limit_memory: int or None
+        The integer is used as sample training points during prediction to limit the total memory requirement. 
+        Setting the value to None would result in no sampling, that is, full training data is used for prediction. 
+        Default value is 5000.
+
+    fast_computation: bool
+        A boolean (True/False) that specifies whether to do exact inference or fast approximation.
+        Default is True.
+
+    optim_control: dict
+        A dictionary of parameters passed to the Adam optimizer when fast_computation is set to True. 
+        The default values have been tested rigorously and tend to strike a balance between accuracy and speed. \n
+        - batch_size: Number of training points sampled at each iteration of Adam. Default value is 100.
+        - learning_rate: The step size for the Adam optimizer. Default value is 0.05.
+        - max_iter: The maximum number of iterations to be performed by Adam. Default value is 5000.
+        - tol: Gradient tolerance. Default value is 1e-6.
+        - beta1: Decay rate for the first moment of the gradient. Default value is 0.9.
+        - beta2: Decay rate for the second moment of the gradient. Default value is 0.999.
+        - epsilon: A small number to avoid division by zero. Default value is 1e-8.
+        - logfile: A string specifying a file name to store hyperparameters value for each iteration. Default value is None.
 
     """
 
-    def __init__(self, opt_method='L-BFGS-B'):
+    def __init__(self, opt_method='L-BFGS-B', limit_memory=5000, fast_computation=True, optim_control={'batch_size': 100,
+                                                                                                       'learning_rate': 0.05,
+                                                                                                       'max_iter': 5000,
+                                                                                                       'tol': 1e-6,
+                                                                                                       'beta1': 0.9,
+                                                                                                       'beta2': 0.999,
+                                                                                                       'epsilon': 1e-8,
+                                                                                                       'logfile': None}):
+
+        if opt_method not in ['L-BFGS-B', 'BFGS']:
+            raise ValueError("The opt_method must be 'L-BFGS-B' or 'BFGS'.")
+
+        if limit_memory:
+            if type(limit_memory) != int:
+                raise ValueError(
+                    "The limit_memory should be either an integer value or None.")
+
+        if type(fast_computation) != type(True):
+            raise ValueError(
+                "The fast_computation must be either True or False.")
+
+        if fast_computation:
+            if not isinstance(optim_control, dict):
+                raise ValueError(
+                    "If fast_computation is True, optim_control must be a dictionary.")
+            if not set(['batch_size', 'learning_rate', 'max_iter', 'tol', 'beta1', 'beta2', 'epsilon', 'logfile']) == set(list(optim_control.keys())):
+                raise ValueError(
+                    "optim_control must contains eight key-value pairs with ['batch_size', 'learning_rate', 'max_iter', 'tol', 'beta1', 'beta2', 'epsilon', 'logfile'] as keys.")
+
         self.opt_method = opt_method
+        self.fast_computation = fast_computation
+        self.limit_memory = limit_memory
+        self.optim_control = optim_control
 
     def fit(self, X_train, y_train, T_train=[]):
         """Fit the TempGP from the training dataset.
@@ -79,9 +132,23 @@ class TempGP(object):
         self.databins = create_thinned_bins(
             self.X_train, self.y_train, self.thinning_number)
         self.optim_result = estimate_binned_params(
-            self.databins, self.opt_method)
+            self.databins, self.fast_computation, self.optim_control, self.opt_method)
+
+        if self.limit_memory:
+            ntrain = X_train.shape[0]
+            if self.limit_memory < ntrain:
+                pred_index = np.random.choice(ntrain, self.limit_memory)
+                X_active = self.X_train[pred_index, :]
+                y_active = self.y_train[pred_index]
+            else:
+                X_active = self.X_train
+                y_active = self.y_train
+        else:
+            X_active = self.X_train
+            y_active = self.y_train
+
         self.weighted_y = compute_weighted_y(
-            self.X_train, self.y_train, self.optim_result['estimated_params'])
+            X_active, y_active, self.optim_result['estimated_params'])
         self.residual = self.y_train - predict_GP(self.X_train, self.weighted_y, self.X_train,
                                                   self.optim_result['estimated_params'])
 

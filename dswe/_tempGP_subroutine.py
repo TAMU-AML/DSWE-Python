@@ -4,7 +4,9 @@
 # LICENSE file in the root directory of this source tree.
 
 import numpy as np
+import pandas as pd
 import math
+import random
 import warnings
 from statsmodels.tsa import stattools as ts
 from scipy.optimize import minimize
@@ -57,7 +59,7 @@ def compute_loglike_grad_sum_tempGP(databins, params):
     return np.array(loglikesum).sum(axis=0)
 
 
-def estimate_binned_params(databins, opt_method='L-BFGS-B'):
+def estimate_binned_params(databins, fast_computation, optim_control, opt_method='L-BFGS-B'):
     ncov = databins[0]['X'].shape[1]
     theta = [0] * ncov
 
@@ -83,18 +85,28 @@ def estimate_binned_params(databins, opt_method='L-BFGS-B'):
     obj_grad = lambda par: compute_loglike_grad_sum_tempGP(databins, params={'theta': par[0:ncov],
                                                                              'sigma_f': par[ncov:ncov + 1], 'sigma_n': par[ncov + 1:ncov + 2], 'beta': par[ncov + 2]})
 
-    optim_result = minimize(fun=obj_fun, x0=par_init,
-                            method=opt_method, jac=obj_grad)
+    if fast_computation:
+        optim_result = adam_optimizer(databins, par_init, optim_control['batch_size'], optim_control['learning_rate'], optim_control['max_iter'],
+                                      optim_control['tol'], optim_control['beta1'], optim_control['beta2'], optim_control['epsilon'], optim_control['logfile'])
+        estimated_params = {'theta': abs(optim_result[0:ncov]),
+                            'sigma_f': abs(optim_result[ncov]),
+                            'sigma_n': abs(optim_result[ncov + 1]),
+                            'beta': optim_result[ncov + 2]}
+        obj_val = None
+        grad_val = None
 
-    estimated_params = {'theta': abs(optim_result.x[0:ncov]),
-                        'sigma_f': abs(optim_result.x[ncov:ncov + 1]).item(),
-                        'sigma_n': abs(optim_result.x[ncov + 1:ncov + 2]).item(),
-                        'beta': optim_result.x[ncov + 2:ncov + 3].item()}
+        return {'estimated_params': estimated_params, 'obj_val': obj_val, 'grad_val': grad_val}
+    else:
+        optim_result = minimize(fun=obj_fun, x0=par_init,
+                                method=opt_method, jac=obj_grad)
+        estimated_params = {'theta': abs(optim_result.x[0:ncov]),
+                            'sigma_f': abs(optim_result.x[ncov:ncov + 1]).item(),
+                            'sigma_n': abs(optim_result.x[ncov + 1:ncov + 2]).item(),
+                            'beta': optim_result.x[ncov + 2:ncov + 3].item()}
+        obj_val = optim_result.fun
+        grad_val = optim_result.jac
 
-    obj_val = optim_result.fun
-    grad_val = optim_result.jac
-
-    return {'estimated_params': estimated_params, 'obj_val': obj_val, 'grad_val': grad_val}
+        return {'estimated_params': estimated_params, 'obj_val': obj_val, 'grad_val': grad_val}
 
 
 def estimate_local_function_params(trainT, residual):
@@ -153,3 +165,46 @@ def compute_local_function(residual, train_T, test_T, neighbourhood):
             pred[i] = 0
 
     return pred
+
+
+def adam_optimizer(databins, par_init, batch_size, learning_rate, max_iter, tol, beta1, beta2, epsilon, logfile):
+    ncov = databins[0]['X'].shape[1]
+    params_t = par_init
+    par_dict = {'theta': par_init[0:ncov],
+                'sigma_f': par_init[ncov],
+                'sigma_n': par_init[ncov + 1],
+                'beta': par_init[ncov + 2]}
+    m_t = np.zeros(len(par_init))
+    v_t = np.zeros(len(par_init))
+
+    params_mat = np.zeros((max_iter, len(params_t)))
+
+    t = 0
+    while(True):
+        sampled_bin = random.randint(0, len(databins) - 1)
+        if batch_size < len(databins[sampled_bin]['y']):
+            sampled_idx = np.random.choice(
+                len(databins[sampled_bin]['y']), batch_size)
+        else:
+            sampled_idx = list(range(len(databins[sampled_bin]['y'])))
+        sample_X = databins[sampled_bin]['X'][sampled_idx]
+        sample_y = databins[sampled_bin]['y'][sampled_idx]
+
+        grad_t = compute_loglike_grad_GP(sample_X, sample_y, par_dict)
+
+        m_t = (beta1 * m_t) + ((1 - beta1) * grad_t)
+        v_t = (beta2 * v_t) + ((1 - beta2) * (grad_t**2))
+        m_hat = m_t / (1 - (beta1**(t + 1)))
+        v_hat = v_t / (1 - (beta2**(t + 1)))
+
+        params_prev = params_t
+        params_t = params_t - \
+            (learning_rate * (m_hat / (np.sqrt(v_hat) + epsilon)))
+        params_mat[t, :] = params_t
+        t = t + 1
+
+        if np.max(np.abs(params_t - params_prev)) < tol or t == max_iter:
+            if logfile:
+                pd.DataFrame(params_mat).to_csv(logfile + '.csv', index=False)
+
+            return params_t
