@@ -98,7 +98,7 @@
 <span class="sd">        a matrix with each column corresponding to one input variable.</span>
 
 <span class="sd">    ylist: list</span>
-<span class="sd">        A list, consisting of data sets to match, and each list is a array corresponds to target </span>
+<span class="sd">        A list, consisting of data sets to match, and each list is an array that corresponds to target </span>
 <span class="sd">        values of the data sets.</span>
 
 <span class="sd">    testcol: list</span>
@@ -111,7 +111,8 @@
 
 <span class="sd">    circ_pos: list or int</span>
 <span class="sd">        A list or array stating the column position of circular variables.</span>
-<span class="sd">        An integer when only one circular variable present. Default value is None.</span>
+<span class="sd">        An integer when only one circular variable present. </span>
+<span class="sd">        Default value is None.</span>
 
 <span class="sd">    thresh: float or list</span>
 <span class="sd">        A numerical or a list of threshold values for each covariates, against which matching happens.</span>
@@ -131,7 +132,7 @@
 
 <span class="sd">    power_bins: int</span>
 <span class="sd">        A integer stating the number of power bins for computing the scaled difference.</span>
-<span class="sd">        Default is 15.</span>
+<span class="sd">        Default value is 15.</span>
 
 <span class="sd">    bseline: int</span>
 <span class="sd">        An integer between 0 to 2, where 1 indicates to use power curve of first dataset</span>
@@ -150,13 +151,12 @@
 <span class="sd">        Default is set to &#39;L-BFGS-B&#39;.</span>
 
 <span class="sd">    sample_size: dict</span>
-<span class="sd">        A dictionary with two keys: optim_size and band_size, </span>
-<span class="sd">        denoting the sample size for each dataset for hyperparameter optimization </span>
-<span class="sd">        and confidence band computation, respectively, when limit_memory = TRUE. </span>
+<span class="sd">        A dictionary with two keys: optim_size and band_size, denoting the sample size for each dataset for </span>
+<span class="sd">        hyperparameter optimization and confidence band computation, respectively, when limit_memory = TRUE. </span>
 <span class="sd">        Default value is list(optim_size = 500,band_size = 5000).</span>
 
 <span class="sd">    rng_seed: int</span>
-<span class="sd">        Random seed for sampling data when limitMemory = TRUE. Default is 1. </span>
+<span class="sd">        Random number genrator (rng) seed for sampling data when limit_memory = TRUE. Default value is 1.  </span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>

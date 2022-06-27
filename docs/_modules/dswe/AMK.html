@@ -107,8 +107,8 @@
 
 <span class="sd">    bw: string or int</span>
 <span class="sd">        A numeric array or a character input for bandwidth. If character, bandwidth</span>
-<span class="sd">        computed internally; the input should be either &#39;dpi&#39; or &#39;dpi_gap&#39;. Default is</span>
-<span class="sd">        &#39;dpi_gap&#39;.</span>
+<span class="sd">        computed internally; the input should be either &#39;dpi&#39; or &#39;dpi_gap&#39;. </span>
+<span class="sd">        Default value is &#39;dpi_gap&#39;.</span>
 
 <span class="sd">    n_multi_cov: int</span>
 <span class="sd">        An integer or a character input specifying the number of multiplicative covariates</span>
@@ -117,13 +117,14 @@
 <span class="sd">        completely additive model. Ignored if the number of covariates is 1.</span>
 
 <span class="sd">    fixed_cov: list</span>
-<span class="sd">        An integer list specifying the fixed covariates column number(s), default value</span>
-<span class="sd">        is [0,1]. Ignored if n_multi_cov is set to &#39;all&#39; or &#39;none&#39; or if the number of</span>
-<span class="sd">        covariates is less than 3.</span>
+<span class="sd">        An integer list specifying the fixed covariates column number(s).</span>
+<span class="sd">        Ignored if n_multi_cov is set to &#39;all&#39; or &#39;none&#39; or if the number of covariates is less than 3.</span>
+<span class="sd">        Default value is [0,1].</span>
 
 <span class="sd">    cir_cov: list or int</span>
 <span class="sd">        A list specifying the circular covariates column number(s) in X_train,</span>
-<span class="sd">        An integer when only one circular covariates present. default value is None.</span>
+<span class="sd">        An integer when only one circular covariates present. </span>
+<span class="sd">        Default value is None.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>

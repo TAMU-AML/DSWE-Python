@@ -97,7 +97,7 @@ function comparison using noisy scattered data.” arXiv preprint arXiv:2003.078
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>Xlist</strong> (<em>list</em>) – A list, consisting of data sets to match, also each of the individual data set can be
 a matrix with each column corresponding to one input variable.</p></li>
-<li><p><strong>ylist</strong> (<em>list</em>) – A list, consisting of data sets to match, and each list is a array corresponds to target
+<li><p><strong>ylist</strong> (<em>list</em>) – A list, consisting of data sets to match, and each list is an array that corresponds to target
 values of the data sets.</p></li>
 <li><p><strong>testset</strong> (<em>np.array</em>) – Test points at which the functions will be compared.</p></li>
 <li><p><strong>conf_level</strong> (<em>float</em>) – A single value representing the statistical significance level for
@@ -106,12 +106,12 @@ constructing the band. Default value is 0.95.</p></li>
 Default is True. If set to True, 5000 datapoints are randomly sampled
 from each dataset under comparison for inference.</p></li>
 <li><p><strong>opt_method</strong> (<em>string</em>) – A string specifying the optimization method to be used for hyperparameter
-estimation. The best working solver are [‘L-BFGS-B’, ‘BFGS’].</p></li>
-<li><p><strong>sample_size</strong> (<em>dict</em>) – A dictionary with two keys: optimSize and bandSize,
-denoting the sample size for each dataset for hyperparameter optimization
-and confidence band computation, respectively, when limitMemory = TRUE.
-Default value is list(optimSize = 500,bandSize = 5000).</p></li>
-<li><p><strong>rng_seed</strong> (<em>int</em>) – Random seed for sampling data when limitMemory = TRUE. Default is 1.</p></li>
+estimation. The best working solver are [‘L-BFGS-B’, ‘BFGS’].
+Default value is ‘L-BFGS-B’.</p></li>
+<li><p><strong>sample_size</strong> (<em>dict</em>) – A dictionary with two keys: optim_size and band_size, denoting the sample size for each dataset for
+hyperparameter optimization and confidence band computation, respectively, when limit_memory = TRUE.
+Default value is {optim_size: 500, band_size: 5000}.</p></li>
+<li><p><strong>rng_seed</strong> (<em>int</em>) – Random number genrator (rng) seed for sampling data when limit_memory = TRUE. Default value is 1.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

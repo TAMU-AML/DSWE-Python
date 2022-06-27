@@ -90,20 +90,35 @@
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>feats_scale</strong> (<em>int</em>) – It increases number of neurons in each layer by multiplying the number of neurons with its value.</p></li>
-<li><p><strong>train_all</strong> (<em>bool</em>) – A boolean to specify whether to train model on the entire dataset and do not separate dataset for cross-validation).</p></li>
-<li><p><strong>n_folds</strong> (<em>int</em>) – Number of folds for cross_validation.</p></li>
-<li><p><strong>batch_size</strong> (<em>int</em>) – Number of batch_size in the training.</p></li>
-<li><p><strong>lr</strong> (<em>float</em>) – Learning rate.</p></li>
-<li><p><strong>n_epochs</strong> (<em>int</em>) – Number of epochs to the train the model.</p></li>
+<li><p><strong>feats_scale</strong> (<em>int</em>) – It multiplies the neurons count in each layer.
+Suppose, a DNN has four 4 hidden layers with default neurons count as [8, 16, 32, 64],
+after giving feats_scale=12, it increases the number of neurons to [8*12, 16*12, 32*12, 64*12],
+which is equal to [96, 192, 384, 768].
+Default value is 12.</p></li>
+<li><p><strong>train_all</strong> (<em>bool</em>) – A boolean (True/False) to specify whether to train the model on the entire dataset or separate the dataset for cross-validation.
+Generally, it should be set to False to check how the model is performing on validation set. Once it’s verified that the model
+is converging and performing well then, set this to True to train it on the entire dataset.
+Default is set to False.</p></li>
+<li><p><strong>n_folds</strong> (<em>int</em>) – Number of folds for cross-validation.
+Default value is 5.</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – Number of training points sampled at each iteration of the model training.
+Default value is 64.</p></li>
+<li><p><strong>lr</strong> (<em>float</em>) – The step size or learning rate for the optimizer.
+Default value is 0.1.</p></li>
+<li><p><strong>n_epochs</strong> (<em>int</em>) – Number of epochs for training the model.
+Default value is 30.</p></li>
 <li><p><strong>optimizer</strong> (<em>string</em>) – A string specifying which optimization algorithm to be used to update model weights.
-The best working optimizers are [‘sgd’, ‘adam’, ‘rmsprop’, ‘adagrad’].</p></li>
+The available optimizers are [‘sgd’, ‘adam’, ‘rmsprop’, ‘adagrad’].
+Default is set to ‘sgd’.</p></li>
 <li><p><strong>loss_fn</strong> (<em>string</em>) – A string specifying which loss functions to be used to compute the errors.
-The common loss functions for continuous labels are [‘l1_loss’, ‘l2_loss’].</p></li>
-<li><p><strong>momentum</strong> (<em>float</em>) – Momentum value for ‘sgd’ and ‘rmsprop’ optimizers. Default value is set to 0.</p></li>
-<li><p><strong>print_loss</strong> (<em>bool</em>) – A boolean to specify whether to print loss value after each epoch during training.</p></li>
-<li><p><strong>save_fig</strong> (<em>bool</em>) – A boolean to specify whether to plot and save loss values during training and validation.
-The plot(s) save in a pdf format.</p></li>
+The common loss functions for continuous response variables are [‘l1_loss’, ‘l2_loss’].
+Default is set to ‘l2_loss’.</p></li>
+<li><p><strong>momentum</strong> (<em>float</em>) – Momentum value for ‘sgd’ and ‘rmsprop’ optimizers. Default is set to 0.</p></li>
+<li><p><strong>print_loss</strong> (<em>bool</em>) – A boolean (True/False) to specify whether to print loss values after each epoch during training.
+Default is set to False.</p></li>
+<li><p><strong>save_fig</strong> (<em>bool</em>) – A boolean (True/False) to specify whether to plot and save loss values during training and validation.
+The plot(s) save in a pdf format.
+Default is set to True.</p></li>
 </ul>
 </dd>
 </dl>

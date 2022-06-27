@@ -103,7 +103,7 @@
 <span class="sd">        a matrix with each column corresponding to one input variable.</span>
 
 <span class="sd">    ylist: list</span>
-<span class="sd">        A list, consisting of data sets to match, and each list is a array corresponds to target </span>
+<span class="sd">        A list, consisting of data sets to match, and each list is an array that corresponds to target </span>
 <span class="sd">        values of the data sets.</span>
 
 <span class="sd">    testset: np.array</span>
@@ -121,15 +121,15 @@
 <span class="sd">    opt_method: string</span>
 <span class="sd">        A string specifying the optimization method to be used for hyperparameter </span>
 <span class="sd">        estimation. The best working solver are [&#39;L-BFGS-B&#39;, &#39;BFGS&#39;].</span>
+<span class="sd">        Default value is &#39;L-BFGS-B&#39;.</span>
 
 <span class="sd">    sample_size: dict</span>
-<span class="sd">        A dictionary with two keys: optimSize and bandSize, </span>
-<span class="sd">        denoting the sample size for each dataset for hyperparameter optimization </span>
-<span class="sd">        and confidence band computation, respectively, when limitMemory = TRUE. </span>
-<span class="sd">        Default value is list(optimSize = 500,bandSize = 5000).</span>
+<span class="sd">        A dictionary with two keys: optim_size and band_size, denoting the sample size for each dataset for </span>
+<span class="sd">        hyperparameter optimization and confidence band computation, respectively, when limit_memory = TRUE. </span>
+<span class="sd">        Default value is {optim_size: 500, band_size: 5000}.</span>
 
 <span class="sd">    rng_seed: int</span>
-<span class="sd">        Random seed for sampling data when limitMemory = TRUE. Default is 1. </span>
+<span class="sd">        Random number genrator (rng) seed for sampling data when limit_memory = TRUE. Default value is 1. </span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -158,13 +158,14 @@
         <span class="k">if</span> <span class="n">limit_memory</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sample_size</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;If limitMemory is True, sample_size must be a dictionary with two named items: optim_size and band_size.&quot;</span><span class="p">)</span>
+                    <span class="s2">&quot;If limit_memory is True, sample_size must be a dictionary with two named items: optim_size and band_size.&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;optim_size&#39;</span><span class="p">,</span> <span class="s1">&#39;band_size&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">sample_size</span><span class="o">.</span><span class="n">keys</span><span class="p">())):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;If limitMemory is True, sample_size must be a dictionary with two named items: optim_size and band_size.&quot;</span><span class="p">)</span>
+                    <span class="s2">&quot;If limit_memory is True, sample_size must be a dictionary with two named items: optim_size and band_size.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">rng_seed</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The range seed must be a single integer value.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The rng_seed must be a single integer value.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">opt_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;L-BFGS-B&#39;</span><span class="p">,</span> <span class="s1">&#39;BFGS&#39;</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The opt_method must be &#39;L-BFGS-B&#39; or &#39;BFGS&#39;.&quot;</span><span class="p">)</span>

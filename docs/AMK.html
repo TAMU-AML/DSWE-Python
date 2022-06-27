@@ -98,17 +98,18 @@ for inland and offshore wind farms,” Journal of the American Statistical Assoc
 <li><p><strong>y_train</strong> (<em>np.array</em>) – A numeric array for response values in the training dataset.</p></li>
 <li><p><strong>X_test</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of test input variable values to compute predictions.</p></li>
 <li><p><strong>bw</strong> (<em>string</em><em> or </em><em>int</em>) – A numeric array or a character input for bandwidth. If character, bandwidth
-computed internally; the input should be either ‘dpi’ or ‘dpi_gap’. Default is
-‘dpi_gap’.</p></li>
+computed internally; the input should be either ‘dpi’ or ‘dpi_gap’.
+Default value is ‘dpi_gap’.</p></li>
 <li><p><strong>n_multi_cov</strong> (<em>int</em>) – An integer or a character input specifying the number of multiplicative covariates
 in each additive term. Default is 3 (same as Lee et al., 2015). The character
 inputs can be: ‘all’ for a completely multiplicative model, or ‘none’ for a
 completely additive model. Ignored if the number of covariates is 1.</p></li>
-<li><p><strong>fixed_cov</strong> (<em>list</em>) – An integer list specifying the fixed covariates column number(s), default value
-is [0,1]. Ignored if n_multi_cov is set to ‘all’ or ‘none’ or if the number of
-covariates is less than 3.</p></li>
+<li><p><strong>fixed_cov</strong> (<em>list</em>) – An integer list specifying the fixed covariates column number(s).
+Ignored if n_multi_cov is set to ‘all’ or ‘none’ or if the number of covariates is less than 3.
+Default value is [0,1].</p></li>
 <li><p><strong>cir_cov</strong> (<em>list</em><em> or </em><em>int</em>) – A list specifying the circular covariates column number(s) in X_train,
-An integer when only one circular covariates present. default value is None.</p></li>
+An integer when only one circular covariates present.
+Default value is None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

@@ -101,11 +101,64 @@
 <span class="sd">    ----------</span>
 <span class="sd">    opt_method: string</span>
 <span class="sd">        Type of solver. The best working solver are [&#39;L-BFGS-B&#39;, &#39;BFGS&#39;].</span>
+<span class="sd">        Default value is &#39;L-BFGS-B&#39;.</span>
+
+<span class="sd">    limit_memory: int or None</span>
+<span class="sd">        The integer is used as sample training points during prediction to limit the total memory requirement. </span>
+<span class="sd">        Setting the value to None would result in no sampling, that is, full training data is used for prediction. </span>
+<span class="sd">        Default value is 5000.</span>
+
+<span class="sd">    fast_computation: bool</span>
+<span class="sd">        A boolean (True/False) that specifies whether to do exact inference or fast approximation.</span>
+<span class="sd">        Default is True.</span>
+
+<span class="sd">    optim_control: dict</span>
+<span class="sd">        A dictionary of parameters passed to the Adam optimizer when fast_computation is set to True. </span>
+<span class="sd">        The default values have been tested rigorously and tend to strike a balance between accuracy and speed. \n</span>
+<span class="sd">        - batch_size: Number of training points sampled at each iteration of Adam. Default value is 100.</span>
+<span class="sd">        - learning_rate: The step size for the Adam optimizer. Default value is 0.05.</span>
+<span class="sd">        - max_iter: The maximum number of iterations to be performed by Adam. Default value is 5000.</span>
+<span class="sd">        - tol: Gradient tolerance. Default value is 1e-6.</span>
+<span class="sd">        - beta1: Decay rate for the first moment of the gradient. Default value is 0.9.</span>
+<span class="sd">        - beta2: Decay rate for the second moment of the gradient. Default value is 0.999.</span>
+<span class="sd">        - epsilon: A small number to avoid division by zero. Default value is 1e-8.</span>
+<span class="sd">        - logfile: A string specifying a file name to store hyperparameters value for each iteration. Default value is None.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opt_method</span><span class="o">=</span><span class="s1">&#39;L-BFGS-B&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opt_method</span><span class="o">=</span><span class="s1">&#39;L-BFGS-B&#39;</span><span class="p">,</span> <span class="n">limit_memory</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">fast_computation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optim_control</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+                                                                                                       <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+                                                                                                       <span class="s1">&#39;max_iter&#39;</span><span class="p">:</span> <span class="mi">5000</span><span class="p">,</span>
+                                                                                                       <span class="s1">&#39;tol&#39;</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">,</span>
+                                                                                                       <span class="s1">&#39;beta1&#39;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span>
+                                                                                                       <span class="s1">&#39;beta2&#39;</span><span class="p">:</span> <span class="mf">0.999</span><span class="p">,</span>
+                                                                                                       <span class="s1">&#39;epsilon&#39;</span><span class="p">:</span> <span class="mf">1e-8</span><span class="p">,</span>
+                                                                                                       <span class="s1">&#39;logfile&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}):</span>
+
+        <span class="k">if</span> <span class="n">opt_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;L-BFGS-B&#39;</span><span class="p">,</span> <span class="s1">&#39;BFGS&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The opt_method must be &#39;L-BFGS-B&#39; or &#39;BFGS&#39;.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">limit_memory</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">limit_memory</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;The limit_memory should be either an integer value or None.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">fast_computation</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The fast_computation must be either True or False.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">fast_computation</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">optim_control</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;If fast_computation is True, optim_control must be a dictionary.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;batch_size&#39;</span><span class="p">,</span> <span class="s1">&#39;learning_rate&#39;</span><span class="p">,</span> <span class="s1">&#39;max_iter&#39;</span><span class="p">,</span> <span class="s1">&#39;tol&#39;</span><span class="p">,</span> <span class="s1">&#39;beta1&#39;</span><span class="p">,</span> <span class="s1">&#39;beta2&#39;</span><span class="p">,</span> <span class="s1">&#39;epsilon&#39;</span><span class="p">,</span> <span class="s1">&#39;logfile&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">optim_control</span><span class="o">.</span><span class="n">keys</span><span class="p">())):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;optim_control must contains eight key-value pairs with [&#39;batch_size&#39;, &#39;learning_rate&#39;, &#39;max_iter&#39;, &#39;tol&#39;, &#39;beta1&#39;, &#39;beta2&#39;, &#39;epsilon&#39;, &#39;logfile&#39;] as keys.&quot;</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">opt_method</span> <span class="o">=</span> <span class="n">opt_method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fast_computation</span> <span class="o">=</span> <span class="n">fast_computation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">limit_memory</span> <span class="o">=</span> <span class="n">limit_memory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optim_control</span> <span class="o">=</span> <span class="n">optim_control</span>
 
 <div class="viewcode-block" id="TempGP.fit"><a class="viewcode-back" href="../../tempGP.html#dswe.tempGP.TempGP.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">T_train</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;Fit the TempGP from the training dataset.</span>
@@ -154,9 +207,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">databins</span> <span class="o">=</span> <span class="n">create_thinned_bins</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">thinning_number</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">optim_result</span> <span class="o">=</span> <span class="n">estimate_binned_params</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">databins</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt_method</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">databins</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fast_computation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">optim_control</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt_method</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit_memory</span><span class="p">:</span>
+            <span class="n">ntrain</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit_memory</span> <span class="o">&lt;</span> <span class="n">ntrain</span><span class="p">:</span>
+                <span class="n">pred_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">ntrain</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit_memory</span><span class="p">)</span>
+                <span class="n">X_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_train</span><span class="p">[</span><span class="n">pred_index</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">y_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span><span class="p">[</span><span class="n">pred_index</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">X_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_train</span>
+                <span class="n">y_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">X_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_train</span>
+            <span class="n">y_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">weighted_y</span> <span class="o">=</span> <span class="n">compute_weighted_y</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">optim_result</span><span class="p">[</span><span class="s1">&#39;estimated_params&#39;</span><span class="p">])</span>
+            <span class="n">X_active</span><span class="p">,</span> <span class="n">y_active</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">optim_result</span><span class="p">[</span><span class="s1">&#39;estimated_params&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">residual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span> <span class="o">-</span> <span class="n">predict_GP</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weighted_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span>
                                                   <span class="bp">self</span><span class="o">.</span><span class="n">optim_result</span><span class="p">[</span><span class="s1">&#39;estimated_params&#39;</span><span class="p">])</span>
 

@@ -90,40 +90,55 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    feats_scale: int</span>
-<span class="sd">        It increases number of neurons in each layer by multiplying the number of neurons with its value.</span>
+<span class="sd">        It multiplies the neurons count in each layer.</span>
+<span class="sd">        Suppose, a DNN has four 4 hidden layers with default neurons count as [8, 16, 32, 64], </span>
+<span class="sd">        after giving feats_scale=12, it increases the number of neurons to [8*12, 16*12, 32*12, 64*12],</span>
+<span class="sd">        which is equal to [96, 192, 384, 768].</span>
+<span class="sd">        Default value is 12.</span>
 
 <span class="sd">    train_all: bool</span>
-<span class="sd">        A boolean to specify whether to train model on the entire dataset and do not separate dataset for cross-validation).</span>
+<span class="sd">        A boolean (True/False) to specify whether to train the model on the entire dataset or separate the dataset for cross-validation.</span>
+<span class="sd">        Generally, it should be set to False to check how the model is performing on validation set. Once it&#39;s verified that the model</span>
+<span class="sd">        is converging and performing well then, set this to True to train it on the entire dataset.</span>
+<span class="sd">        Default is set to False.</span>
 
 <span class="sd">    n_folds: int</span>
-<span class="sd">        Number of folds for cross_validation.</span>
+<span class="sd">        Number of folds for cross-validation.</span>
+<span class="sd">        Default value is 5.</span>
 
 <span class="sd">    batch_size: int</span>
-<span class="sd">        Number of batch_size in the training.</span>
+<span class="sd">        Number of training points sampled at each iteration of the model training.</span>
+<span class="sd">        Default value is 64.</span>
 
 <span class="sd">    lr: float</span>
-<span class="sd">        Learning rate.</span>
+<span class="sd">        The step size or learning rate for the optimizer.</span>
+<span class="sd">        Default value is 0.1.</span>
 
 <span class="sd">    n_epochs: int</span>
-<span class="sd">        Number of epochs to the train the model.</span>
+<span class="sd">        Number of epochs for training the model.</span>
+<span class="sd">        Default value is 30.</span>
 
 <span class="sd">    optimizer: string</span>
 <span class="sd">        A string specifying which optimization algorithm to be used to update model weights.</span>
-<span class="sd">        The best working optimizers are [&#39;sgd&#39;, &#39;adam&#39;, &#39;rmsprop&#39;, &#39;adagrad&#39;].</span>
+<span class="sd">        The available optimizers are [&#39;sgd&#39;, &#39;adam&#39;, &#39;rmsprop&#39;, &#39;adagrad&#39;].</span>
+<span class="sd">        Default is set to &#39;sgd&#39;.</span>
 
 <span class="sd">    loss_fn: string</span>
 <span class="sd">        A string specifying which loss functions to be used to compute the errors.</span>
-<span class="sd">        The common loss functions for continuous labels are [&#39;l1_loss&#39;, &#39;l2_loss&#39;]. </span>
+<span class="sd">        The common loss functions for continuous response variables are [&#39;l1_loss&#39;, &#39;l2_loss&#39;]. </span>
+<span class="sd">        Default is set to &#39;l2_loss&#39;.</span>
 
 <span class="sd">    momentum: float</span>
-<span class="sd">        Momentum value for &#39;sgd&#39; and &#39;rmsprop&#39; optimizers. Default value is set to 0.</span>
+<span class="sd">        Momentum value for &#39;sgd&#39; and &#39;rmsprop&#39; optimizers. Default is set to 0.</span>
 
 <span class="sd">    print_loss: bool</span>
-<span class="sd">        A boolean to specify whether to print loss value after each epoch during training.</span>
+<span class="sd">        A boolean (True/False) to specify whether to print loss values after each epoch during training.</span>
+<span class="sd">        Default is set to False.</span>
 
 <span class="sd">    save_fig: bool</span>
-<span class="sd">        A boolean to specify whether to plot and save loss values during training and validation.</span>
+<span class="sd">        A boolean (True/False) to specify whether to plot and save loss values during training and validation.</span>
 <span class="sd">        The plot(s) save in a pdf format.</span>
+<span class="sd">        Default is set to True.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feats_scale</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>

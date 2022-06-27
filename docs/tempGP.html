@@ -88,7 +88,7 @@
 </div>
 <span class="target" id="module-dswe.tempGP"></span><dl class="py class">
 <dt class="sig sig-object py" id="dswe.tempGP.TempGP">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dswe.tempGP.</span></span><span class="sig-name descname"><span class="pre">TempGP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opt_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'L-BFGS-B'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/tempGP.html#TempGP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.tempGP.TempGP" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dswe.tempGP.</span></span><span class="sig-name descname"><span class="pre">TempGP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opt_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'L-BFGS-B'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fast_computation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optim_control</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'batch_size':</span> <span class="pre">100,</span> <span class="pre">'beta1':</span> <span class="pre">0.9,</span> <span class="pre">'beta2':</span> <span class="pre">0.999,</span> <span class="pre">'epsilon':</span> <span class="pre">1e-08,</span> <span class="pre">'learning_rate':</span> <span class="pre">0.05,</span> <span class="pre">'logfile':</span> <span class="pre">None,</span> <span class="pre">'max_iter':</span> <span class="pre">5000,</span> <span class="pre">'tol':</span> <span class="pre">1e-06}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/tempGP.html#TempGP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.tempGP.TempGP" title="Permalink to this definition"></a></dt>
 <dd><p>The temporal overfitting problem with applications in wind power curve modeling.
 A Gaussian process based power curve model which explicitly models the temporal aspect of the power curve.
 The model consists of two parts: f(x) and g(t).</p>
@@ -98,7 +98,28 @@ in wind power curve modeling.” arXiv preprint arXiv:2012.01349. &lt;https://ar
 2012.01349&gt;.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>opt_method</strong> (<em>string</em>) – Type of solver. The best working solver are [‘L-BFGS-B’, ‘BFGS’].</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>opt_method</strong> (<em>string</em>) – Type of solver. The best working solver are [‘L-BFGS-B’, ‘BFGS’].
+Default value is ‘L-BFGS-B’.</p></li>
+<li><p><strong>limit_memory</strong> (<em>int</em><em> or </em><em>None</em>) – The integer is used as sample training points during prediction to limit the total memory requirement.
+Setting the value to None would result in no sampling, that is, full training data is used for prediction.
+Default value is 5000.</p></li>
+<li><p><strong>fast_computation</strong> (<em>bool</em>) – A boolean (True/False) that specifies whether to do exact inference or fast approximation.
+Default is True.</p></li>
+<li><p><strong>optim_control</strong> (<em>dict</em>) – <p>A dictionary of parameters passed to the Adam optimizer when fast_computation is set to True.
+The default values have been tested rigorously and tend to strike a balance between accuracy and speed.</p>
+<ul>
+<li><p>batch_size: Number of training points sampled at each iteration of Adam. Default value is 100.</p></li>
+<li><p>learning_rate: The step size for the Adam optimizer. Default value is 0.05.</p></li>
+<li><p>max_iter: The maximum number of iterations to be performed by Adam. Default value is 5000.</p></li>
+<li><p>tol: Gradient tolerance. Default value is 1e-6.</p></li>
+<li><p>beta1: Decay rate for the first moment of the gradient. Default value is 0.9.</p></li>
+<li><p>beta2: Decay rate for the second moment of the gradient. Default value is 0.999.</p></li>
+<li><p>epsilon: A small number to avoid division by zero. Default value is 1e-8.</p></li>
+<li><p>logfile: A string specifying a file name to store hyperparameters value for each iteration. Default value is None.</p></li>
+</ul>
+</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="py method">
