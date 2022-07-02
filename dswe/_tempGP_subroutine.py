@@ -170,10 +170,6 @@ def compute_local_function(residual, train_T, test_T, neighbourhood):
 def adam_optimizer(databins, par_init, batch_size, learning_rate, max_iter, tol, beta1, beta2, epsilon, logfile):
     ncov = databins[0]['X'].shape[1]
     params_t = par_init
-    par_dict = {'theta': par_init[0:ncov],
-                'sigma_f': par_init[ncov],
-                'sigma_n': par_init[ncov + 1],
-                'beta': par_init[ncov + 2]}
     m_t = np.zeros(len(par_init))
     v_t = np.zeros(len(par_init))
 
@@ -189,6 +185,11 @@ def adam_optimizer(databins, par_init, batch_size, learning_rate, max_iter, tol,
             sampled_idx = list(range(len(databins[sampled_bin]['y'])))
         sample_X = databins[sampled_bin]['X'][sampled_idx]
         sample_y = databins[sampled_bin]['y'][sampled_idx]
+
+        par_dict = {'theta': params_t[0:ncov],
+                    'sigma_f': params_t[ncov],
+                    'sigma_n': params_t[ncov + 1],
+                    'beta': params_t[ncov + 2]}
 
         grad_t = compute_loglike_grad_GP(sample_X, sample_y, par_dict)
 

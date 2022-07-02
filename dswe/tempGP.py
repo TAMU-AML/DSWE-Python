@@ -149,11 +149,12 @@ class TempGP(object):
 
         self.weighted_y = compute_weighted_y(
             X_active, y_active, self.optim_result['estimated_params'])
-        self.residual = self.y_train - predict_GP(self.X_train, self.weighted_y, self.X_train,
+        self.model_F = {'X_train': X_active, 'y_train': y_active,
+                        'weighted_y': self.weighted_y}
+
+        self.residual = self.y_train - predict_GP(self.model_F['X_train'], self.model_F['weighted_y'], self.X_train,
                                                   self.optim_result['estimated_params'])
 
-        self.model_F = {'X_train': self.X_train, 'y_train': self.y_train,
-                        'weighted_y': self.weighted_y}
         self.model_G = {'residual': self.residual, 'time_index': self.T_train}
 
         return self
