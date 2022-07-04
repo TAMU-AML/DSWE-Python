@@ -5,3 +5,4 @@ scipy>=1.7.0
 statsmodels>=0.13.0
 # bartpy>=0.0.2
 torch>=1.0.0
+matplotlib>=3.4.3
