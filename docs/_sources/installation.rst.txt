@@ -24,6 +24,8 @@ DSWE requires:
 * PyTorch (>=1.0.0)
 * Matplotlib (>=3.4.3)
 
+All the required packages don't need to be pre-installed. Installing DSWE would automatically install everything.
+
 Install DSWE
 *************
 
