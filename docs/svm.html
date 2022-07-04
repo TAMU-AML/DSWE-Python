@@ -79,18 +79,17 @@
 <h1>SVMPowerCurve<a class="headerlink" href="#svmpowercurve" title="Permalink to this headline"></a></h1>
 <p>Support Vector Machine (SVM) based power curve modelling.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dwse</span> <span class="kn">import</span> <span class="n">SVMPowerCurve</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">SVMPowerCurve</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">SVMPowerCurve</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 </pre></div>
 </div>
 <span class="target" id="module-dswe.svm"></span><dl class="py class">
 <dt class="sig sig-object py" id="dswe.svm.SVMPowerCurve">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dswe.svm.</span></span><span class="sig-name descname"><span class="pre">SVMPowerCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rbf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scale'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/svm.html#SVMPowerCurve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.svm.SVMPowerCurve" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dswe.svm.</span></span><span class="sig-name descname"><span class="pre">SVMPowerCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rbf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scale'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/svm.html#SVMPowerCurve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.svm.SVMPowerCurve" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X_train</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of input variable values in the training dataset.</p></li>
-<li><p><strong>y_train</strong> (<em>np.array</em>) – A numeric array for response values in the training dataset.</p></li>
 <li><p><strong>kernel</strong> (<em>string</em>) – Kernel type to be used in the algorithm. Default is ‘rbf’ else can be ‘linear’, ‘poly’, ‘sigmoid’.
 ‘poly’ mean polynomial and ‘rbf’ means radial basis function.</p></li>
 <li><p><strong>degree</strong> (<em>int</em>) – Degree of the polynomial kernel function (‘poly’). Ignored by all other kernels.</p></li>
@@ -102,6 +101,25 @@ Must be strictly positive.</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="dswe.svm.SVMPowerCurve.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/svm.html#SVMPowerCurve.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.svm.SVMPowerCurve.fit" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X_train</strong> (<em>np.ndarray</em><em> or </em><em>pd.DataFrame</em>) – A matrix or dataframe of input variable values in the training dataset.</p></li>
+<li><p><strong>y_train</strong> (<em>np.array</em>) – A numeric array for response values in the training dataset.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>self with trained parameter values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dswe.svm.SVMPowerCurve" title="dswe.svm.SVMPowerCurve">SVMPowerCurve</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dswe.svm.SVMPowerCurve.predict">
 <span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/svm.html#SVMPowerCurve.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.svm.SVMPowerCurve.predict" title="Permalink to this definition"></a></dt>
