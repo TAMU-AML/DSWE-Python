@@ -1,26 +1,34 @@
 # DSWE-Python
-A python package to supplement the Data Science for Wind Energy (DSWE) book.
+**DSWE** is a python package to supplement the Data Science for Wind Energy (DSWE) book and other state-of-the-art methods used in wind energy power modelling.
 
-Installing DSWE package
-=============================
+Website: https://tamu-aml.github.io/DSWE-Python/
 
-To install DSWE package locally, first clone the repository from GitHub. The package is in development mode currently, so checkout the **dev** branch.
+Installation
+------------
+
+### Dependencies
+
+DSWE requires:
+
+- Python (>=3.8)
+- NumPy (>=1.21.2)
+- Pandas (>=1.3.3)
+- Scikit-learn (>=1.0)
+- Scipy (>=1.7.0)
+- Statsmodels (>=0.13.0)
+- PyTorch (>=1.0.0)
+- Matplotlib (>=3.4.3)
+
+--------------------------------------------------------------------------------
 
 ```console
-git clone -b dev https://github.com/TAMU-AML/DSWE-Python/
+pip install dswe
 ```
 
-After cloning, install the package using **pip** and set the path to the package directory. All the dependencies require for the package will be installed automatically.
-
+To get the latest code changes as they are merged, you can clone this repo and build from source manually. This is not guaranteed to be stable.
 ```console
+git clone -b dev https://github.com/TAMU-AML/DSWE-Python/
 pip install DSWE-Python/
 ```
 
-If you are already inside the DSWE package, run the below commands,
-
-```console
-pip install .
-```
-
-### [Documentation Link](https://tamu-aml.github.io/DSWE-Python/)
 
