@@ -41,7 +41,7 @@ To get the latest code changes as they are merged, you can clone this repo and b
 .. note:: AMK and BayesTreePowerCurve function requires some extra attention.
 
 - **AMK**: The optimal bandwidth selection algorithm i.e., the direct plug-in (DPI) approach, is not implemented yet. You need to pass bandwidth corresponding to each column.
-- **BayesTreePowerCurve**: This module is built on top BartPy which is a python implementation of the Bayesian additive regressions trees (BART). This package has not been updated for a long time and simple `pip install bartypy` sometimes does not work. You have to explicitly clone the repo and build from source manually. You can follow the following steps to install this package.
+- **BayesTreePowerCurve**: This module is built on top BartPy which is a python implementation of the Bayesian additive regressions trees (BART). This package has not been updated for a long time and simple ``pip install bartypy`` sometimes does not work. You have to explicitly clone the repo and build from source manually. You can follow the following steps to install this package.
 
 ::
 
