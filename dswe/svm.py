@@ -14,12 +14,6 @@ class SVMPowerCurve(object):
     """
     Parameters
     ----------
-    X_train: np.ndarray or pd.DataFrame
-        A matrix or dataframe of input variable values in the training dataset.
-
-    y_train: np.array
-        A numeric array for response values in the training dataset.
-
     kernel: string
         Kernel type to be used in the algorithm. Default is 'rbf' else can be 'linear', 'poly', 'sigmoid'. 
         'poly' mean polynomial and 'rbf' means radial basis function.
@@ -38,19 +32,7 @@ class SVMPowerCurve(object):
 
     """
 
-    def __init__(self, X_train, y_train, kernel='rbf', degree=3, gamma='scale', C=1.0):
-
-        if not (isinstance(X_train, list) or isinstance(X_train, pd.DataFrame) or isinstance(X_train, pd.Series) or isinstance(X_train, np.ndarray)):
-            raise ValueError(
-                "The X_train should be either a list or numpy array or dataframe.")
-
-        if not (isinstance(y_train, list) or isinstance(y_train, np.ndarray)) or isinstance(y_train, pd.Series) or isinstance(y_train, pd.DataFrame):
-            raise ValueError(
-                "The target data should be either a list or numpy array or dataframe.")
-
-        if len(X_train) != len(y_train):
-            raise ValueError(
-                "The X_train and y_train should have same number of data points.")
+    def __init__(self, kernel='rbf', degree=3, gamma='scale', C=1.0):
 
         if isinstance(kernel, str):
             if kernel not in ['linear', 'poly', 'rbf', 'sigmoid']:
@@ -70,12 +52,42 @@ class SVMPowerCurve(object):
         if not (isinstance(C, int) or isinstance(C, float)) and C > 0:
             raise ValueError("The C must be a numeric value greater than 0.")
 
-        self.X_train = np.array(X_train)
-        self.y_train = np.array(y_train)
         self.kernel = kernel
         self.degree = degree
         self.gamma = gamma
         self.C = C
+
+    def fit(self, X_train, y_train):
+        """
+        Parameters
+        ----------
+        X_train: np.ndarray or pd.DataFrame
+            A matrix or dataframe of input variable values in the training dataset.
+
+        y_train: np.array
+            A numeric array for response values in the training dataset.
+
+        Returns
+        -------
+        SVMPowerCurve
+            self with trained parameter values.
+
+        """
+
+        if not (isinstance(X_train, list) or isinstance(X_train, pd.DataFrame) or isinstance(X_train, pd.Series) or isinstance(X_train, np.ndarray)):
+            raise ValueError(
+                "The X_train should be either a list or numpy array or dataframe.")
+
+        if not (isinstance(y_train, list) or isinstance(y_train, np.ndarray)) or isinstance(y_train, pd.Series) or isinstance(y_train, pd.DataFrame):
+            raise ValueError(
+                "The target data should be either a list or numpy array or dataframe.")
+
+        if len(X_train) != len(y_train):
+            raise ValueError(
+                "The X_train and y_train should have same number of data points.")
+
+        self.X_train = np.array(X_train)
+        self.y_train = np.array(y_train)
 
         if len(self.X_train.shape) == 1:
             self.X_train = self.X_train.reshape(-1, 1)
@@ -117,6 +129,8 @@ class SVMPowerCurve(object):
                 self.model = SVR(kernel=self.kernel,
                                  gamma=self.gamma, C=self.C)
             self.model.fit(self.X_train, self.y_train)
+
+        return self
 
     def predict(self, X_test):
         """

@@ -6,7 +6,6 @@
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
-from bartpy.sklearnmodel import SklearnModel
 
 
 class BayesTreePowerCurve(object):
@@ -14,18 +13,40 @@ class BayesTreePowerCurve(object):
     """
     Parameters
     ----------
-    X_train: np.ndarray or pd.DataFrame
-        A matrix or dataframe of input variable values in the training dataset.
-
-    y_train: np.array
-        A numeric array for response values in the training dataset.
-
     n_trees: int
         Number of trees to use. An integer greater than 0.
 
     """
 
-    def __init__(self, X_train, y_train, n_trees=200):
+    def __init__(self, n_trees=200):
+        try:
+            from bartpy.sklearnmodel import SklearnModel
+        except:
+            print("To run this model, please install the bartpy python library. You can see more details about it on the installation page of DSWE package.")
+
+        if not isinstance(n_trees, int):
+            raise ValueError("The number of trees must be an integer value.")
+
+        self.n_trees = n_trees
+
+    def fit(self, X_train, y_train):
+        """
+        Parameters
+        ----------
+        X_train: np.ndarray or pd.DataFrame
+            A matrix or dataframe of input variable values in the training dataset.
+
+        y_train: np.array
+            A numeric array for response values in the training dataset.
+
+        Returns
+        -------
+        BayesTreePowerCurve
+            self with trained parameter values.
+
+        """
+
+        from bartpy.sklearnmodel import SklearnModel
 
         if not (isinstance(X_train, list) or isinstance(X_train, pd.DataFrame) or isinstance(X_train, pd.Series) or isinstance(X_train, np.ndarray)):
             raise ValueError(
@@ -39,12 +60,8 @@ class BayesTreePowerCurve(object):
             raise ValueError(
                 "The X_train and y_train should have same number of data points.")
 
-        if not isinstance(n_trees, int):
-            raise ValueError("The number of trees must be an integer value.")
-
         self.X_train = np.array(X_train)
         self.y_train = np.array(y_train)
-        self.n_trees = n_trees
 
         if len(self.X_train.shape) == 1:
             self.X_train = self.X_train.reshape(-1, 1)
@@ -69,6 +86,8 @@ class BayesTreePowerCurve(object):
 
         self.model = SklearnModel(self.n_trees)
         self.model.fit(self.X_train, self.y_train)
+
+        return self
 
     def predict(self, X_test):
         """
