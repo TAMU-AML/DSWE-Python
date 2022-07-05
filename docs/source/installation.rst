@@ -33,6 +33,10 @@ Install DSWE
 
   pip install dswe
 
+
+[The above command will work once the package is released.]
+
+
 To get the latest code changes as they are merged, you can clone this repo and build from source manually.
 
 ::
