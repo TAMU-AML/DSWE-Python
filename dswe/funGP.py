@@ -17,9 +17,7 @@ class FunGP(object):
 
     References
     ----------
-    Prakash, A., Tuo, R., & Ding, Y. (2020). "Gaussian process aided 
-    function comparison using noisy scattered data." arXiv preprint arXiv:2003.07899. 
-    <https://arxiv.org/abs/2003.07899>.
+    Prakash, Tuo, and Ding, 2022, “Gaussian process aided function comparison using noisy scattered data,” Technometrics, Vol. 64, pp. 92-102.
 
     Parameters
     ----------

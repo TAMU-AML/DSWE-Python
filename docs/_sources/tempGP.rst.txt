@@ -1,7 +1,7 @@
 TempGP
 =======
 
-Temporal Gaussian Process (TempGP)
+The Gaussian process-based power curve that avoids temporal overfitting.
 
 .. code-block:: python
 

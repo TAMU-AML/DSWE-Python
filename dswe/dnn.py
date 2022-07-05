@@ -12,6 +12,12 @@ from ._DNN_subroutine import *
 
 class DNNPowerCurve(object):
     """
+    Power predictions using Deep Neural Network (DNN)
+
+    References
+    ----------
+    Karami, Kehtarnavaz, and Rotea, 2021, "Probabilistic neural network to quantify uncertainty of wind power estimation," arXiv:2106.04656.
+
     Parameters
     ----------
     feats_scale: int

@@ -1,7 +1,7 @@
 DNNPowerCurve
 =============
 
-Calculate power predictions using Deep Neural Network (DNN)
+Power predictions using Deep Neural Network (DNN)
 
 .. code-block:: python
 

@@ -18,9 +18,7 @@ class TempGP(object):
 
     References
     ----------
-    Prakash, A., Tuo, R., & Ding, Y. (2020). "The temporal overfitting problem with applications
-    in wind power curve modeling." arXiv preprint arXiv:2012.01349. <https://arxiv.org/abs/
-    2012.01349>.
+    Prakash, Tuo, and Ding, 2022, “The temporal overfitting problem with applications in wind power curve modeling,” Technometrics, accepted
 
     Parameters
     ----------

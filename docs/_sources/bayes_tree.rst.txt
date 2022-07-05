@@ -1,7 +1,7 @@
 BayesTreePowerCurve
 ====================
 
-Bayesian Additive Regressions Trees (BART) based power curve estimate.
+Bayesian Additive Regressions Trees (BART) based power curve estimatation.
 
 .. code-block:: python
 

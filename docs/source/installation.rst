@@ -57,8 +57,10 @@ To get the latest code changes as they are merged, you can clone this repo and b
 References
 ***********
 
-* `Data science for Wind Energy book <https://aml.engr.tamu.edu/book-dswe/>`_
-* **AMK**: `Power Curve Estimation With Multivariate Environmental Factors for Inland and Offshore Wind Farms <https://aml.engr.tamu.edu/wp-content/uploads/sites/164/2017/11/J53.pdf>`_
-* **TempGP**: `The temporal overfitting problem with applications in wind power curve modeling <https://arxiv.org/abs/2012.01349>`_
-* **CovMatch, FunGP**: `A Case Study of Space-time Performance Comparison of Wind Turbines on a Wind Farm <https://arxiv.org/pdf/2005.08652.pdf>`_
-
+* `Data Science for Wind Energy book. <https://aml.engr.tamu.edu/book-dswe/>`_
+* **AMK**: Lee, Ding, Genton, and Xie, 2015, “Power curve estimation with multivariate environmental factors for inland and offshore wind farms,” Journal of the American Statistical Association, Vol. 110, pp. 56-67 `[pdf] <https://aml.engr.tamu.edu/wp-content/uploads/sites/164/2017/11/J53.pdf>`_
+* **TempGP**: Prakash, Tuo, and Ding, 2022, “The temporal overfitting problem with applications in wind power curve modeling,” Technometrics, accepted `[preprint] <https://arxiv.org/abs/2012.01349>`_
+* **CovMatch**: Shin, Ding, and Huang, 2018, “Covariate matching methods for testing and quantifying wind turbine upgrades,” Annals of Applied Statistics, Vol. 12(2), pp. 1271-1292. `[accepted version] <http://aml.engr.tamu.edu/wp-content/uploads/sites/164/2017/11/J64_accepted.pdf>`_
+* **FunGP**: Prakash, Tuo, and Ding, 2022, “Gaussian process aided function comparison using noisy scattered data,” Technometrics, Vol. 64, pp. 92-102. `[preprint] <http://aml.engr.tamu.edu/wp-content/uploads/sites/164/2001/09/J78_Main.pdf>`_
+* **ComparePCurve**: Ding, Kumar, Prakash, Kio, Liu, Liu, and Li, 2021, “A case study of space-time performance comparison of wind turbines on a wind farm,” Renewable Energy, Vol. 171, pp. 735-746. `[preprint] <https://arxiv.org/abs/2005.08652>`_
+* **DNNPowerCurve**: The DNNPowerCurve function is partially based on Karami, Kehtarnavaz, and Rotea, 2021, "Probabilistic neural network to quantify uncertainty of wind power estimation," arXiv:2106.04656. `[preprint] <https://arxiv.org/abs/2106.04656>`_.  Our team refined the network architecture and tuned the training parameters.
