@@ -1,7 +1,7 @@
 KNNPowerCurve
 ==============
 
-k-nearest neighbors (KNN) regression model.
+K-nearest neighbors (KNN) based power curve estimation.
 
 .. code-block:: python
 

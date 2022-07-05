@@ -1,7 +1,7 @@
 FunGP
 ======
 
-Function comparison using Gaussian Process and Hypothesis testing (FunGP)
+Function comparison using Gaussian Process and Hypothesis testing.
 
 .. code-block:: python
 

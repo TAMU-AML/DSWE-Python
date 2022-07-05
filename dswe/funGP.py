@@ -12,9 +12,6 @@ from ._funGP_subroutine import *
 class FunGP(object):
 
     """
-    Gaussian process aided function comparison using noisy scattered data. 
-    Estimates the functions for different data samples using Gaussian process models.
-
     References
     ----------
     Prakash, Tuo, and Ding, 2022, “Gaussian process aided function comparison using noisy scattered data,” Technometrics, Vol. 64, pp. 92-102.

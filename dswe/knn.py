@@ -15,9 +15,6 @@ from ._knn_subroutine import compute_best_k
 class KNNPowerCurve(object):
 
     """
-    All the parameters are fine-tuned automatically using GridSearch.
-    No need to explicitly pass anything.
-
     Parameters
     ----------
     algorithm: 

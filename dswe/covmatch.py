@@ -11,9 +11,6 @@ from ._covmatch_subroutine import *
 class CovMatch(object):
 
     """
-    The class aims to take list of two data sets and returns the after matched data sets using user
-    specified covariates and threshold.
-
     References
     ----------
     Shin, Ding, and Huang, 2018, “Covariate matching methods for testing and quantifying wind turbine upgrades,” Annals of Applied Statistics, Vol. 12(2), pp. 1271-1292.

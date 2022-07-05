@@ -12,10 +12,6 @@ from ._tempGP_subroutine import *
 class TempGP(object):
 
     """
-    The temporal overfitting problem with applications in wind power curve modeling.
-    A Gaussian process based power curve model which explicitly models the temporal aspect of the power curve. 
-    The model consists of two parts: f(x) and g(t).
-
     References
     ----------
     Prakash, Tuo, and Ding, 2022, “The temporal overfitting problem with applications in wind power curve modeling,” Technometrics, accepted

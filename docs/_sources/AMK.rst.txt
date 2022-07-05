@@ -1,7 +1,7 @@
 AMK
 ====
 
-Additive Multiplicative Kernel Regression (AMK)
+Additive Multiplicative Kernel Regression (AMK) based power curve estimation.
 
 .. code-block:: python
 

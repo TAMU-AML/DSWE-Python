@@ -1,7 +1,8 @@
 CovMatch
 =========
 
-Covariate Matching
+Covariate Matching.
+The model aims to take list of two data sets and returns the after matched data sets using user specified covariates and threshold.
 
 .. code-block:: python
 

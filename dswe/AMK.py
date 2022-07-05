@@ -11,8 +11,6 @@ from ._AMK_subroutine import *
 class AMK(object):
 
     """
-    Power Curve Estimation With Multivariate Environmental Factors for Inland and Offshore Wind Farms.
-
     References
     ----------
     Lee, Ding, Genton, and Xie, 2015, “Power curve estimation with multivariate environmental factors

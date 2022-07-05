@@ -1,5 +1,5 @@
 # DSWE-Python
-**DSWE** is a python package to supplement the Data Science for Wind Energy (DSWE) book and other state-of-the-art methods used in wind energy power modelling.
+**DSWE** is a python package, written by [Professor Yu Ding's](https://aml.engr.tamu.edu/) research team, to supplement the Data Science for Wind Energy ([DSWE](https://aml.engr.tamu.edu/book-dswe/)) book and other state-of-the-art methods used in wind energy applications.
 
 Website: https://tamu-aml.github.io/DSWE-Python/
 
@@ -49,8 +49,8 @@ pip install bartpy/
 References
 ----------
 - [Data Science for Wind Energy book.](https://aml.engr.tamu.edu/book-dswe/)
-- **AMK**: Lee, Ding, Genton, and Xie, 2015, “Power curve estimation with multivariate environmental factors for inland and offshore wind farms,” Journal of the American Statistical Association, Vol. 110, pp. 56-67 [[pdf]](https://aml.engr.tamu.edu/wp-content/uploads/sites/164/2017/11/J53.pdf)
-- **TempGP**: Prakash, Tuo, and Ding, 2022, “The temporal overfitting problem with applications in wind power curve modeling,” Technometrics, accepted [[preprint]](https://arxiv.org/abs/2012.01349)
+- **AMK**: Lee, Ding, Genton, and Xie, 2015, “Power curve estimation with multivariate environmental factors for inland and offshore wind farms,” Journal of the American Statistical Association, Vol. 110, pp. 56-67. [[pdf]](https://aml.engr.tamu.edu/wp-content/uploads/sites/164/2017/11/J53.pdf)
+- **TempGP**: Prakash, Tuo, and Ding, 2022, “The temporal overfitting problem with applications in wind power curve modeling,” Technometrics, accepted. [[preprint]](https://arxiv.org/abs/2012.01349)
 - **CovMatch**: Shin, Ding, and Huang, 2018, “Covariate matching methods for testing and quantifying wind turbine upgrades,” Annals of Applied Statistics, Vol. 12(2), pp. 1271-1292. [[accepted version]](http://aml.engr.tamu.edu/wp-content/uploads/sites/164/2017/11/J64_accepted.pdf)
 - **FunGP**: Prakash, Tuo, and Ding, 2022, “Gaussian process aided function comparison using noisy scattered data,” Technometrics, Vol. 64, pp. 92-102. [[preprint]](http://aml.engr.tamu.edu/wp-content/uploads/sites/164/2001/09/J78_Main.pdf)
 - **ComparePCurve**: Ding, Kumar, Prakash, Kio, Liu, Liu, and Li, 2021, “A case study of space-time performance comparison of wind turbines on a wind farm,” Renewable Energy, Vol. 171, pp. 735-746. [[preprint]](https://arxiv.org/abs/2005.08652)

@@ -77,7 +77,7 @@
              
   <section id="fungp">
 <h1>FunGP<a class="headerlink" href="#fungp" title="Permalink to this headline"></a></h1>
-<p>Function comparison using Gaussian Process and Hypothesis testing (FunGP)</p>
+<p>Function comparison using Gaussian Process and Hypothesis testing.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dwse</span> <span class="kn">import</span> <span class="n">FunGP</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">FunGP</span><span class="p">(</span><span class="n">Xlist</span><span class="p">,</span> <span class="n">ylist</span><span class="p">,</span> <span class="n">testset</span><span class="p">)</span>
 <span class="n">mu1</span><span class="p">,</span> <span class="n">mu2</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">mu1</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">mu2</span>
@@ -86,9 +86,7 @@
 <span class="target" id="module-dswe.funGP"></span><dl class="py class">
 <dt class="sig sig-object py" id="dswe.funGP.FunGP">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dswe.funGP.</span></span><span class="sig-name descname"><span class="pre">FunGP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Xlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conf_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opt_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'L-BFGS-B'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'band_size':</span> <span class="pre">5000,</span> <span class="pre">'optim_size':</span> <span class="pre">500}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dswe/funGP.html#FunGP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dswe.funGP.FunGP" title="Permalink to this definition"></a></dt>
-<dd><p>Gaussian process aided function comparison using noisy scattered data.
-Estimates the functions for different data samples using Gaussian process models.</p>
-<p class="rubric">References</p>
+<dd><p class="rubric">References</p>
 <p>Prakash, Tuo, and Ding, 2022, “Gaussian process aided function comparison using noisy scattered data,” Technometrics, Vol. 64, pp. 92-102.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

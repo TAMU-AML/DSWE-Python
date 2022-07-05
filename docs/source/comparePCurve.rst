@@ -1,7 +1,7 @@
 ComparePCurve
 ==============
 
-Power curve comparison and uncertainity quantification (ComparePCurve)
+Power curve comparison and uncertainity quantification.
 
 .. code-block:: python
 

@@ -1,7 +1,7 @@
 SVMPowerCurve
 ==============
 
-Support Vector Machine (SVM) based power curve modelling.
+Support Vector Machine (SVM) based power curve estimation.
 
 .. code-block:: python
 
