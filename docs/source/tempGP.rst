@@ -14,3 +14,8 @@ The Gaussian process-based power curve that avoids temporal overfitting.
 
 .. automodule:: dswe.tempGP
    :members:
+
+.. admonition:: Reference
+  
+  Prakash, Tuo, and Ding, 2022, “The temporal overfitting problem with 
+  applications in wind power curve modeling,” Technometrics, accepted.

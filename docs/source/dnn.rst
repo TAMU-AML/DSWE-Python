@@ -13,3 +13,9 @@ Deep Neural Network (DNN) based power curve estimation.
 
 .. automodule:: dswe.dnn
    :members:
+
+.. admonition:: Reference
+  
+  Karami, Kehtarnavaz, and Rotea, 2021, “Probabilistic 
+  neural network to quantify uncertainty of wind power estimation,” 
+  arXiv:2106.04656. 

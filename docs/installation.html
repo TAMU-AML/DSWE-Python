@@ -100,13 +100,12 @@
 </section>
 <section id="install-dswe">
 <h2>Install DSWE<a class="headerlink" href="#install-dswe" title="Permalink to this headline"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">dswe</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip install dswe
 </pre></div>
 </div>
-<p>[The above command will work once the package is released.]</p>
 <p>To get the latest code changes as they are merged, you can clone this repo and build from source manually.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="o">-</span><span class="n">b</span> <span class="n">dev</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">TAMU</span><span class="o">-</span><span class="n">AML</span><span class="o">/</span><span class="n">DSWE</span><span class="o">-</span><span class="n">Python</span><span class="o">/</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">DSWE</span><span class="o">-</span><span class="n">Python</span><span class="o">/</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git clone -b dev https://github.com/TAMU-AML/DSWE-Python/
+<span class="gp">$ </span>pip install DSWE-Python/
 </pre></div>
 </div>
 <div class="admonition note">
@@ -117,8 +116,8 @@
 <li><p><strong>AMK</strong>: The optimal bandwidth selection algorithm i.e., the direct plug-in (DPI) approach, is not implemented yet. You need to pass bandwidth corresponding to each column.</p></li>
 <li><p><strong>BayesTreePowerCurve</strong>: This module is built on top BartPy which is a python implementation of the Bayesian additive regressions trees (BART). The BartPy package has not been updated for a long time and simple <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">bartypy</span></code> sometimes does not work. You have to explicitly clone the repo and build from source manually. You can follow the following steps to install BartPy package.</p></li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">JakeColtman</span><span class="o">/</span><span class="n">bartpy</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">bartpy</span><span class="o">/</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git clone https://github.com/JakeColtman/bartpy
+<span class="gp">$ </span>pip install bartpy/
 </pre></div>
 </div>
 </section>

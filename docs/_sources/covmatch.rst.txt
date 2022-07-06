@@ -13,3 +13,9 @@ The model aims to take list of two data sets and returns the after matched data 
 
 .. automodule:: dswe.covmatch
    :members:
+
+.. admonition:: Reference
+  
+  Shin, Ding, and Huang, 2018, “Covariate matching methods 
+  for testing and quantifying wind turbine upgrades,” Annals 
+  of Applied Statistics, Vol. 12(2), pp. 1271-1292.

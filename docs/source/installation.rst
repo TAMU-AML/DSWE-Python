@@ -28,30 +28,27 @@ All the required packages don't need to be pre-installed. Installing DSWE would 
 Install DSWE
 *************
 
-::
+.. code:: console
 
-  pip install dswe
-
-
-[The above command will work once the package is released.]
+    $ pip install dswe
 
 
 To get the latest code changes as they are merged, you can clone this repo and build from source manually.
 
-::
+.. code:: console
 
-  git clone -b dev https://github.com/TAMU-AML/DSWE-Python/
-  pip install DSWE-Python/
+    $ git clone -b dev https://github.com/TAMU-AML/DSWE-Python/
+    $ pip install DSWE-Python/
 
 .. note:: AMK and BayesTreePowerCurve function requires some extra attention.
 
 - **AMK**: The optimal bandwidth selection algorithm i.e., the direct plug-in (DPI) approach, is not implemented yet. You need to pass bandwidth corresponding to each column.
 - **BayesTreePowerCurve**: This module is built on top BartPy which is a python implementation of the Bayesian additive regressions trees (BART). The BartPy package has not been updated for a long time and simple ``pip install bartypy`` sometimes does not work. You have to explicitly clone the repo and build from source manually. You can follow the following steps to install BartPy package.
 
-::
+.. code:: console
 
-  git clone https://github.com/JakeColtman/bartpy
-  pip install bartpy/
+    $ git clone https://github.com/JakeColtman/bartpy
+    $ pip install bartpy/
 
 References
 ***********
