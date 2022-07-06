@@ -11,12 +11,6 @@ from ._AMK_subroutine import *
 class AMK(object):
 
     """
-    References
-    ----------
-    Lee, Ding, Genton, and Xie, 2015, “Power curve estimation with multivariate environmental factors
-    for inland and offshore wind farms,” Journal of the American Statistical Association, Vol. 110, pp.
-    56-67, DOI:10.1080/01621459.2014.977385.
-
     Parameters
     ----------
     X_train: np.ndarray or pd.DataFrame

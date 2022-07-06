@@ -12,10 +12,6 @@ from ._tempGP_subroutine import *
 class TempGP(object):
 
     """
-    References
-    ----------
-    Prakash, Tuo, and Ding, 2022, “The temporal overfitting problem with applications in wind power curve modeling,” Technometrics, accepted
-
     Parameters
     ----------
     opt_method: string
