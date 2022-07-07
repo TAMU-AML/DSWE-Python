@@ -15,14 +15,12 @@ Welcome to DSWE's documentation!
    bayes_tree
    comparePCurve
    covmatch
+   dnn
    funGP
    knn
    svm
    tempGP
-   dnn
-
-
-
+   
 
 Indices and tables
 ==================
