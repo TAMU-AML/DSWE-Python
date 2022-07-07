@@ -2,7 +2,7 @@ Jupyter Notebooks
 ==================
 
 Jupyter notebooks are available that provide tutorials about dswe functionality. 
-They are hosted at `dswe/notebooks <https://github.com/TAMU-AML/DSWE-Python/tree/dev/test>`_. 
+They are hosted at `dswe/notebooks <https://github.com/TAMU-AML/DSWE-Python/tree/dev/notebooks>`_. 
 The notebooks can be downloaded to interactively modify the examples.
 
 List of Notebooks:
