@@ -22,7 +22,7 @@ copyright = '2022, Pratyush Kumar, Abhinav Prakash, and Yu Ding'
 author = 'Pratyush Kumar, Abhinav Prakash, and Yu Ding'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1'
+release = '0.1.1'
 
 
 # -- General configuration ---------------------------------------------------
