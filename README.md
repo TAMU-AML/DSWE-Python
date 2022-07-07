@@ -1,9 +1,10 @@
 # DSWE-Python
 **DSWE** is a python package, written by [Professor Yu Ding's](https://aml.engr.tamu.edu/) research team, to supplement the Data Science for Wind Energy ([DSWE](https://aml.engr.tamu.edu/book-dswe/)) book and other state-of-the-art methods used in wind energy applications.
 
-Website: https://tamu-aml.github.io/DSWE-Python/
+Documentation: https://tamu-aml.github.io/DSWE-Python/
+PyPI: https://pypi.org/project/dswe/
 
-Installation
+<!-- Installation
 ------------
 
 ### Dependencies
@@ -56,4 +57,4 @@ References
 - **CovMatch**: Shin, Ding, and Huang, 2018, “Covariate matching methods for testing and quantifying wind turbine upgrades,” Annals of Applied Statistics, Vol. 12(2), pp. 1271-1292. [[accepted version]](http://aml.engr.tamu.edu/wp-content/uploads/sites/164/2017/11/J64_accepted.pdf)
 - **FunGP**: Prakash, Tuo, and Ding, 2022, “Gaussian process aided function comparison using noisy scattered data,” Technometrics, Vol. 64, pp. 92-102. [[preprint]](http://aml.engr.tamu.edu/wp-content/uploads/sites/164/2001/09/J78_Main.pdf)
 - **ComparePCurve**: Ding, Kumar, Prakash, Kio, Liu, Liu, and Li, 2021, “A case study of space-time performance comparison of wind turbines on a wind farm,” Renewable Energy, Vol. 171, pp. 735-746. [[preprint]](https://arxiv.org/abs/2005.08652)
-- **DNNPowerCurve**: The DNNPowerCurve function is partially based on Karami, Kehtarnavaz, and Rotea, 2021, "Probabilistic neural network to quantify uncertainty of wind power estimation," arXiv:2106.04656. [[preprint]](https://arxiv.org/abs/2106.04656).  Our team refined the network architecture and tuned the training parameters.
+- **DNNPowerCurve**: The DNNPowerCurve function is partially based on Karami, Kehtarnavaz, and Rotea, 2021, "Probabilistic neural network to quantify uncertainty of wind power estimation," arXiv:2106.04656. [[preprint]](https://arxiv.org/abs/2106.04656).  Our team refined the network architecture and tuned the training parameters. -->
