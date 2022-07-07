@@ -1,0 +1,15 @@
+.DS_Store
+.vscode/
+dswe/__pycache__
+dswe/DSWE.egg-info
+__pycache__
+DSWE.egg-info
+dist
+/build
+run/
+debug.py
+debug_2.ipynb
+debug.ipynb
+dswe/.ipynb_checkpoints
+.ipynb_checkpoints/
+vg_grad.ipynb
