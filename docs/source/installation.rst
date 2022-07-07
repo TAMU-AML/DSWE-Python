@@ -7,7 +7,7 @@
 Getting Started with DSWE
 #############################
 
-**DSWE** is a python package, written by `Professor Yu Ding's <https://aml.engr.tamu.edu/>`_ research team, to supplement the Data Science for Wind Energy (`DSWE <https://aml.engr.tamu.edu/book-dswe/>`_) book and other state-of-the-art methods used in wind energy applications.
+`**DSWE** <https://github.com/TAMU-AML/DSWE-Python>`_ is a python package, written by `Professor Yu Ding's <https://aml.engr.tamu.edu/>`_ research team, to supplement the Data Science for Wind Energy (`DSWE <https://aml.engr.tamu.edu/book-dswe/>`_) book and other state-of-the-art methods used in wind energy applications.
 
 Dependencies
 *************
@@ -37,7 +37,7 @@ To get the latest code changes as they are merged, you can clone this repo and b
 
 .. code:: console
 
-    $ git clone -b dev https://github.com/TAMU-AML/DSWE-Python/
+    $ git clone https://github.com/TAMU-AML/DSWE-Python/
     $ pip install DSWE-Python/
 
 .. attention:: 
