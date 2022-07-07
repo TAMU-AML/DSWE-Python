@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as f:
 
 setup(
     name="dswe",
-    version="0.0.1",
+    version="0.1",
     author="Pratyush Kumar, Abhinav Prakash, and Yu Ding",
     author_email="yuding@tamu.edu",
     maintainer_email="pratyush.019@gmail.com",
