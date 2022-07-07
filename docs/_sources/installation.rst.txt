@@ -28,6 +28,8 @@ All the required packages don't need to be pre-installed. Installing DSWE would 
 Install DSWE
 *************
 
+DSWE is on `PyPI <https://pypi.org/project/dswe/>`_, so you can use ``pip`` to install it.
+
 .. code:: console
 
     $ pip install dswe
