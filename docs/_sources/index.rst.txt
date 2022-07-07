@@ -20,7 +20,7 @@ Welcome to DSWE's documentation!
    knn
    svm
    tempGP
-   
+   notebooks
 
 Indices and tables
 ==================

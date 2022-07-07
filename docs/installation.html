@@ -54,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="knn.html">KNNPowerCurve</a></li>
 <li class="toctree-l1"><a class="reference internal" href="svm.html">SVMPowerCurve</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tempGP.html">TempGP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Jupyter Notebooks</a></li>
 </ul>
 
         </div>
@@ -87,7 +88,7 @@
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline"></a></h2>
 <p>DSWE requires:</p>
 <ul class="simple">
-<li><p>Python (&gt;=3.8)</p></li>
+<li><p>Python (&gt;=3.6)</p></li>
 <li><p>NumPy (&gt;=1.21.2)</p></li>
 <li><p>Pandas (&gt;=1.3.3)</p></li>
 <li><p>Scikit-learn (&gt;=1.0)</p></li>
@@ -111,7 +112,7 @@
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
 <ul class="simple">
-<li><p><strong>AMK</strong>: The optimal bandwidth selection algorithm i.e., the direct plug-in (DPI) approach, is not implemented yet. You need to pass bandwidth corresponding to each column.</p></li>
+<li><p><strong>AMK</strong>: The optimal bandwidth selection algorithm i.e., the direct plug-in (DPI) approach, is not implemented yet. You need to provide bandwidth corresponding to each column.</p></li>
 <li><p><strong>BayesTreePowerCurve</strong>: This module is built on top BartPy which is a python implementation of the Bayesian additive regressions trees (BART). To use the BayesTreePowerCurve model, you need to install the BartPy manually. The BartPy package has not been updated for a long time and simple <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">bartypy</span></code> sometimes does not work. You have to explicitly clone the repo and build from source manually.</p></li>
 </ul>
 </div>

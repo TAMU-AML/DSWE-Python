@@ -14,7 +14,7 @@ Dependencies
 
 DSWE requires:
 
-* Python (>=3.8)
+* Python (>=3.6)
 * NumPy (>=1.21.2)
 * Pandas (>=1.3.3)
 * Scikit-learn (>=1.0)
@@ -42,7 +42,7 @@ To get the latest code changes as they are merged, you can clone this repo and b
 
 .. attention:: 
 
-    - **AMK**: The optimal bandwidth selection algorithm i.e., the direct plug-in (DPI) approach, is not implemented yet. You need to pass bandwidth corresponding to each column.
+    - **AMK**: The optimal bandwidth selection algorithm i.e., the direct plug-in (DPI) approach, is not implemented yet. You need to provide bandwidth corresponding to each column.
     - **BayesTreePowerCurve**: This module is built on top BartPy which is a python implementation of the Bayesian additive regressions trees (BART). To use the BayesTreePowerCurve model, you need to install the BartPy manually. The BartPy package has not been updated for a long time and simple ``pip install bartypy`` sometimes does not work. You have to explicitly clone the repo and build from source manually. 
 
 You can follow the following steps to install BartPy package.
