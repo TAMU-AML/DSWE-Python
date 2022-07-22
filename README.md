@@ -2,6 +2,7 @@
 **DSWE** is a python package, written by [Professor Yu Ding's](https://aml.engr.tamu.edu/) research team, to supplement the Data Science for Wind Energy ([DSWE](https://aml.engr.tamu.edu/book-dswe/)) book and other state-of-the-art methods used in wind energy applications.
 
 Documentation: https://tamu-aml.github.io/DSWE-Python/
+
 PyPI: https://pypi.org/project/dswe/
 
 <!-- Installation

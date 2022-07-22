@@ -7,9 +7,8 @@ import numpy as np
 import pandas as pd
 import math
 from sklearn.neighbors import KNeighborsRegressor
-from sklearn.model_selection import GridSearchCV
 from .utils import validate_inputs
-from ._knn_subroutine import compute_best_k
+from ._knn_subroutine import compute_best_k, compute_best_subset
 
 
 class KNNPowerCurve(object):
@@ -17,22 +16,30 @@ class KNNPowerCurve(object):
     """
     Parameters
     ----------
-    algorithm: 
+    algorithm: list
         Algorithm used to compute the nearest neighbors.
         'auto' attempt to decide the most appropriate algorithm based on the values passed to 'fit' method.
+        Default is 'auto'.
 
-    weights: 
+    weights: list
         Weight function used in prediction. Can take either 'uniform' or 'distance'.
         'uniform' means uniform weights i.e., all points in each neighborhood are weighted equally.
         'distance' means weight points by the inverse of their distance.
+        Default is 'uniform'.
+
+    subset_selection: bool
+        A boolean (True/False) to select the best feature columns.
+        Default is set to False.
+
     """
 
-    def __init__(self, algorithm=['auto'], weights=['uniform', 'distance']):
+    def __init__(self, algorithm='auto', weights='uniform', subset_selection=False):
 
         self.algorithm = algorithm
         self.weights = weights
+        self.subset_selection = subset_selection
 
-    def fit(self, X_train, y_train, subset_selection=False):
+    def fit(self, X_train, y_train):
         """
         Parameters
         ----------
@@ -63,29 +70,43 @@ class KNNPowerCurve(object):
             (self.scaler_max - self.scaler_min)
         range_k = np.linspace(5, 50, 10, dtype=int)
 
-        if not subset_selection:
+        if not self.subset_selection:
             result = compute_best_k(
                 self.normalized_X_train, self.y_train, range_k)
+            self.best_k = result['best_k']
 
-            knn = KNeighborsRegressor(n_neighbors=result['best_k'])
-            parameters = {'algorithm': self.algorithm,
-                          'weights': self.weights}
-            regressor = GridSearchCV(knn, parameters)
+            regressor = KNeighborsRegressor(
+                n_neighbors=self.best_k, algorithm=self.algorithm, weights=self.weights)
             regressor.fit(self.normalized_X_train, self.y_train)
             mae = np.mean(abs(regressor.predict(
                 self.normalized_X_train) - self.y_train))
 
-            self.best_k = result['best_k']
             self.best_rmse = result['best_rmse']
             self.mae = mae
 
             self.model = KNeighborsRegressor(n_neighbors=self.best_k).fit(
                 self.normalized_X_train, self.y_train)
 
-            return self
-
         else:
-            print("Subset selection choice is not available yet.")
+            result = compute_best_subset(
+                self.normalized_X_train, self.y_train, range_k)
+            self.best_k = result['best_k']
+            self.best_subset = result['best_subset']
+
+            regressor = KNeighborsRegressor(
+                n_neighbors=self.best_k, algorithm=self.algorithm, weights=self.weights)
+            regressor.fit(
+                self.normalized_X_train[:, self.best_subset], self.y_train)
+            mae = np.mean(abs(regressor.predict(
+                self.normalized_X_train[:, self.best_subset]) - self.y_train))
+
+            self.best_rmse = result['best_rmse']
+            self.mae = mae
+
+            self.model = KNeighborsRegressor(n_neighbors=self.best_k).fit(
+                self.normalized_X_train, self.y_train)
+
+        return self
 
     def predict(self, X_test):
         """
@@ -114,6 +135,9 @@ class KNNPowerCurve(object):
 
         normlized_X_test = (X_test - self.scaler_min) / \
             (self.scaler_max - self.scaler_min)
+
+        if self.subset_selection:
+            normlized_X_test = normlized_X_test[:, self.best_subset]
 
         y_pred = self.model.predict(normlized_X_test)
 
@@ -161,6 +185,10 @@ class KNNPowerCurve(object):
 
         self.normalized_X_train = (self.X_train - self.scaler_min) / \
             (self.scaler_max - self.scaler_min)
+
+        if self.subset_selection:
+            self.normalized_X_train = self.normalized_X_train[:,
+                                                              self.best_subset]
 
         ubk = 1.2
         lbk = 0.8
