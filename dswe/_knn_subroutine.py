@@ -32,13 +32,40 @@ def compute_best_k(X, y, range_k):
         return compute_best_k(X, y, range_k)
 
 
+def _compute_best_subset(X, xcol, y, range_k, best_subset, best_rmse, best_k):
+    ncov = len(xcol)
+    best_col = None
+
+    for i in range(ncov):
+        result = compute_best_k(X[:, best_subset + [xcol[i]]], y, range_k)
+        rmse = result['best_rmse']
+        if rmse < best_rmse:
+            best_rmse = rmse
+            best_k = result['best_k']
+            best_col = xcol[i]
+
+    return_dict = {'best_subset': best_subset,
+                   'best_k': best_k, 'best_rmse': best_rmse}
+
+    if best_col is not None:
+        best_subset.append(best_col)
+        col_diff = list(set(xcol) - set(best_subset))
+        if len(col_diff) > 0:
+            return_dict = _compute_best_subset(
+                X, col_diff, y, range_k, best_subset, best_rmse, best_k)
+        else:
+            return_dict = {'best_subset': best_subset,
+                           'best_k': best_k, 'best_rmse': best_rmse}
+
+    return return_dict
+
+
 def compute_best_subset(X, y, range_k):
-    best_subset = None
+    best_subset = []
     best_rmse = float("inf")
     best_k = None
+    xcol = list(range(X.shape[1]))
+    return_dict = _compute_best_subset(
+        X, xcol, y, range_k, best_subset, best_rmse, best_k)
 
-    def _compute_best_subset(X, y, range_k, best_subset, best_rmse, best_k):
-        # cols = X.shape[1]
-        pass
-
-    pass
+    return return_dict
