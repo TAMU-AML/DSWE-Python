@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>dswe.comparePCurve &mdash; DSWE 0.1.2 documentation</title>
+  <title>dswe.comparePCurve &mdash; DSWE 0.1.3 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -269,14 +269,14 @@
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testset</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">testset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">testset</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Xlist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">testset</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">testcol</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">testset</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;The number of columns in input and testset should be same.&quot;</span><span class="p">)</span>
+                    <span class="s2">&quot;The length of testcol should be equal to the number of columns in testset.&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">testset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Xlist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">testcol</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;The length of testcol should match the number of input columns.&quot;</span><span class="p">)</span>
+        <span class="c1"># if self.testset is None:</span>
+        <span class="c1">#     if self.Xlist[0].shape[1] != len(testcol):</span>
+        <span class="c1">#         raise ValueError(</span>
+        <span class="c1">#             &quot;The length of testcol should match the number of input columns.&quot;)</span>
 
         <span class="n">result_matching</span> <span class="o">=</span> <span class="n">CovMatch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Xlist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ylist</span><span class="p">,</span> <span class="n">circ_pos</span><span class="p">,</span> <span class="n">thresh</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matched_data_X</span> <span class="o">=</span> <span class="n">result_matching</span><span class="o">.</span><span class="n">matched_data_X</span>
