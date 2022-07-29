@@ -11,6 +11,8 @@ Getting Started with DSWE
 
 DSWE is on `PyPI <https://pypi.org/project/dswe/>`_.
 
+DSWE Python HELP Document is available via this `link <https://zenodo.org/record/6940865>`_.
+
 Dependencies
 *************
 
